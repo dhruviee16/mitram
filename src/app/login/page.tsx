@@ -1,16 +1,26 @@
 import { Suspense } from "react";
-import { AuthSplitLayout } from "@/components/auth/auth-split-layout";
+import { redirect } from "next/navigation";
+import { AuthLayout } from "@/components/auth/auth-layout";
 import { LoginForm } from "@/components/auth/login-form";
+import { getSafeCallbackUrl } from "@/lib/safe-redirect";
+import { auth } from "@/auth";
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ callbackUrl?: string }>;
+}) {
+  const session = await auth();
+  if (session?.user) {
+    const { callbackUrl } = await searchParams;
+    redirect(getSafeCallbackUrl(callbackUrl ?? null));
+  }
+
   return (
-    <AuthSplitLayout
-      title="Welcome back"
-      subtitle="Sign in to manage your family's trips."
-    >
+    <AuthLayout title="Welcome back" subtitle="Sign in to manage your family's trips.">
       <Suspense fallback={null}>
         <LoginForm />
       </Suspense>
-    </AuthSplitLayout>
+    </AuthLayout>
   );
 }
