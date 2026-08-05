@@ -20,7 +20,12 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error("createOrderForBooking failed:", err);
     const message = err instanceof Error ? err.message : "Could not start payment.";
-    const isNotFound = message === "Booking not found.";
-    return NextResponse.json({ error: message }, { status: isNotFound ? 404 : 500 });
+    if (message === "Booking not found.") {
+      return NextResponse.json({ error: message }, { status: 404 });
+    }
+    if (message === "This booking is already paid.") {
+      return NextResponse.json({ error: message }, { status: 409 });
+    }
+    return NextResponse.json({ error: "Could not start payment." }, { status: 500 });
   }
 }

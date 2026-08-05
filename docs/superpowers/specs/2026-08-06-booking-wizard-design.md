@@ -9,7 +9,9 @@ Build `/book/[tripSlug]` — the third sub-project of the page-build effort, aft
 
 ## 2. Scope
 
-**In scope:** the 5-step wizard (who's this for → traveler details → room/care → review → payment), `POST /api/bookings`, `POST /api/payments/create-order`, `POST /api/payments/verify`, a standalone `/book/confirmation/[bookingId]` page.
+**In scope:** the 5-step wizard (who's this for → traveler details → room/care → review → payment), `POST /api/bookings`, `POST /api/payments/create-order`, `POST /api/payments/verify`, `POST /api/webhooks/razorpay`, a standalone `/book/confirmation/[bookingId]` page.
+
+**Added mid-build:** `POST /api/webhooks/razorpay` — the client-driven `verify` call alone can't catch a successful charge where the browser tab closed, the network dropped, or the JS crashed right after Razorpay's popup succeeded but before `verify` was called. The webhook is Razorpay's server-to-server `payment.captured` notification, authenticated by a *separate* signature scheme (HMAC-SHA256 over the raw request body using a webhook secret, `RAZORPAY_WEBHOOK_SECRET`, configured in the Razorpay dashboard — not the checkout `order_id|payment_id` signature `verify` uses). Both paths call idempotent update logic, so whichever arrives first wins and the other is a safe no-op.
 
 **Explicitly out of scope:**
 - Reusing an existing `TravelerProfile` — every booking creates a new one, per user decision. A "select from saved travelers" picker is a natural future enhancement once there's real repeat-booking data.
