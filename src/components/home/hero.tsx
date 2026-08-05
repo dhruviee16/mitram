@@ -1,6 +1,6 @@
 export function Hero() {
   return (
-    <div className="bg-gradient-to-br from-[#5c1010] to-primary px-4 py-10 text-center sm:px-6">
+    <div className="bg-linear-to-br from-[#5c1010] to-primary px-4 py-10 text-center sm:px-6">
       <p className="text-xs font-semibold uppercase tracking-widest text-primary-foreground/75">
         Senior-assisted travel, built with MakeMyTrip
       </p>

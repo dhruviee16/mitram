@@ -23,7 +23,7 @@ export function TripCard({ trip }: { trip: TripCardTrip }) {
   return (
     <Link
       href={`/trips/${trip.slug}`}
-      className="group block overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
       <div className="relative h-40 w-full">
         <Image
@@ -40,21 +40,31 @@ export function TripCard({ trip }: { trip: TripCardTrip }) {
 
       <div className="border-t border-border p-4">
         <div className="flex items-baseline justify-between gap-2">
-          <h3 className="font-heading text-base font-bold text-foreground">{trip.title}</h3>
+          <h3 className="font-heading text-base font-bold text-foreground">
+            {trip.title}
+          </h3>
         </div>
-        <p className="mt-1 text-xs text-muted-foreground">{trip.routeSummary}</p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          {trip.routeSummary}
+        </p>
 
         {(firstFeature || secondFeature) && (
           <div className="mt-3 flex flex-col gap-1 border-t border-border pt-3 text-xs text-foreground">
             {firstFeature && (
               <span className="flex items-center gap-1.5">
-                <ShieldCheck className="size-3.5 shrink-0 text-primary" aria-hidden="true" />
+                <ShieldCheck
+                  className="size-3.5 shrink-0 text-primary"
+                  aria-hidden="true"
+                />
                 {firstFeature}
               </span>
             )}
             {secondFeature && (
               <span className="flex items-center gap-1.5">
-                <Radio className="size-3.5 shrink-0 text-primary" aria-hidden="true" />
+                <Radio
+                  className="size-3.5 shrink-0 text-primary"
+                  aria-hidden="true"
+                />
                 {secondFeature}
               </span>
             )}
@@ -64,7 +74,10 @@ export function TripCard({ trip }: { trip: TripCardTrip }) {
         <div className="mt-3 flex items-center justify-between">
           <span className="font-heading text-lg font-bold text-foreground">
             ₹{trip.basePrice.toLocaleString("en-IN")}
-            <span className="text-xs font-normal text-muted-foreground"> /person</span>
+            <span className="text-xs font-normal text-muted-foreground">
+              {" "}
+              /person
+            </span>
           </span>
           <span className="flex items-center gap-1 text-sm font-semibold text-primary">
             View trip

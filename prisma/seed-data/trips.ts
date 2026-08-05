@@ -57,7 +57,12 @@ export const trips = [
     durationDays: 7,
     durationNights: 6,
     basePrice: 48000,
-    images: ["/images/trips/dwarka-rann-of-kutch.jpg"] as string[],
+    images: [
+      "/images/trips/dwarka-rann-of-kutch-1.jpg",
+      "/images/trips/dwarka-rann-of-kutch-2.jpg",
+      "/images/trips/dwarka-rann-of-kutch-3.jpg",
+      "/images/trips/dwarka-rann-of-kutch-4.jpg",
+    ] as string[],
     careFeatures: [
       "Assisted boat boarding with life jackets",
       "Wheelchair access paths at White Rann",
