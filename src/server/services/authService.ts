@@ -9,6 +9,16 @@ function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
 }
 
+// Distinguishable from unexpected errors (DB failures, etc.) so callers can
+// safely forward only this message to the client without risking leaking
+// internal error details.
+export class DuplicateEmailError extends Error {
+  constructor() {
+    super("An account with this email already exists.");
+    this.name = "DuplicateEmailError";
+  }
+}
+
 export async function verifyCredentials(email: string, password: string) {
   const user = await prisma.user.findUnique({ where: { email: normalizeEmail(email) } });
 
@@ -22,7 +32,7 @@ export async function registerUser(email: string, password: string, name: string
   const normalizedEmail = normalizeEmail(email);
   const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } });
   if (existing) {
-    throw new Error("An account with this email already exists.");
+    throw new DuplicateEmailError();
   }
 
   const passwordHash = await bcrypt.hash(password, 10);

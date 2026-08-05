@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, DM_Sans } from "next/font/google";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { SessionProvider } from "@/components/providers/session-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { SkipLink } from "@/components/layout/skip-link";
@@ -34,15 +35,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col font-body">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-          <QueryProvider>
-            <SkipLink />
-            <SiteNav />
-            <main id="main-content" className="flex-1">
-              {children}
-            </main>
-            <SiteFooter />
-            <Toaster />
-          </QueryProvider>
+          <SessionProvider>
+            <QueryProvider>
+              <SkipLink />
+              <SiteNav />
+              <main id="main-content" className="flex-1">
+                {children}
+              </main>
+              <SiteFooter />
+              <Toaster />
+            </QueryProvider>
+          </SessionProvider>
         </ThemeProvider>
       </body>
     </html>

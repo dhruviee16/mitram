@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 
 import { signupSchema, type SignupValues } from "@/lib/validations/auth";
+import { getSafeCallbackUrl } from "@/lib/safe-redirect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -23,7 +24,7 @@ import {
 export function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/";
+  const callbackUrl = getSafeCallbackUrl(searchParams.get("callbackUrl"));
   const [submitting, setSubmitting] = useState(false);
 
   const form = useForm<SignupValues>({

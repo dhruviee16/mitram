@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { signupSchema } from "@/lib/validations/auth";
-import { registerUser } from "@/server/services/authService";
+import { registerUser, DuplicateEmailError } from "@/server/services/authService";
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -21,7 +21,10 @@ export async function POST(req: Request) {
     );
     return NextResponse.json(user, { status: 201 });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Could not create account.";
-    return NextResponse.json({ error: message }, { status: 409 });
+    if (err instanceof DuplicateEmailError) {
+      return NextResponse.json({ error: err.message }, { status: 409 });
+    }
+    console.error("registerUser failed:", err);
+    return NextResponse.json({ error: "Could not create account." }, { status: 500 });
   }
 }

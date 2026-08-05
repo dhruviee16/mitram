@@ -6,6 +6,8 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+import { SignOutButton } from "@/components/auth/sign-out-button";
+import { auth } from "@/auth";
 
 const links = [
   { href: "/trips", label: "Yatras" },
@@ -13,7 +15,9 @@ const links = [
   { href: "/dashboard", label: "Live Tracker" },
 ];
 
-export function SiteNav() {
+export async function SiteNav() {
+  const session = await auth();
+
   return (
     <header className="border-b border-border bg-card">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
@@ -38,12 +42,21 @@ export function SiteNav() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <Link
-          href="/login"
-          className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-        >
-          Sign In
-        </Link>
+        {session?.user ? (
+          <div className="flex items-center gap-4">
+            <span className="hidden text-sm text-muted-foreground sm:inline">
+              {session.user.name}
+            </span>
+            <SignOutButton />
+          </div>
+        ) : (
+          <Link
+            href="/login"
+            className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            Sign In
+          </Link>
+        )}
       </div>
     </header>
   );
