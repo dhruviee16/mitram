@@ -21,6 +21,10 @@ export type BookedFor = z.infer<typeof bookedForSchema>;
 export type TravelerValues = z.infer<typeof travelerSchema>;
 export type RoomCareValues = z.infer<typeof roomCareSchema>;
 
+export const trackingVisibilitySchema = z.object({
+  visible: z.boolean(),
+});
+
 export const bookingRequestSchema = z.object({
   tripSlug: z.string().min(1),
   bookedFor: bookedForSchema,

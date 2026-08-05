@@ -44,6 +44,20 @@ export async function createBooking(userId: string, input: BookingRequestValues)
   return { bookingId: booking.id, totalAmount: booking.totalAmount };
 }
 
+export async function setTrackingVisibility(bookingId: string, userId: string, visible: boolean) {
+  const booking = await prisma.booking.findUnique({ where: { id: bookingId } });
+  if (!booking || booking.userId !== userId) {
+    throw new Error("Booking not found.");
+  }
+
+  const updated = await prisma.booking.update({
+    where: { id: bookingId },
+    data: { trackingVisible: visible },
+  });
+
+  return { trackingVisible: updated.trackingVisible };
+}
+
 export function getBookingById(id: string) {
   return prisma.booking.findUnique({
     where: { id },
