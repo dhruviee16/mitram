@@ -7,7 +7,7 @@ export const trips = [
     durationDays: 4,
     durationNights: 3,
     basePrice: 33999,
-    images: [] as string[],
+    images: ["/images/trips/sammed-shikharji-yatra.jpg"] as string[],
     careFeatures: [
       "BP & sugar monitoring twice daily",
       "Verified Saathi companion",
@@ -57,7 +57,7 @@ export const trips = [
     durationDays: 7,
     durationNights: 6,
     basePrice: 48000,
-    images: [] as string[],
+    images: ["/images/trips/dwarka-rann-of-kutch.jpg"] as string[],
     careFeatures: [
       "Assisted boat boarding with life jackets",
       "Wheelchair access paths at White Rann",
@@ -132,7 +132,7 @@ export const trips = [
     durationDays: 7,
     durationNights: 6,
     basePrice: 39999,
-    images: [] as string[],
+    images: ["/images/trips/maharashtra-jyotirlinga-circuit.jpg"] as string[],
     careFeatures: [
       "1 MITRAM Coordinator for every 8 seniors",
       "Wheelchairs, first-aid, motion-sickness kits, BP/sugar checks",

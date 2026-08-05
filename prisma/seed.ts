@@ -12,7 +12,7 @@ async function main() {
     const { days, ...tripData } = trip;
     await prisma.trip.upsert({
       where: { slug: trip.slug },
-      update: {},
+      update: tripData,
       create: {
         ...tripData,
         days: { create: days },
