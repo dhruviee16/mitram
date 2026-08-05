@@ -1,0 +1,145 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  traveler
+  nri
+}
+
+enum BookedFor {
+  self
+  parent
+  nri
+}
+
+enum BookingStatus {
+  pending
+  confirmed
+  upcoming
+  ongoing
+  completed
+  cancelled
+}
+
+enum PaymentStatus {
+  created
+  paid
+  failed
+}
+
+enum HealthStatus {
+  ok
+  monitor
+}
+
+model User {
+  id               String            @id @default(cuid())
+  email            String            @unique
+  passwordHash     String
+  name             String
+  phone            String?
+  role             UserRole          @default(traveler)
+  travelerProfiles TravelerProfile[]
+  bookings         Booking[]
+  createdAt        DateTime          @default(now())
+}
+
+model TravelerProfile {
+  id           String    @id @default(cuid())
+  user         User      @relation(fields: [userId], references: [id])
+  userId       String
+  name         String
+  age          Int
+  relationship String // "self" | "parent" | "other"
+  healthNotes  String[]  @default([])
+  dietaryNeeds String[]  @default([])
+  bookings     Booking[]
+  createdAt    DateTime  @default(now())
+}
+
+model Trip {
+  id             String    @id @default(cuid())
+  slug           String    @unique
+  title          String
+  category       String // "pilgrimage" | "international" | "heritage" | "hill"
+  routeSummary   String
+  durationDays   Int
+  durationNights Int
+  basePrice      Int // INR
+  images         String[]  @default([])
+  careFeatures   String[]  @default([])
+  inclusions     String[]  @default([])
+  summary        String
+  days           TripDay[]
+  bookings       Booking[]
+  createdAt      DateTime  @default(now())
+}
+
+model TripDay {
+  id          String   @id @default(cuid())
+  trip        Trip     @relation(fields: [tripId], references: [id])
+  tripId      String
+  dayNumber   Int
+  title       String
+  description String
+  activities  String[] @default([])
+
+  @@unique([tripId, dayNumber])
+}
+
+model Booking {
+  id                  String            @id @default(cuid())
+  user                User              @relation(fields: [userId], references: [id])
+  userId              String
+  trip                Trip              @relation(fields: [tripId], references: [id])
+  tripId              String
+  bookedFor           BookedFor
+  travelers           TravelerProfile[]
+  numTravelers        Int
+  roomType            String
+  specialCareRequests String[]          @default([])
+  totalAmount         Int
+  status              BookingStatus     @default(pending)
+  trackingVisible     Boolean           @default(true)
+  payment             Payment?
+  tripUpdates         TripUpdate[]
+  createdAt           DateTime          @default(now())
+}
+
+model Payment {
+  id                String        @id @default(cuid())
+  booking           Booking       @relation(fields: [bookingId], references: [id])
+  bookingId         String        @unique
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  status            PaymentStatus @default(created)
+  amount            Int
+  createdAt         DateTime      @default(now())
+}
+
+model TripUpdate {
+  id            String        @id @default(cuid())
+  booking       Booking       @relation(fields: [bookingId], references: [id])
+  bookingId     String
+  timestamp     DateTime
+  locationLabel String
+  lat           Float?
+  lng           Float?
+  note          String?
+  photoUrl      String?
+  healthBp      String?
+  healthSugar   String?
+  healthTemp    String?
+  healthStatus  HealthStatus?
+
+  @@index([bookingId, timestamp])
+}
