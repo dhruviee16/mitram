@@ -4,6 +4,8 @@ import { useState } from "react";
 import { StepIndicator } from "@/components/booking/step-indicator";
 import { StepWhoFor } from "@/components/booking/step-who-for";
 import { StepTraveler } from "@/components/booking/step-traveler";
+import { StepRoomCare } from "@/components/booking/step-room-care";
+import { StepReview } from "@/components/booking/step-review";
 import type { BookedFor, TravelerValues, RoomCareValues } from "@/lib/validations/booking";
 
 export type WizardState = {
@@ -56,7 +58,26 @@ export function BookingWizard({ trip }: { trip: TripSummary }) {
         />
       )}
 
-      {/* Steps 2 (room/care) and 3 (review) are added in Task 4 */}
+      {step === 2 && (
+        <StepRoomCare
+          value={state.roomCare}
+          onBack={() => setStep(1)}
+          onNext={(roomCare) => {
+            setState((s) => ({ ...s, roomCare }));
+            setStep(3);
+          }}
+        />
+      )}
+
+      {step === 3 && state.bookedFor && state.traveler && state.roomCare && (
+        <StepReview
+          trip={trip}
+          bookedFor={state.bookedFor}
+          traveler={state.traveler}
+          roomCare={state.roomCare}
+          onBack={() => setStep(2)}
+        />
+      )}
     </div>
   );
 }

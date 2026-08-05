@@ -2,6 +2,15 @@ import Razorpay from "razorpay";
 import crypto from "node:crypto";
 import { prisma } from "@/server/db";
 
+// Plain string `!==` on a signature leaks timing information an attacker
+// could use to guess it byte-by-byte. Always compare HMAC digests this way.
+export function timingSafeEqualHex(a: string, b: string): boolean {
+  const bufA = Buffer.from(a, "hex");
+  const bufB = Buffer.from(b, "hex");
+  if (bufA.length !== bufB.length) return false;
+  return crypto.timingSafeEqual(bufA, bufB);
+}
+
 function getRazorpayClient() {
   const keyId = process.env.RAZORPAY_KEY_ID;
   const keySecret = process.env.RAZORPAY_KEY_SECRET;
@@ -85,7 +94,7 @@ export async function verifyAndConfirmPayment(input: {
     .update(`${input.razorpayOrderId}|${input.razorpayPaymentId}`)
     .digest("hex");
 
-  if (expectedSignature !== input.razorpaySignature) {
+  if (!timingSafeEqualHex(expectedSignature, input.razorpaySignature)) {
     return { confirmed: false as const };
   }
 

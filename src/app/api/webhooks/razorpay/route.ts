@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { NextResponse } from "next/server";
-import { confirmPaymentFromWebhook } from "@/server/services/paymentService";
+import { confirmPaymentFromWebhook, timingSafeEqualHex } from "@/server/services/paymentService";
 
 // Razorpay webhook events (https://razorpay.com/docs/webhooks/) — authenticated
 // via HMAC-SHA256 over the raw request body using a webhook secret configured
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     .update(rawBody)
     .digest("hex");
 
-  if (expectedSignature !== signature) {
+  if (!timingSafeEqualHex(expectedSignature, signature)) {
     return NextResponse.json({ error: "Invalid signature." }, { status: 400 });
   }
 
