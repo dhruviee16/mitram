@@ -3,6 +3,9 @@ import { Playfair_Display, DM_Sans } from "next/font/google";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { SkipLink } from "@/components/layout/skip-link";
+import { SiteNav } from "@/components/layout/site-nav";
+import { SiteFooter } from "@/components/layout/site-footer";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -32,7 +35,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col font-body">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <QueryProvider>
-            {children}
+            <SkipLink />
+            <SiteNav />
+            <main id="main-content" className="flex-1">
+              {children}
+            </main>
+            <SiteFooter />
             <Toaster />
           </QueryProvider>
         </ThemeProvider>
