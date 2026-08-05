@@ -1,14 +1,22 @@
-import { TripCard } from "@/components/trip/trip-card";
+import { SearchStrip } from "@/components/home/search-strip";
+import { Hero } from "@/components/home/hero";
+import { TripCarousel } from "@/components/home/trip-carousel";
+import { TrustPillars } from "@/components/home/trust-pillars";
+import { Testimonials } from "@/components/home/testimonials";
+import { HomeCta } from "@/components/home/home-cta";
 import { listTrips } from "@/server/services/tripService";
 
 export default async function Home() {
   const trips = await listTrips();
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-4 p-8 sm:grid-cols-3">
-      {trips.map((trip) => (
-        <TripCard key={trip.slug} trip={trip} />
-      ))}
-    </div>
+    <>
+      <SearchStrip />
+      <Hero />
+      <TripCarousel trips={trips} />
+      <TrustPillars />
+      <Testimonials />
+      <HomeCta />
+    </>
   );
 }
