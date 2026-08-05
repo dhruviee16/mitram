@@ -1,3 +1,5 @@
+import { Circle } from "lucide-react";
+
 import {
   Accordion,
   AccordionContent,
@@ -101,9 +103,9 @@ export function ItinerarySection({
               {itineraryDays.map((day) => (
                 <AccordionItem key={day.value} value={day.value}>
                   <AccordionTrigger className="py-4 text-left">
-                    <div className="flex flex-col gap-1 pr-3">
-                      <span className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-                        Day {day.dayNumber}
+                    <div className="flex items-center gap-3 pr-3">
+                      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 font-heading text-sm font-bold text-primary">
+                        {day.dayNumber}
                       </span>
                       <span className="font-heading text-base font-bold text-foreground">
                         {day.title}
@@ -111,18 +113,19 @@ export function ItinerarySection({
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="pb-5">
-                    <div className="space-y-3 border-l border-border pl-4 text-sm text-foreground">
+                    <div className="space-y-3 pl-11 text-sm text-foreground">
                       <p className="leading-7 text-muted-foreground">
                         {day.description}
                       </p>
                       {day.activities.length > 0 && (
                         <ul className="grid gap-2 sm:grid-cols-2" role="list">
                           {day.activities.map((activity) => (
-                            <li
-                              key={activity}
-                              className="rounded-lg bg-secondary/40 px-3 py-2"
-                            >
-                              {activity}
+                            <li key={activity} className="flex items-start gap-2">
+                              <Circle
+                                className="mt-1.5 size-1.5 shrink-0 fill-primary text-primary"
+                                aria-hidden="true"
+                              />
+                              <span>{activity}</span>
                             </li>
                           ))}
                         </ul>

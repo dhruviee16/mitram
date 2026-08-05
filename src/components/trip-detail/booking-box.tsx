@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { ShieldCheck, CheckCircle2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export function BookingBox({
   slug,
@@ -21,9 +23,10 @@ export function BookingBox({
   return (
     <>
       <aside className="hidden lg:sticky lg:top-24 lg:block">
-        <Card className="overflow-hidden shadow-sm">
-          <CardHeader className="gap-3 border-b border-border px-5 py-4">
-            <Badge variant="secondary" className="w-fit">
+        <Card className="gap-0 overflow-hidden border-border/80 py-0 shadow-sm">
+          <CardHeader className="gap-3 border-b border-border bg-secondary/40 px-5 py-5">
+            <Badge variant="secondary" className="w-fit gap-1">
+              <ShieldCheck className="size-3" aria-hidden="true" />
               Assisted departure
             </Badge>
             <div>
@@ -36,41 +39,46 @@ export function BookingBox({
             </div>
             <Link
               href={`/book/${slug}`}
-              className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="inline-flex h-11 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               Book Now
             </Link>
           </CardHeader>
 
-          <CardContent className="space-y-4 px-5 py-4">
-            <div>
-              <h3 className="text-sm font-semibold text-foreground">Care features</h3>
-              <ul className="mt-3 space-y-2 text-sm text-muted-foreground" role="list">
-                {careFeatures.map((feature) => (
-                  <li
-                    key={feature}
-                    className="rounded-lg border border-border/70 bg-secondary/30 px-3 py-2 text-foreground"
-                  >
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <CardContent className="px-5 py-5">
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Care features
+            </h3>
+            <ul className="mt-3 space-y-2.5 text-sm text-foreground" role="list">
+              {careFeatures.map((feature) => (
+                <li key={feature} className="flex items-start gap-2.5">
+                  <ShieldCheck
+                    className="mt-0.5 size-4 shrink-0 text-primary"
+                    aria-hidden="true"
+                  />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
 
             {inclusions.length > 0 && (
-              <div>
-                <h3 className="text-sm font-semibold text-foreground">Key inclusions</h3>
-                <ul className="mt-3 space-y-2 text-sm text-muted-foreground" role="list">
+              <>
+                <Separator className="my-5" />
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  Key inclusions
+                </h3>
+                <ul className="mt-3 space-y-2.5 text-sm text-foreground" role="list">
                   {inclusions.slice(0, 4).map((item) => (
-                    <li
-                      key={item}
-                      className="rounded-lg border border-border/70 bg-secondary/30 px-3 py-2 text-foreground"
-                    >
-                      {item}
+                    <li key={item} className="flex items-start gap-2.5">
+                      <CheckCircle2
+                        className="mt-0.5 size-4 shrink-0 text-primary"
+                        aria-hidden="true"
+                      />
+                      <span>{item}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </>
             )}
           </CardContent>
         </Card>
