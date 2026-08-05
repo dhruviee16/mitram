@@ -1,4 +1,11 @@
 import { TripCard } from "@/components/trip/trip-card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
 
 type Trip = Parameters<typeof TripCard>[0]["trip"];
 
@@ -9,13 +16,17 @@ export function TripCarousel({ trips }: { trips: Trip[] }) {
         <h2 id="carousel-heading" className="font-heading text-xl font-bold text-foreground">
           Mitram&rsquo;s Most-Loved Yatras
         </h2>
-        <ul className="mt-4 flex gap-4 overflow-x-auto pb-2" role="list">
-          {trips.map((trip) => (
-            <li key={trip.slug} className="w-64 shrink-0">
-              <TripCard trip={trip} />
-            </li>
-          ))}
-        </ul>
+        <Carousel opts={{ align: "start" }} className="mt-4">
+          <CarouselContent>
+            {trips.map((trip) => (
+              <CarouselItem key={trip.slug} className="basis-[85%] sm:basis-1/2 lg:basis-1/3">
+                <TripCard trip={trip} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="hidden sm:flex" />
+          <CarouselNext className="hidden sm:flex" />
+        </Carousel>
       </div>
     </section>
   );
