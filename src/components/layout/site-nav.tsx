@@ -12,7 +12,7 @@ import { auth } from "@/auth";
 const links = [
   { href: "/trips", label: "Yatras" },
   { href: "/trips", label: "All Packages" },
-  { href: "/dashboard", label: "Live Tracker" },
+  { href: "/dashboard", label: "My Bookings" },
 ];
 
 export async function SiteNav() {
