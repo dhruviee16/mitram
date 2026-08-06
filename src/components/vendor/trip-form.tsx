@@ -3,10 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, useFieldArray } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
-import { vendorTripSchema } from "@/lib/validations/vendor";
 import { TRIP_CATEGORIES } from "@/lib/trip-categories";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -68,7 +66,6 @@ export function TripForm({
   const [submitting, setSubmitting] = useState(false);
 
   const form = useForm<TripFormDefaultValues>({
-    resolver: zodResolver(vendorTripSchema) as never,
     defaultValues: defaultValues ?? emptyDefaults,
   });
 
@@ -100,7 +97,7 @@ export function TripForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit as never)} className="space-y-6" noValidate>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" noValidate>
         <FormField
           control={form.control}
           name="title"
