@@ -13,6 +13,7 @@ datasource db {
 enum UserRole {
   traveler
   nri
+  vendor
 }
 
 enum BookedFor {
@@ -50,6 +51,7 @@ model User {
   role             UserRole          @default(traveler)
   travelerProfiles TravelerProfile[]
   bookings         Booking[]
+  vendorTrips      Trip[]            @relation("VendorTrips")
   createdAt        DateTime          @default(now())
 }
 
@@ -81,6 +83,8 @@ model Trip {
   summary        String
   days           TripDay[]
   bookings       Booking[]
+  vendor         User?     @relation("VendorTrips", fields: [vendorId], references: [id])
+  vendorId       String?
   createdAt      DateTime  @default(now())
 }
 
