@@ -3,10 +3,12 @@ import Link from "next/link";
 export function AuthLayout({
   title,
   subtitle,
+  showPartnerLink = false,
   children,
 }: {
   title: string;
   subtitle: string;
+  showPartnerLink?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -25,6 +27,14 @@ export function AuthLayout({
           <p className="mt-1 text-center text-sm text-muted-foreground">{subtitle}</p>
           <div className="mt-6">{children}</div>
         </div>
+        {showPartnerLink && (
+          <p className="mt-8 border-t border-border pt-4 text-center text-sm text-muted-foreground">
+            Run a travel business?{" "}
+            <Link href="/vendor" className="font-medium text-primary hover:underline">
+              Partner with Mitram
+            </Link>
+          </p>
+        )}
       </div>
     </div>
   );

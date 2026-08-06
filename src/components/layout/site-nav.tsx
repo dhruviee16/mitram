@@ -16,18 +16,21 @@ const travelerLinks = [
 ];
 
 const vendorLinks = [
+  { href: "/", label: "Home" },
+  { href: "/trips", label: "All Packages" },
   { href: "/vendor/dashboard", label: "My Trips" },
 ];
 
 export async function SiteNav() {
   const session = await auth();
-  const isVendor = (session?.user as { role?: string } | undefined)?.role === "vendor";
+  const isVendor =
+    (session?.user as { role?: string } | undefined)?.role === "vendor";
   const links = isVendor ? vendorLinks : travelerLinks;
 
   return (
     <header className="border-b border-border bg-card">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
-        <Link href={isVendor ? "/vendor/dashboard" : "/"} className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <Image
             src="/images/brand/logo.png"
             alt="Mitram"
@@ -49,7 +52,15 @@ export async function SiteNav() {
         </NavigationMenu>
 
         {session?.user ? (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            {isVendor && (
+              <Link
+                href="/vendor/dashboard"
+                className="rounded-md bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
+                Vendor Dashboard
+              </Link>
+            )}
             <span className="hidden text-sm text-muted-foreground sm:inline">
               {session.user.name}
             </span>

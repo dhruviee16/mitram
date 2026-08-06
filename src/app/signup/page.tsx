@@ -20,6 +20,7 @@ export default async function SignupPage({
     <AuthLayout
       title="Create your account"
       subtitle="Book and track trips for the people you love."
+      showPartnerLink
     >
       <Suspense fallback={null}>
         <SignupForm />

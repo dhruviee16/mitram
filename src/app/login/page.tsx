@@ -17,7 +17,11 @@ export default async function LoginPage({
   }
 
   return (
-    <AuthLayout title="Welcome back" subtitle="Sign in to manage your family's trips.">
+    <AuthLayout
+      title="Welcome back"
+      subtitle="Sign in to manage your family's trips."
+      showPartnerLink
+    >
       <Suspense fallback={null}>
         <LoginForm />
       </Suspense>

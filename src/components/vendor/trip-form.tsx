@@ -22,6 +22,7 @@ import {
   Form,
   FormControl,
   FormField,
+  FormDescription,
   FormItem,
   FormLabel,
   FormMessage,
@@ -38,7 +39,12 @@ type TripFormDefaultValues = {
   careFeatures: string;
   inclusions: string;
   summary: string;
-  days: { dayNumber: number; title: string; description: string; activities: string }[];
+  days: {
+    dayNumber: number;
+    title: string;
+    description: string;
+    activities: string;
+  }[];
 };
 
 const emptyDefaults: TripFormDefaultValues = {
@@ -73,7 +79,10 @@ export function TripForm({
     defaultValues: defaultValues ?? emptyDefaults,
   });
 
-  const { fields, append, remove } = useFieldArray({ control: form.control, name: "days" });
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "days",
+  });
   const [images, setImages] = useState<string[]>(defaultValues?.images ?? []);
 
   async function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
@@ -87,43 +96,40 @@ export function TripForm({
       body.append("file", file);
       const res = await fetch("/api/vendor/uploads", { method: "POST", body });
       if (!res.ok) {
-        const data = await res.json().catch(() => ({ error: "Could not upload image." }));
+        const data = await res
+          .json()
+          .catch(() => ({ error: "Could not upload image." }));
         toast.error(data.error ?? "Could not upload image.");
         continue;
       }
       const { url } = (await res.json()) as { url: string };
-      setImages((prev) => {
-        const next = [...prev, url];
-        form.setValue("images", next);
-        return next;
-      });
+      setImages((prev) => [...prev, url]);
     }
 
     setUploading(false);
   }
 
   function removeImage(index: number) {
-    setImages((prev) => {
-      const next = prev.filter((_, i) => i !== index);
-      form.setValue("images", next);
-      return next;
-    });
+    setImages((prev) => prev.filter((_, i) => i !== index));
   }
 
   async function onSubmit(values: TripFormDefaultValues) {
     setSubmitting(true);
 
-    const url = mode === "create" ? "/api/vendor/trips" : `/api/vendor/trips/${tripId}`;
+    const url =
+      mode === "create" ? "/api/vendor/trips" : `/api/vendor/trips/${tripId}`;
     const method = mode === "create" ? "POST" : "PUT";
 
     const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
+      body: JSON.stringify({ ...values, images }),
     });
 
     if (!res.ok) {
-      const data = await res.json().catch(() => ({ error: "Could not save trip." }));
+      const data = await res
+        .json()
+        .catch(() => ({ error: "Could not save trip." }));
       toast.error(data.error ?? "Could not save trip.");
       setSubmitting(false);
       return;
@@ -136,7 +142,11 @@ export function TripForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" noValidate>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6"
+        noValidate
+      >
         <FormField
           control={form.control}
           name="title"
@@ -183,8 +193,11 @@ export function TripForm({
             <FormItem>
               <FormLabel>Route summary</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="e.g. Delhi → Haridwar → Rishikesh" />
+                <Input {...field} placeholder="Delhi, Haridwar, Rishikesh" />
               </FormControl>
+              <FormDescription>
+                Use commas between stops. We can format the route later.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -250,8 +263,17 @@ export function TripForm({
           <FormLabel>Photos</FormLabel>
           <div className="flex flex-wrap gap-3">
             {images.map((url, index) => (
-              <div key={url} className="relative size-24 overflow-hidden rounded-md border border-border">
-                <Image src={url} alt="" fill sizes="96px" className="object-cover" />
+              <div
+                key={url}
+                className="relative size-24 overflow-hidden rounded-md border border-border"
+              >
+                <Image
+                  src={url}
+                  alt=""
+                  fill
+                  sizes="96px"
+                  className="object-cover"
+                />
                 <button
                   type="button"
                   onClick={() => removeImage(index)}
@@ -288,7 +310,11 @@ export function TripForm({
             <FormItem>
               <FormLabel>Care features (one per line)</FormLabel>
               <FormControl>
-                <Textarea rows={3} {...field} placeholder="Wheelchair-accessible coach" />
+                <Textarea
+                  rows={3}
+                  {...field}
+                  placeholder="Wheelchair-accessible coach"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -311,13 +337,20 @@ export function TripForm({
 
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="font-heading text-lg font-bold text-foreground">Itinerary</h2>
+            <h2 className="font-heading text-lg font-bold text-foreground">
+              Itinerary
+            </h2>
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={() =>
-                append({ dayNumber: fields.length + 1, title: "", description: "", activities: "" })
+                append({
+                  dayNumber: fields.length + 1,
+                  title: "",
+                  description: "",
+                  activities: "",
+                })
               }
             >
               Add day
@@ -325,11 +358,21 @@ export function TripForm({
           </div>
 
           {fields.map((day, index) => (
-            <div key={day.id} className="space-y-3 rounded-lg border border-border p-4">
+            <div
+              key={day.id}
+              className="space-y-3 rounded-lg border border-border p-4"
+            >
               <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-foreground">Day {index + 1}</p>
+                <p className="text-sm font-semibold text-foreground">
+                  Day {index + 1}
+                </p>
                 {fields.length > 1 && (
-                  <Button type="button" variant="ghost" size="sm" onClick={() => remove(index)}>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => remove(index)}
+                  >
                     Remove
                   </Button>
                 )}
@@ -389,7 +432,11 @@ export function TripForm({
         </div>
 
         <Button type="submit" disabled={submitting}>
-          {submitting ? "Saving..." : mode === "create" ? "Create trip" : "Save changes"}
+          {submitting
+            ? "Saving..."
+            : mode === "create"
+              ? "Create trip"
+              : "Save changes"}
         </Button>
       </form>
     </Form>
