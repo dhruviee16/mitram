@@ -23,7 +23,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: "MITRAM — Senior-assisted travel",
-  description: "Senior-assisted travel, built with MakeMyTrip.",
+  description: "Senior-assisted travel, done right.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
