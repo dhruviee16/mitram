@@ -4,7 +4,7 @@ import { authConfig } from "@/auth.config";
 
 const { auth } = NextAuth(authConfig);
 
-const protectedPrefixes = ["/dashboard", "/book"];
+const protectedPrefixes = ["/dashboard", "/book", "/vendor/dashboard", "/vendor/trips", "/vendor/bookings"];
 
 export default auth((req) => {
   const isProtected = protectedPrefixes.some((p) => req.nextUrl.pathname.startsWith(p));
@@ -16,5 +16,11 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/book/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/book/:path*",
+    "/vendor/dashboard/:path*",
+    "/vendor/trips/:path*",
+    "/vendor/bookings/:path*",
+  ],
 };
