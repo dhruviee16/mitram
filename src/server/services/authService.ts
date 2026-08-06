@@ -28,7 +28,12 @@ export async function verifyCredentials(email: string, password: string) {
   return { id: user.id, email: user.email, name: user.name, role: user.role };
 }
 
-export async function registerUser(email: string, password: string, name: string) {
+export async function registerUser(
+  email: string,
+  password: string,
+  name: string,
+  role: "traveler" | "nri" | "vendor" = "traveler"
+) {
   const normalizedEmail = normalizeEmail(email);
   const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } });
   if (existing) {
@@ -37,7 +42,7 @@ export async function registerUser(email: string, password: string, name: string
 
   const passwordHash = await bcrypt.hash(password, 10);
   const user = await prisma.user.create({
-    data: { email: normalizedEmail, passwordHash, name, role: "traveler" },
+    data: { email: normalizedEmail, passwordHash, name, role },
   });
 
   return { id: user.id, email: user.email, name: user.name, role: user.role };
