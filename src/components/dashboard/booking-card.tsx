@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const FALLBACK_IMAGE =
@@ -55,6 +56,12 @@ export function BookingCard({ booking }: { booking: BookingCardBooking }) {
             ₹{booking.totalAmount.toLocaleString("en-IN")}
           </span>
         </div>
+        {booking.status === "ongoing" && (
+          <p className="mt-2 flex items-center gap-1 text-xs font-semibold text-primary">
+            <MapPin className="size-3.5" aria-hidden="true" />
+            Live tracking available
+          </p>
+        )}
       </div>
     </Link>
   );
