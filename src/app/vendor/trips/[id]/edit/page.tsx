@@ -36,7 +36,7 @@ export default async function EditVendorTripPage({
             durationDays: trip.durationDays,
             durationNights: trip.durationNights,
             basePrice: trip.basePrice,
-            images: trip.images.join("\n"),
+            images: trip.images,
             careFeatures: trip.careFeatures.join("\n"),
             inclusions: trip.inclusions.join("\n"),
             summary: trip.summary,

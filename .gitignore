@@ -43,3 +43,7 @@ next-env.d.ts
 
 /src/generated/prisma
 .superpowers/
+
+# vendor-uploaded trip images (user content, not source)
+/public/uploads/vendor-trips/*
+!/public/uploads/vendor-trips/.gitkeep

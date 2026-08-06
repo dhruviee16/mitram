@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useForm, useFieldArray } from "react-hook-form";
 import { toast } from "sonner";
+import { X } from "lucide-react";
 
 import { TRIP_CATEGORIES } from "@/lib/trip-categories";
 import { Button } from "@/components/ui/button";
@@ -32,7 +34,7 @@ type TripFormDefaultValues = {
   durationDays: number;
   durationNights: number;
   basePrice: number;
-  images: string;
+  images: string[];
   careFeatures: string;
   inclusions: string;
   summary: string;
@@ -46,7 +48,7 @@ const emptyDefaults: TripFormDefaultValues = {
   durationDays: 1,
   durationNights: 0,
   basePrice: 0,
-  images: "",
+  images: [],
   careFeatures: "",
   inclusions: "",
   summary: "",
@@ -64,12 +66,49 @@ export function TripForm({
 }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<TripFormDefaultValues>({
     defaultValues: defaultValues ?? emptyDefaults,
   });
 
   const { fields, append, remove } = useFieldArray({ control: form.control, name: "days" });
+  const [images, setImages] = useState<string[]>(defaultValues?.images ?? []);
+
+  async function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    if (files.length === 0) return;
+    e.target.value = "";
+    setUploading(true);
+
+    for (const file of files) {
+      const body = new FormData();
+      body.append("file", file);
+      const res = await fetch("/api/vendor/uploads", { method: "POST", body });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: "Could not upload image." }));
+        toast.error(data.error ?? "Could not upload image.");
+        continue;
+      }
+      const { url } = (await res.json()) as { url: string };
+      setImages((prev) => {
+        const next = [...prev, url];
+        form.setValue("images", next);
+        return next;
+      });
+    }
+
+    setUploading(false);
+  }
+
+  function removeImage(index: number) {
+    setImages((prev) => {
+      const next = prev.filter((_, i) => i !== index);
+      form.setValue("images", next);
+      return next;
+    });
+  }
 
   async function onSubmit(values: TripFormDefaultValues) {
     setSubmitting(true);
@@ -207,19 +246,40 @@ export function TripForm({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="images"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Image URLs (one per line)</FormLabel>
-              <FormControl>
-                <Textarea rows={3} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <FormItem>
+          <FormLabel>Photos</FormLabel>
+          <div className="flex flex-wrap gap-3">
+            {images.map((url, index) => (
+              <div key={url} className="relative size-24 overflow-hidden rounded-md border border-border">
+                <Image src={url} alt="" fill sizes="96px" className="object-cover" />
+                <button
+                  type="button"
+                  onClick={() => removeImage(index)}
+                  aria-label="Remove photo"
+                  className="absolute top-1 right-1 flex size-5 items-center justify-center rounded-full bg-foreground/70 text-background"
+                >
+                  <X className="size-3" aria-hidden="true" />
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="flex size-24 flex-col items-center justify-center gap-1 rounded-md border border-dashed border-input text-xs text-muted-foreground hover:border-primary hover:text-primary disabled:opacity-50"
+            >
+              {uploading ? "Uploading..." : "+ Add photo"}
+            </button>
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            multiple
+            onChange={handleImageSelect}
+            className="hidden"
+          />
+        </FormItem>
 
         <FormField
           control={form.control}

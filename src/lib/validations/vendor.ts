@@ -26,7 +26,7 @@ export const vendorTripSchema = z.object({
   durationDays: z.coerce.number().int().min(1),
   durationNights: z.coerce.number().int().min(0),
   basePrice: z.coerce.number().int().min(1),
-  images: z.string().transform(listFromLines).default([]),
+  images: z.array(z.string()).default([]),
   careFeatures: z.string().transform(listFromLines).default([]),
   inclusions: z.string().transform(listFromLines).default([]),
   summary: z.string().min(1, "Enter a trip summary."),
