@@ -9,19 +9,25 @@ import {
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { auth } from "@/auth";
 
-const links = [
+const travelerLinks = [
   { href: "/trips", label: "Yatras" },
   { href: "/trips", label: "All Packages" },
   { href: "/dashboard", label: "My Bookings" },
 ];
 
+const vendorLinks = [
+  { href: "/vendor/dashboard", label: "My Trips" },
+];
+
 export async function SiteNav() {
   const session = await auth();
+  const isVendor = (session?.user as { role?: string } | undefined)?.role === "vendor";
+  const links = isVendor ? vendorLinks : travelerLinks;
 
   return (
     <header className="border-b border-border bg-card">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href={isVendor ? "/vendor/dashboard" : "/"} className="flex items-center gap-2">
           <Image
             src="/images/brand/logo.png"
             alt="Mitram"

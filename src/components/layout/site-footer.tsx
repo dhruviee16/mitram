@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-secondary">
@@ -7,6 +9,9 @@ export function SiteFooter() {
           Senior-assisted travel, done right. A trust layer that makes
           senior travel safe for the traveler and visible for the family paying for it.
         </p>
+        <Link href="/vendor" className="mt-4 inline-block font-medium text-primary hover:underline">
+          List your trips on Mitram — Become a partner
+        </Link>
       </div>
     </footer>
   );
