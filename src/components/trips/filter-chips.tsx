@@ -1,13 +1,9 @@
 "use client";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { TRIP_CATEGORIES } from "@/lib/trip-categories";
 
-const categories = [
-  { value: "all", label: "All" },
-  { value: "pilgrimage", label: "Pilgrimage" },
-  { value: "heritage", label: "Heritage" },
-  { value: "international", label: "International" },
-];
+const categories = [{ value: "all", label: "All" }, ...TRIP_CATEGORIES];
 
 export function FilterChips({
   active,

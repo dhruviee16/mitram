@@ -2,7 +2,7 @@ export const trips = [
   {
     slug: "sammed-shikharji-yatra",
     title: "Sammed Shikharji Yatra",
-    category: "pilgrimage",
+    category: "spiritual",
     routeSummary: "Delhi → Deoghar → Madhuban",
     durationDays: 4,
     durationNights: 3,
@@ -52,7 +52,7 @@ export const trips = [
   {
     slug: "dwarka-rann-of-kutch",
     title: "Dwarka + Rann of Kutch Spiritual & Heritage Yatra",
-    category: "pilgrimage",
+    category: "spiritual",
     routeSummary: "Ahmedabad → Dwarka → Beyt Dwarka → Shivrajpur → Mundra → Rann of Kutch → Ahmedabad",
     durationDays: 7,
     durationNights: 6,
@@ -90,7 +90,7 @@ export const trips = [
   {
     slug: "char-dham-yatra",
     title: "Char Dham Yatra — Fully Assisted",
-    category: "pilgrimage",
+    category: "spiritual",
     routeSummary: "Yamunotri → Gangotri → Kedarnath → Badrinath",
     durationDays: 11,
     durationNights: 10,
@@ -104,7 +104,7 @@ export const trips = [
   {
     slug: "vaishno-devi-yatra",
     title: "Vaishno Devi Yatra",
-    category: "pilgrimage",
+    category: "spiritual",
     routeSummary: "Delhi → Jammu → Katra",
     durationDays: 6,
     durationNights: 5,
@@ -132,7 +132,7 @@ export const trips = [
   {
     slug: "maharashtra-jyotirlinga-circuit",
     title: "Maharashtra Jyotirlinga Circuit",
-    category: "pilgrimage",
+    category: "spiritual",
     routeSummary: "Mumbai → Trimbakeshwar → Grishneshwar → Shirdi → Bhimashankar → Pune → Mumbai",
     durationDays: 7,
     durationNights: 6,
@@ -158,6 +158,6 @@ export const trips = [
 ];
 
 export const internationalTrips = [
-  { slug: "bhutan-gentle-himalaya", title: "Bhutan — Gentle Himalaya", category: "international", routeSummary: "Paro → Thimphu → Punakha", durationDays: 6, durationNights: 5, basePrice: 89999, images: [] as string[], careFeatures: ["Low-altitude itinerary", "Oxygen support on standby"], inclusions: ["Visa assistance", "All meals", "AC transport"], summary: "A gentle, low-altitude introduction to Bhutan's monasteries and valleys.", days: [] as { dayNumber: number; title: string; description: string; activities: string[] }[] },
-  { slug: "spain-portugal-heritage", title: "Spain & Portugal Heritage", category: "international", routeSummary: "Madrid → Lisbon → Porto", durationDays: 10, durationNights: 9, basePrice: 189999, images: [] as string[], careFeatures: ["English/Hindi-speaking coordinator", "Wheelchair-accessible coach"], inclusions: ["4-star hotels", "Daily breakfast", "Guided heritage tours"], summary: "Iberian heritage at a relaxed, senior-friendly pace.", days: [] as { dayNumber: number; title: string; description: string; activities: string[] }[] },
+  { slug: "bhutan-gentle-himalaya", title: "Bhutan — Gentle Himalaya", category: "leisure", routeSummary: "Paro → Thimphu → Punakha", durationDays: 6, durationNights: 5, basePrice: 89999, images: [] as string[], careFeatures: ["Low-altitude itinerary", "Oxygen support on standby"], inclusions: ["Visa assistance", "All meals", "AC transport"], summary: "A gentle, low-altitude introduction to Bhutan's monasteries and valleys.", days: [] as { dayNumber: number; title: string; description: string; activities: string[] }[] },
+  { slug: "spain-portugal-heritage", title: "Spain & Portugal Heritage", category: "leisure", routeSummary: "Madrid → Lisbon → Porto", durationDays: 10, durationNights: 9, basePrice: 189999, images: [] as string[], careFeatures: ["English/Hindi-speaking coordinator", "Wheelchair-accessible coach"], inclusions: ["4-star hotels", "Daily breakfast", "Guided heritage tours"], summary: "Iberian heritage at a relaxed, senior-friendly pace.", days: [] as { dayNumber: number; title: string; description: string; activities: string[] }[] },
 ];
