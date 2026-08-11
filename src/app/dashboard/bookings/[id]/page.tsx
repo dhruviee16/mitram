@@ -7,6 +7,7 @@ import { getBookingById } from "@/server/services/bookingService";
 import { Badge } from "@/components/ui/badge";
 import { ItineraryRecap } from "@/components/dashboard/itinerary-recap";
 import { LiveTrackingPanel } from "@/components/dashboard/live-tracking-panel";
+import { formatRoute } from "@/lib/format-route";
 
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1598091383021-15ddea10925d?w=800&q=70";
@@ -52,7 +53,7 @@ export default async function BookingDetailPage({
         </div>
         <div>
           <h1 className="font-heading text-xl font-bold text-foreground">{booking.trip.title}</h1>
-          <p className="text-xs text-muted-foreground">{booking.trip.routeSummary}</p>
+          <p className="text-xs text-muted-foreground">{formatRoute(booking.trip.routeSummary)}</p>
           <Badge className="mt-2 capitalize">{booking.status}</Badge>
         </div>
       </div>

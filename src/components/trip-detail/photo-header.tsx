@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { formatRoute } from "@/lib/format-route";
 
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1598091383021-15ddea10925d?w=1200&q=70";
@@ -34,7 +35,7 @@ function HeaderCaption({
       <h1 className="mt-3 font-heading text-2xl font-bold text-white sm:text-4xl">
         {title}
       </h1>
-      <p className="mt-1 text-sm text-white/85 sm:text-base">{routeSummary}</p>
+      <p className="mt-1 text-sm text-white/85 sm:text-base">{formatRoute(routeSummary)}</p>
     </div>
   );
 }
@@ -72,7 +73,7 @@ export function PhotoHeader({
         <div className="relative h-56 w-full overflow-hidden rounded-[1.25rem] sm:h-80">
           <Image
             src={heroImage}
-            alt={`${title} — ${routeSummary}`}
+            alt={`${title} — ${formatRoute(routeSummary)}`}
             fill
             sizes="100vw"
             priority
@@ -92,7 +93,7 @@ export function PhotoHeader({
             <DialogTrigger className="group relative h-56 overflow-hidden rounded-[1.25rem] text-left outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:h-80">
               <Image
                 src={heroImage}
-                alt={`${title} — ${routeSummary}`}
+                alt={`${title} — ${formatRoute(routeSummary)}`}
                 fill
                 sizes="(min-width: 640px) 60vw, 100vw"
                 priority

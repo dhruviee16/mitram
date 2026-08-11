@@ -191,12 +191,12 @@ export function TripForm({
           name="routeSummary"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Route summary</FormLabel>
+              <FormLabel>Route stops</FormLabel>
               <FormControl>
                 <Input {...field} placeholder="Delhi, Haridwar, Rishikesh" />
               </FormControl>
               <FormDescription>
-                Use commas between stops. We can format the route later.
+                Just the place names, separated by commas — we&rsquo;ll add the arrows for you.
               </FormDescription>
               <FormMessage />
             </FormItem>

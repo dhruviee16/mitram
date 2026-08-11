@@ -11,6 +11,7 @@ import { useCreatePaymentOrder } from "@/hooks/use-create-payment-order";
 import { useVerifyPayment } from "@/hooks/use-verify-payment";
 import type { BookedFor, TravelerValues, RoomCareValues } from "@/lib/validations/booking";
 import type { TripSummary } from "@/components/booking/booking-wizard";
+import { formatRoute } from "@/lib/format-route";
 
 const bookedForLabels: Record<BookedFor, string> = {
   self: "Myself",
@@ -99,7 +100,7 @@ export function StepReview({
         <div>
           <p className="text-sm font-bold text-foreground">{trip.title}</p>
           <p className="text-xs text-muted-foreground">
-            {trip.routeSummary} · {trip.durationDays}D/{trip.durationNights}N
+            {formatRoute(trip.routeSummary)} · {trip.durationDays}D/{trip.durationNights}N
           </p>
         </div>
       </div>

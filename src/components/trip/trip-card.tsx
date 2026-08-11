@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ShieldCheck, Radio, ArrowRight } from "lucide-react";
+import { formatRoute } from "@/lib/format-route";
 
 type TripCardTrip = {
   slug: string;
@@ -28,7 +29,7 @@ export function TripCard({ trip }: { trip: TripCardTrip }) {
       <div className="relative h-40 w-full">
         <Image
           src={image}
-          alt={`${trip.title} — ${trip.routeSummary}`}
+          alt={`${trip.title} — ${formatRoute(trip.routeSummary)}`}
           fill
           sizes="(min-width: 768px) 320px, 90vw"
           className="object-cover"
@@ -45,7 +46,7 @@ export function TripCard({ trip }: { trip: TripCardTrip }) {
           </h3>
         </div>
         <p className="mt-1 text-xs text-muted-foreground">
-          {trip.routeSummary}
+          {formatRoute(trip.routeSummary)}
         </p>
 
         {(firstFeature || secondFeature) && (

@@ -5,6 +5,7 @@ import { CheckCircle2 } from "lucide-react";
 import { auth } from "@/auth";
 import { getBookingById } from "@/server/services/bookingService";
 import { Button } from "@/components/ui/button";
+import { formatRoute } from "@/lib/format-route";
 
 export default async function BookingConfirmationPage({
   params,
@@ -49,7 +50,7 @@ export default async function BookingConfirmationPage({
           </div>
           <div>
             <p className="text-sm font-bold text-foreground">{booking.trip.title}</p>
-            <p className="text-xs text-muted-foreground">{booking.trip.routeSummary}</p>
+            <p className="text-xs text-muted-foreground">{formatRoute(booking.trip.routeSummary)}</p>
           </div>
         </div>
         <dl className="mt-4 space-y-2 text-sm">

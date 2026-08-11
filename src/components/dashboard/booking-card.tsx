@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { formatRoute } from "@/lib/format-route";
 
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1598091383021-15ddea10925d?w=400&q=70";
@@ -49,7 +50,7 @@ export function BookingCard({ booking }: { booking: BookingCardBooking }) {
             {booking.status}
           </Badge>
         </div>
-        <p className="mt-1 text-xs text-muted-foreground">{booking.trip.routeSummary}</p>
+        <p className="mt-1 text-xs text-muted-foreground">{formatRoute(booking.trip.routeSummary)}</p>
         <div className="mt-2 flex items-center justify-between text-sm">
           <span className="capitalize text-muted-foreground">{booking.roomType} room</span>
           <span className="font-heading font-bold text-primary">
