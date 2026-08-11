@@ -46,7 +46,9 @@ export function LoginForm() {
       return;
     }
 
+    toast.success("Signed in.");
     router.push(callbackUrl);
+    router.refresh();
   }
 
   return (

@@ -61,7 +61,9 @@ export function SignupForm() {
       return;
     }
 
+    toast.success("Account created.");
     router.push(callbackUrl);
+    router.refresh();
   }
 
   return (
