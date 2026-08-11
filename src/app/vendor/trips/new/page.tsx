@@ -1,5 +1,7 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { TripForm } from "@/components/vendor/trip-form";
 
 export default async function NewVendorTripPage() {
@@ -10,7 +12,14 @@ export default async function NewVendorTripPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
-      <h1 className="font-heading text-2xl font-bold text-foreground">Add a trip</h1>
+      <Link
+        href="/vendor/dashboard"
+        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
+      >
+        <ArrowLeft className="size-4" aria-hidden="true" />
+        Your trips
+      </Link>
+      <h1 className="mt-4 font-heading text-2xl font-bold text-foreground">Add a trip</h1>
       <div className="mt-6">
         <TripForm mode="create" />
       </div>

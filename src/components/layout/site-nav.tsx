@@ -10,7 +10,6 @@ import { SignOutButton } from "@/components/auth/sign-out-button";
 import { auth } from "@/auth";
 
 const travelerLinks = [
-  { href: "/trips", label: "Yatras" },
   { href: "/trips", label: "All Packages" },
   { href: "/dashboard", label: "My Bookings" },
 ];

@@ -1,5 +1,7 @@
 import { auth } from "@/auth";
 import { redirect, notFound } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { getBookingForVendorUpdate } from "@/server/services/vendorService";
 import { TripUpdateForm } from "@/components/vendor/trip-update-form";
 
@@ -24,7 +26,15 @@ export default async function VendorBookingUpdatesPage({
 
   return (
     <div className="mx-auto max-w-xl px-4 py-8 sm:px-6">
-      <h1 className="font-heading text-2xl font-bold text-foreground">
+      <Link
+        href={`/vendor/trips/${booking.trip.id}/bookings`}
+        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
+      >
+        <ArrowLeft className="size-4" aria-hidden="true" />
+        Bookings
+      </Link>
+
+      <h1 className="mt-4 font-heading text-2xl font-bold text-foreground">
         {booking.trip.title} — {booking.user.name}
       </h1>
       {booking.status !== "ongoing" ? (

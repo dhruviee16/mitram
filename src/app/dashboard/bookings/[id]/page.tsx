@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { auth } from "@/auth";
 import { getBookingById } from "@/server/services/bookingService";
 import { Badge } from "@/components/ui/badge";
@@ -30,7 +32,15 @@ export default async function BookingDetailPage({
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
-      <div className="flex gap-4">
+      <Link
+        href="/dashboard"
+        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
+      >
+        <ArrowLeft className="size-4" aria-hidden="true" />
+        My Bookings
+      </Link>
+
+      <div className="mt-4 flex gap-4">
         <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-md">
           <Image
             src={booking.trip.images[0] ?? FALLBACK_IMAGE}
