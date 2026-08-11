@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MITRAM
 
-## Getting Started
+Senior-assisted travel booking site (concept/investor MVP).
 
-First, run the development server:
+## Setup
+
+Requires **pnpm** (`corepack enable` if you don't have it) and a local **Postgres** instance.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install                    # installs deps, generates the Prisma client (postinstall)
+cp .env.example .env            # fill in DATABASE_URL, AUTH_SECRET, RAZORPAY_* etc.
+pnpm setup                      # runs migrations + seeds the database
+pnpm dev                        # start dev server on localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`AUTH_SECRET` can be generated with `pnpm dlx auth secret`. Razorpay keys are only needed to exercise the checkout flow — get test-mode keys from the Razorpay dashboard.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm dev              # dev server (Turbopack)
+pnpm build            # production build
+pnpm start            # run a production build
+pnpm lint             # eslint
+pnpm typecheck        # tsc --noEmit
 
-## Learn More
+pnpm db:migrate       # create + apply a migration
+pnpm db:generate      # regenerate the Prisma client after schema.prisma changes
+pnpm db:seed          # re-run prisma/seed.ts
+pnpm db:studio        # Prisma Studio (DB GUI)
+pnpm db:reset         # drop, recreate, migrate, and reseed the database
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See `CLAUDE.md` for architecture and conventions.
