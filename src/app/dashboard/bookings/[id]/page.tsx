@@ -101,12 +101,18 @@ export default async function BookingDetailPage({
         <ItineraryRecap days={booking.trip.days} />
       </div>
 
-      {booking.status === "ongoing" && (
+      {booking.status === "ongoing" ? (
         <LiveTrackingPanel
           bookingId={booking.id}
           trackingVisible={booking.trackingVisible}
           tripUpdates={booking.tripUpdates}
         />
+      ) : (
+        booking.status === "confirmed" && (
+          <p className="mt-6 rounded-lg border border-dashed border-border p-4 text-center text-sm text-muted-foreground">
+            Live tracking will appear here once the trip starts.
+          </p>
+        )
       )}
     </div>
   );

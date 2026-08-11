@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { listBookingsForVendorTrip } from "@/server/services/vendorService";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { StartTripButton } from "@/components/vendor/start-trip-button";
 
 export default async function VendorTripBookingsPage({
   params,
@@ -56,6 +57,7 @@ export default async function VendorTripBookingsPage({
                 <Badge variant="secondary" className="capitalize">
                   {booking.status}
                 </Badge>
+                {booking.status === "confirmed" && <StartTripButton bookingId={booking.id} />}
                 {booking.status === "ongoing" && (
                   <Button
                     size="sm"

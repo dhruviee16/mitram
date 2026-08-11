@@ -129,6 +129,24 @@ export async function getBookingForVendorUpdate(bookingId: string, vendorId: str
   return booking;
 }
 
+export async function startTrip(bookingId: string, vendorId: string) {
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: { trip: true },
+  });
+  if (!booking || booking.trip.vendorId !== vendorId) {
+    throw new Error("Booking not found.");
+  }
+  if (booking.status !== "confirmed") {
+    throw new Error("Booking is not confirmed.");
+  }
+
+  return prisma.booking.update({
+    where: { id: bookingId },
+    data: { status: "ongoing" },
+  });
+}
+
 export async function postTripUpdate(
   bookingId: string,
   vendorId: string,
