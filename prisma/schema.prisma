@@ -109,6 +109,7 @@ model Booking {
   bookedFor           BookedFor
   travelers           TravelerProfile[]
   numTravelers        Int
+  travelDate          DateTime
   roomType            String
   specialCareRequests String[]          @default([])
   totalAmount         Int

@@ -6,6 +6,7 @@ type CreateBookingInput = {
   tripSlug: string;
   bookedFor: BookedFor;
   traveler: TravelerValues;
+  travelDate: Date;
   roomType: RoomCareValues["roomType"];
   specialCareRequests: string[];
 };

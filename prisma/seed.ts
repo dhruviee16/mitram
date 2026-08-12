@@ -60,6 +60,7 @@ async function main() {
       bookedFor: "parent",
       travelers: { connect: [{ id: parentProfile.id }] },
       numTravelers: 1,
+      travelDate: new Date("2026-09-15"),
       roomType: "single",
       specialCareRequests: ["Jain satvik meals", "BP monitoring twice daily"],
       totalAmount: shikharji.basePrice,

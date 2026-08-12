@@ -13,6 +13,7 @@ export const travelerSchema = z.object({
 export const roomTypeSchema = z.enum(["single", "twin", "triple"]);
 
 export const roomCareSchema = z.object({
+  travelDate: z.coerce.date().refine((d) => d.getTime() > Date.now(), "Pick a date in the future."),
   roomType: roomTypeSchema,
   specialCareRequests: z.array(z.string()).default([]),
 });
@@ -29,6 +30,7 @@ export const bookingRequestSchema = z.object({
   tripSlug: z.string().min(1),
   bookedFor: bookedForSchema,
   traveler: travelerSchema,
+  travelDate: z.coerce.date(),
   roomType: roomTypeSchema,
   specialCareRequests: z.array(z.string()).default([]),
 });

@@ -34,6 +34,7 @@ export async function createBooking(userId: string, input: BookingRequestValues)
       bookedFor: input.bookedFor,
       travelers: { connect: [{ id: traveler.id }] },
       numTravelers: 1,
+      travelDate: input.travelDate,
       roomType: input.roomType,
       specialCareRequests: input.specialCareRequests,
       totalAmount: trip.basePrice,

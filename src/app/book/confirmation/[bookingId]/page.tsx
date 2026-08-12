@@ -61,6 +61,16 @@ export default async function BookingConfirmationPage({
             </div>
           )}
           <div className="flex justify-between">
+            <dt className="text-muted-foreground">Travel date</dt>
+            <dd className="text-foreground">
+              {booking.travelDate.toLocaleDateString("en-IN", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </dd>
+          </div>
+          <div className="flex justify-between">
             <dt className="text-muted-foreground">Room</dt>
             <dd className="text-foreground capitalize">{booking.roomType}</dd>
           </div>

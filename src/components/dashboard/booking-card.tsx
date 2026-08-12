@@ -12,6 +12,7 @@ type BookingCardBooking = {
   status: string;
   roomType: string;
   totalAmount: number;
+  travelDate: Date;
   trip: {
     title: string;
     routeSummary: string;
@@ -51,6 +52,13 @@ export function BookingCard({ booking }: { booking: BookingCardBooking }) {
           </Badge>
         </div>
         <p className="mt-1 text-xs text-muted-foreground">{formatRoute(booking.trip.routeSummary)}</p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          {booking.travelDate.toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          })}
+        </p>
         <div className="mt-2 flex items-center justify-between text-sm">
           <span className="capitalize text-muted-foreground">{booking.roomType} room</span>
           <span className="font-heading font-bold text-primary">

@@ -46,6 +46,7 @@ export function StepReview({
         tripSlug: trip.slug,
         bookedFor,
         traveler,
+        travelDate: roomCare.travelDate,
         roomType: roomCare.roomType,
         specialCareRequests: roomCare.specialCareRequests,
       });
@@ -114,6 +115,16 @@ export function StepReview({
           <dt className="text-muted-foreground">Traveler</dt>
           <dd className="text-foreground">
             {traveler.name}, {traveler.age}
+          </dd>
+        </div>
+        <div className="flex justify-between">
+          <dt className="text-muted-foreground">Travel date</dt>
+          <dd className="text-foreground">
+            {roomCare.travelDate.toLocaleDateString("en-IN", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
           </dd>
         </div>
         <div className="flex justify-between">
