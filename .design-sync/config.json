@@ -1,0 +1,12 @@
+{
+  "projectId": "46cd5eb4-21f1-4cec-a312-3df9f8350c7d",
+  "pkg": "mitram-ui",
+  "globalName": "MitramUI",
+  "shape": "package",
+  "buildCmd": "pnpm build:ds && pnpm dlx @tailwindcss/cli --input src/app/globals.css --output dist-ds/styles.css --content \"src/components/ui/**/*.tsx\" --content \"src/components/ui/**/*.ts\"",
+  "srcDir": "src/components/ui",
+  "tsconfig": "tsconfig.ds.json",
+  "cssEntry": "dist-ds/styles.css",
+  "guidelinesGlob": ["docs/**/*.md"],
+  "readmeHeader": ".design-sync/conventions.md"
+}

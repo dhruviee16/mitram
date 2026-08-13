@@ -2,6 +2,7 @@
   "name": "mitram",
   "version": "0.1.0",
   "private": true,
+  "types": "dist-ds/index.d.mts",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -16,7 +17,8 @@
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset",
     "db:deploy": "prisma migrate deploy",
-    "setup": "prisma generate && prisma migrate dev && prisma db seed"
+    "setup": "prisma generate && prisma migrate dev && prisma db seed",
+    "build:ds": "tsup"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -59,6 +61,7 @@
     "eslint-config-next": "16.3.0",
     "prisma": "^7.9.1",
     "tailwindcss": "^4",
+    "tsup": "^8.5.1",
     "tsx": "^4.23.5",
     "typescript": "^5"
   },
