@@ -1,6 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Field, FieldContent, FieldLabel, FieldTitle, FieldDescription } from "@/components/ui/field";
 import { useBookingDraftStore } from "@/stores/booking-draft-store";
 import type { BookedFor } from "@/lib/validations/booking";
 
@@ -17,25 +19,24 @@ export function StepWhoFor({ onNext }: { onNext: () => void }) {
   return (
     <div>
       <h1 className="font-heading text-xl font-bold text-foreground">Who&rsquo;s this trip for?</h1>
-      <div className="mt-4 space-y-2" role="radiogroup" aria-label="Who is this trip for">
+      <RadioGroup
+        value={bookedFor ?? undefined}
+        onValueChange={(value) => update({ bookedFor: value as BookedFor })}
+        aria-label="Who is this trip for"
+        className="mt-4 gap-2"
+      >
         {options.map((opt) => (
-          <button
-            key={opt.value}
-            type="button"
-            role="radio"
-            aria-checked={bookedFor === opt.value}
-            onClick={() => update({ bookedFor: opt.value })}
-            className={
-              bookedFor === opt.value
-                ? "block w-full rounded-lg border-2 border-primary bg-secondary/40 p-4 text-left"
-                : "block w-full rounded-lg border border-border p-4 text-left hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            }
-          >
-            <p className="text-sm font-semibold text-foreground">{opt.label}</p>
-            <p className="text-xs text-muted-foreground">{opt.description}</p>
-          </button>
+          <FieldLabel key={opt.value} htmlFor={`booked-for-${opt.value}`}>
+            <Field orientation="horizontal">
+              <FieldContent>
+                <FieldTitle>{opt.label}</FieldTitle>
+                <FieldDescription>{opt.description}</FieldDescription>
+              </FieldContent>
+              <RadioGroupItem value={opt.value} id={`booked-for-${opt.value}`} />
+            </Field>
+          </FieldLabel>
         ))}
-      </div>
+      </RadioGroup>
       <Button type="button" className="mt-6 w-full min-h-11" disabled={!bookedFor} onClick={onNext}>
         Continue
       </Button>

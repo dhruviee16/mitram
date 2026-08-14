@@ -26,7 +26,6 @@ export async function SiteFooter() {
     {
       heading: "Support",
       links: [
-        { href: "/dashboard", label: "My Journey" },
         { href: "/contact", label: "Need a Hand?" },
         { href: "/faq", label: "FAQ" },
       ],

@@ -1,4 +1,5 @@
 import { Compass, ShieldCheck, Users, Heart } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const metadata = { title: "How MITRAM Works" };
 
@@ -15,11 +16,15 @@ export default function HowItWorksPage() {
       <h1 className="font-heading text-3xl font-bold text-foreground">How MITRAM Works</h1>
       <ol className="mt-8 grid gap-4 sm:grid-cols-2">
         {steps.map(({ icon: Icon, title, body }, i) => (
-          <li key={title} className="rounded-lg border border-border bg-card p-5">
-            <span className="font-heading text-xs font-bold text-primary">STEP {i + 1}</span>
-            <Icon className="mt-2 size-6 text-primary" aria-hidden="true" />
-            <p className="mt-2 font-heading text-base font-bold text-foreground">{title}</p>
-            <p className="mt-1 text-sm text-muted-foreground">{body}</p>
+          <li key={title}>
+            <Card>
+              <CardContent>
+                <span className="font-heading text-xs font-bold text-primary">STEP {i + 1}</span>
+                <Icon className="mt-2 size-6 text-primary" aria-hidden="true" />
+                <p className="mt-2 font-heading text-base font-bold text-foreground">{title}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{body}</p>
+              </CardContent>
+            </Card>
           </li>
         ))}
       </ol>

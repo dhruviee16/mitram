@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { auth } from "@/auth";
 import { getBookingById } from "@/server/services/bookingService";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { ItineraryRecap } from "@/components/dashboard/itinerary-recap";
 import { LiveTrackingPanel } from "@/components/dashboard/live-tracking-panel";
 import { ReviewForm } from "@/components/dashboard/review-form";
@@ -58,7 +59,8 @@ export default async function BookingDetailPage({
         </div>
       </div>
 
-      <div className="mt-6 rounded-lg border border-border bg-card p-4">
+      <Card className="mt-6">
+      <CardContent>
         <h2 className="text-sm font-semibold text-foreground">
           Traveler{booking.travelers.length === 1 ? "" : "s"}
         </h2>
@@ -128,7 +130,8 @@ export default async function BookingDetailPage({
             )}
           </div>
         )}
-      </div>
+      </CardContent>
+      </Card>
 
       <div className="mt-6">
         <ItineraryRecap days={booking.trip.days} />
@@ -137,15 +140,17 @@ export default async function BookingDetailPage({
       {booking.status === "completed" && (
         <div className="mt-6">
           {booking.review ? (
-            <div className="rounded-lg border border-border bg-card p-4">
-              <p className="text-sm font-semibold text-foreground">Your review</p>
-              <div className="mt-1.5">
-                <StarRating value={booking.review.rating} readOnly />
-              </div>
-              {booking.review.comment && (
-                <p className="mt-2 text-sm text-muted-foreground">{booking.review.comment}</p>
-              )}
-            </div>
+            <Card>
+              <CardContent>
+                <p className="text-sm font-semibold text-foreground">Your review</p>
+                <div className="mt-1.5">
+                  <StarRating value={booking.review.rating} readOnly />
+                </div>
+                {booking.review.comment && (
+                  <p className="mt-2 text-sm text-muted-foreground">{booking.review.comment}</p>
+                )}
+              </CardContent>
+            </Card>
           ) : (
             <ReviewForm bookingId={booking.id} />
           )}
@@ -160,9 +165,11 @@ export default async function BookingDetailPage({
         />
       ) : (
         booking.status === "confirmed" && (
-          <p className="mt-6 rounded-lg border border-dashed border-border p-4 text-center text-sm text-muted-foreground">
-            Live tracking will appear here once the trip starts.
-          </p>
+          <Card className="mt-6 border-dashed">
+            <CardContent className="text-center text-sm text-muted-foreground">
+              Live tracking will appear here once the trip starts.
+            </CardContent>
+          </Card>
         )
       )}
     </div>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { RowActionsMenu } from "@/components/ui/row-actions-menu";
 import { patchJson, deleteJson } from "@/lib/api";
 
 export function TestimonialActions({ id, featured }: { id: string; featured: boolean }) {
@@ -37,13 +37,11 @@ export function TestimonialActions({ id, featured }: { id: string; featured: boo
   }
 
   return (
-    <div className="flex shrink-0 gap-2">
-      <Button type="button" size="sm" variant="outline" disabled={submitting} onClick={toggleFeatured}>
-        {featured ? "Unfeature" : "Feature"}
-      </Button>
-      <Button type="button" size="sm" variant="destructive" disabled={submitting} onClick={handleDelete}>
-        Delete
-      </Button>
-    </div>
+    <RowActionsMenu
+      actions={[
+        { label: featured ? "Unfeature" : "Feature", onClick: toggleFeatured, disabled: submitting },
+        { label: "Delete", onClick: handleDelete, variant: "destructive", disabled: submitting },
+      ]}
+    />
   );
 }

@@ -54,7 +54,7 @@ export default async function TripsPage({
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
-        <aside>
+        <aside className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
           <TripFilterForm searchParams={params} />
         </aside>
         <div>

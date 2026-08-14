@@ -1,23 +1,42 @@
-import { HeartPulse, Radio, ShieldCheck, Users } from "lucide-react";
+import { FeatureSteps } from "@/components/ui/feature-steps";
 
-const pillars = [
-  { icon: HeartPulse, label: "Medical support" },
-  { icon: Radio, label: "Live family tracking" },
-  { icon: ShieldCheck, label: "Police-verified Saathi" },
-  { icon: Users, label: "Senior-first pacing" },
+const features = [
+  {
+    step: "Medical support",
+    title: "Medical support",
+    content:
+      "Trip coordinators trained for senior care, with tie-ups for on-trip medical assistance if it's ever needed.",
+    image: "/images/features/medical-support.jpg",
+  },
+  {
+    step: "Live family tracking",
+    title: "Live family tracking",
+    content:
+      "Family back home can follow the journey in real time — every stop, every day, without having to ask.",
+    image: "/images/features/live-tracking.jpg",
+  },
+  {
+    step: "Police-verified Saathi",
+    title: "Police-verified Saathi",
+    content:
+      "Every Saathi accompanying a group is background-checked and police-verified before they travel with you.",
+    image: "/images/features/verified-saathi.jpg",
+  },
+  {
+    step: "Senior-first pacing",
+    title: "Senior-first pacing",
+    content:
+      "Itineraries built around comfort — fewer rushed transfers, more rest, and walking levels set for the group.",
+    image: "/images/features/senior-pacing.jpg",
+  },
 ];
 
 export function TrustPillars() {
   return (
-    <section aria-label="Why families trust Mitram" className="border-y border-border bg-secondary px-4 py-8 sm:px-6">
-      <ul className="mx-auto flex max-w-6xl flex-wrap justify-center gap-8" role="list">
-        {pillars.map(({ icon: Icon, label }) => (
-          <li key={label} className="flex flex-col items-center gap-2 text-center">
-            <Icon className="size-6 text-primary" aria-hidden="true" />
-            <span className="text-sm font-medium text-foreground">{label}</span>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <FeatureSteps
+      features={features}
+      title="Built for peace of mind"
+      subtitle="The four things every Mitram journey is designed around."
+    />
   );
 }

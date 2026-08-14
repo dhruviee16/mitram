@@ -2,6 +2,10 @@
 
 import { ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Card, CardContent } from "@/components/ui/card";
+import { Field, FieldContent, FieldLabel, FieldTitle } from "@/components/ui/field";
 import { useBookingDraftStore } from "@/stores/booking-draft-store";
 import type { TripSummary } from "@/components/booking/booking-wizard";
 
@@ -42,58 +46,61 @@ export function StepCareInsurance({
       <h1 className="font-heading text-xl font-bold text-foreground">Room, care &amp; insurance</h1>
 
       <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Room type</p>
-      <div className="mt-2 space-y-2" role="radiogroup" aria-label="Room type">
+      <RadioGroup
+        value={draft.roomType ?? undefined}
+        onValueChange={(value) => update({ roomType: value })}
+        aria-label="Room type"
+        className="mt-2 gap-2"
+      >
         {roomTypes.map((opt) => (
-          <button
-            key={opt.value}
-            type="button"
-            role="radio"
-            aria-checked={draft.roomType === opt.value}
-            onClick={() => update({ roomType: opt.value })}
-            className={
-              draft.roomType === opt.value
-                ? "block w-full rounded-lg border-2 border-primary bg-secondary/40 p-3 text-left text-sm font-semibold text-foreground"
-                : "block w-full rounded-lg border border-border p-3 text-left text-sm text-foreground hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            }
-          >
-            {opt.label}
-          </button>
+          <FieldLabel key={opt.value} htmlFor={`room-type-${opt.value}`}>
+            <Field orientation="horizontal">
+              <FieldContent>
+                <FieldTitle>{opt.label}</FieldTitle>
+              </FieldContent>
+              <RadioGroupItem value={opt.value} id={`room-type-${opt.value}`} />
+            </Field>
+          </FieldLabel>
         ))}
-      </div>
+      </RadioGroup>
 
       <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
         Special care requests
       </p>
       <div className="mt-2 space-y-2">
         {careOptions.map((option) => (
-          <label key={option} className="flex min-h-11 items-center gap-2.5 rounded-lg border border-border p-3 text-sm text-foreground">
-            <input
-              type="checkbox"
-              checked={draft.specialCareRequests.includes(option)}
-              onChange={() => toggleCare(option)}
-              className="size-[18px] accent-primary"
-            />
-            {option}
-          </label>
+          <FieldLabel key={option} htmlFor={`care-${option}`}>
+            <Field orientation="horizontal">
+              <Checkbox
+                id={`care-${option}`}
+                checked={draft.specialCareRequests.includes(option)}
+                onCheckedChange={() => toggleCare(option)}
+              />
+              <FieldTitle className="font-normal">{option}</FieldTitle>
+            </Field>
+          </FieldLabel>
         ))}
       </div>
 
       <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Travel insurance</p>
       {trip.insuranceIncluded ? (
-        <div className="mt-2 flex items-center gap-2.5 rounded-lg border border-primary/30 bg-secondary/30 p-3 text-sm text-foreground">
-          <ShieldCheck className="size-4 shrink-0 text-primary" aria-hidden="true" />
-          Travel insurance is included with this trip.
-        </div>
+        <Card className="mt-2 border-primary/30 bg-secondary/30" size="sm">
+          <CardContent className="flex items-center gap-2.5 text-sm text-foreground">
+            <ShieldCheck className="size-4 shrink-0 text-primary" aria-hidden="true" />
+            Travel insurance is included with this trip.
+          </CardContent>
+        </Card>
       ) : (
-        <label className="mt-2 flex min-h-11 items-center gap-2.5 rounded-lg border border-border p-3 text-sm text-foreground">
-          <input
-            type="checkbox"
-            checked={draft.insuranceOpted}
-            onChange={(e) => update({ insuranceOpted: e.target.checked })}
-            className="size-[18px] accent-primary"
-          />
-          Add travel insurance
-        </label>
+        <FieldLabel htmlFor="insurance-opt-in" className="mt-2">
+          <Field orientation="horizontal">
+            <Checkbox
+              id="insurance-opt-in"
+              checked={draft.insuranceOpted}
+              onCheckedChange={(checked) => update({ insuranceOpted: checked === true })}
+            />
+            <FieldTitle className="font-normal">Add travel insurance</FieldTitle>
+          </Field>
+        </FieldLabel>
       )}
 
       <div className="mt-6 flex gap-3">

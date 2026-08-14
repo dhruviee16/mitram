@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { RowActionsMenu } from "@/components/ui/row-actions-menu";
 import { patchJson } from "@/lib/api";
 
 export function StatusActionButtons({
@@ -30,19 +30,13 @@ export function StatusActionButtons({
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
-      {actions.map((action) => (
-        <Button
-          key={action.status}
-          type="button"
-          size="sm"
-          variant={action.variant ?? "outline"}
-          disabled={submitting !== null}
-          onClick={() => handleClick(action.status)}
-        >
-          {submitting === action.status ? "Saving..." : action.label}
-        </Button>
-      ))}
-    </div>
+    <RowActionsMenu
+      actions={actions.map((action) => ({
+        label: action.label,
+        variant: action.variant === "destructive" ? "destructive" : "default",
+        disabled: submitting !== null,
+        onClick: () => handleClick(action.status),
+      }))}
+    />
   );
 }

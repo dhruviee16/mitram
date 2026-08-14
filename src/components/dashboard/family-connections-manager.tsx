@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { Card, CardContent } from "@/components/ui/card";
 import { postJson, patchJson, deleteJson } from "@/lib/api";
 
 type Connection = {
@@ -90,39 +91,44 @@ export function FamilyConnectionsManager({ initialConnections }: { initialConnec
       {connections.length > 0 && (
         <ul className="space-y-4" role="list">
           {connections.map((c) => (
-            <li key={c.id} className="rounded-lg border border-border bg-card p-4">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <p className="text-sm font-bold text-foreground">{c.name}</p>
-                  <p className="text-xs text-muted-foreground">{c.relationship}</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => handleRemove(c.id)}
-                  aria-label={`Remove ${c.name}`}
-                  className="flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-destructive"
-                >
-                  <Trash2 className="size-4" aria-hidden="true" />
-                </button>
-              </div>
-              <div className="mt-3 space-y-2.5 border-t border-border pt-3">
-                {PERMISSION_FIELDS.map(({ key, label }) => (
-                  <div key={key} className="flex items-center justify-between">
-                    <span className="text-sm text-foreground">{label}</span>
-                    <Switch
-                      checked={c[key] as boolean}
-                      onCheckedChange={(checked) => togglePermission(c.id, key, checked)}
-                      aria-label={`${label} for ${c.name}`}
-                    />
+            <li key={c.id}>
+              <Card>
+                <CardContent>
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="text-sm font-bold text-foreground">{c.name}</p>
+                      <p className="text-xs text-muted-foreground">{c.relationship}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRemove(c.id)}
+                      aria-label={`Remove ${c.name}`}
+                      className="flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-destructive"
+                    >
+                      <Trash2 className="size-4" aria-hidden="true" />
+                    </button>
                   </div>
-                ))}
-              </div>
+                  <div className="mt-3 space-y-2.5 border-t border-border pt-3">
+                    {PERMISSION_FIELDS.map(({ key, label }) => (
+                      <div key={key} className="flex items-center justify-between">
+                        <span className="text-sm text-foreground">{label}</span>
+                        <Switch
+                          checked={c[key] as boolean}
+                          onCheckedChange={(checked) => togglePermission(c.id, key, checked)}
+                          aria-label={`${label} for ${c.name}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             </li>
           ))}
         </ul>
       )}
 
-      <div className="rounded-lg border border-dashed border-border p-4">
+      <Card className="border-dashed">
+      <CardContent>
         <p className="text-sm font-semibold text-foreground">Add a family member</p>
         <div className="mt-3 grid grid-cols-2 gap-2">
           <Input
@@ -156,7 +162,8 @@ export function FamilyConnectionsManager({ initialConnections }: { initialConnec
           <Plus className="size-4" aria-hidden="true" />
           {submitting ? "Adding..." : "Add family member"}
         </Button>
-      </div>
+      </CardContent>
+      </Card>
     </div>
   );
 }

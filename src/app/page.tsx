@@ -1,8 +1,8 @@
 import { Hero } from "@/components/home/hero";
-import { DealsStrip } from "@/components/home/deals-strip";
 import { BrowseCategories } from "@/components/home/browse-categories";
 import { TripCarousel } from "@/components/home/trip-carousel";
 import { HowItWorks } from "@/components/home/how-it-works";
+import { StorySections } from "@/components/home/story-sections";
 import { TrustPillars } from "@/components/home/trust-pillars";
 import { DestinationInspiration } from "@/components/home/destination-inspiration";
 import { Testimonials } from "@/components/home/testimonials";
@@ -11,23 +11,25 @@ import { listTrips } from "@/server/services/tripService";
 import { listCategories } from "@/server/services/categoryService";
 import { listDestinations } from "@/server/services/destinationService";
 import { listFeaturedTestimonials } from "@/server/services/testimonialService";
+import { getHomeStats } from "@/server/services/statsService";
 
 export default async function Home() {
-  const [trips, categories, destinations, testimonials] = await Promise.all([
+  const [trips, categories, destinations, testimonials, stats] = await Promise.all([
     listTrips(),
     listCategories(),
     listDestinations(),
     listFeaturedTestimonials(),
+    getHomeStats(),
   ]);
 
   return (
     <>
-      <Hero />
-      <DealsStrip />
+      <Hero stats={{ averageRating: stats.averageRating, travelers: stats.travelers }} />
+      <TrustPillars />
       <BrowseCategories categories={categories} />
       <TripCarousel trips={trips} />
       <HowItWorks />
-      <TrustPillars />
+      <StorySections />
       <DestinationInspiration destinations={destinations} />
       <Testimonials testimonials={testimonials} />
       <HomeCta />

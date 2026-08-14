@@ -1,4 +1,5 @@
 import { CalendarDays, MapPin, Users, Footprints, Star, UtensilsCrossed, ShieldCheck, Heart } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 type QuickInfoTrip = {
   durationDays: number;
@@ -43,21 +44,25 @@ export function QuickInfo({ trip }: { trip: QuickInfoTrip }) {
   ].filter(Boolean) as { icon: typeof CalendarDays; label: string; value: string }[];
 
   return (
-    <section aria-labelledby="quick-info-heading" className="rounded-2xl border border-border bg-card p-5 shadow-sm">
-      <h2 id="quick-info-heading" className="font-heading text-lg font-bold text-foreground">
-        Quick Information
-      </h2>
-      <dl className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map(({ icon: Icon, label, value }) => (
-          <div key={label} className="flex items-start gap-2.5">
-            <Icon className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
-            <div>
-              <dt className="text-xs text-muted-foreground">{label}</dt>
-              <dd className="text-sm font-semibold text-foreground">{value}</dd>
-            </div>
-          </div>
-        ))}
-      </dl>
+    <section aria-labelledby="quick-info-heading">
+      <Card>
+        <CardContent>
+          <h2 id="quick-info-heading" className="font-heading text-lg font-bold text-foreground">
+            Quick Information
+          </h2>
+          <dl className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {items.map(({ icon: Icon, label, value }) => (
+              <div key={label} className="flex items-start gap-2.5">
+                <Icon className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                <div>
+                  <dt className="text-xs text-muted-foreground">{label}</dt>
+                  <dd className="text-sm font-semibold text-foreground">{value}</dd>
+                </div>
+              </div>
+            ))}
+          </dl>
+        </CardContent>
+      </Card>
     </section>
   );
 }

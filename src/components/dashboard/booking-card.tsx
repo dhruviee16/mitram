@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { formatRoute } from "@/lib/format-route";
 
 const FALLBACK_IMAGE =
@@ -33,8 +34,10 @@ export function BookingCard({ booking }: { booking: BookingCardBooking }) {
   return (
     <Link
       href={`/dashboard/bookings/${booking.id}`}
-      className="flex gap-4 rounded-lg border border-border bg-card p-4 transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className="group block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
+      <Card className="flex-row gap-4 border-border transition-colors group-hover:border-primary">
+      <CardContent className="flex flex-1 gap-4">
       <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-md">
         <Image
           src={booking.trip.images[0] ?? FALLBACK_IMAGE}
@@ -72,6 +75,8 @@ export function BookingCard({ booking }: { booking: BookingCardBooking }) {
           </p>
         )}
       </div>
+      </CardContent>
+      </Card>
     </Link>
   );
 }

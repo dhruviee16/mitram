@@ -4,6 +4,9 @@ import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Field, FieldContent, FieldLabel, FieldTitle } from "@/components/ui/field";
 import { useBookingDraftStore, type BookingTraveler } from "@/stores/booking-draft-store";
 import type { TripSummary } from "@/components/booking/booking-wizard";
 
@@ -63,48 +66,51 @@ export function StepDepartureTravelers({
       {trip.dates.length === 0 ? (
         <p className="mt-2 text-sm text-muted-foreground">No upcoming departures available for this trip.</p>
       ) : (
-        <div className="mt-2 space-y-2" role="radiogroup" aria-label="Departure date">
+        <RadioGroup
+          value={draft.tripDateId ?? undefined}
+          onValueChange={(value) => update({ tripDateId: value })}
+          aria-label="Departure date"
+          className="mt-2 gap-2"
+        >
           {trip.dates.map((d) => (
-            <button
-              key={d.id}
-              type="button"
-              role="radio"
-              aria-checked={draft.tripDateId === d.id}
-              onClick={() => update({ tripDateId: d.id })}
-              className={
-                draft.tripDateId === d.id
-                  ? "block w-full rounded-lg border-2 border-primary bg-secondary/40 p-3 text-left text-sm"
-                  : "block w-full rounded-lg border border-border p-3 text-left text-sm hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              }
-            >
-              <span className="font-semibold text-foreground">
-                {new Date(d.departureDate).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
-              </span>
-              {d.seatsAvailable !== null && (
-                <span className="ml-2 text-xs text-muted-foreground">{d.seatsAvailable} seats left</span>
-              )}
-            </button>
+            <FieldLabel key={d.id} htmlFor={`trip-date-${d.id}`}>
+              <Field orientation="horizontal">
+                <FieldContent>
+                  <FieldTitle>
+                    {new Date(d.departureDate).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
+                  </FieldTitle>
+                  {d.seatsAvailable !== null && (
+                    <span className="text-xs text-muted-foreground">{d.seatsAvailable} seats left</span>
+                  )}
+                </FieldContent>
+                <RadioGroupItem value={d.id} id={`trip-date-${d.id}`} />
+              </Field>
+            </FieldLabel>
           ))}
-        </div>
+        </RadioGroup>
       )}
 
       <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Travelers</p>
       {draft.travelers.length > 0 && (
         <ul className="mt-2 space-y-2" role="list">
           {draft.travelers.map((t, i) => (
-            <li key={`${t.name}-${i}`} className="flex items-center justify-between rounded-lg border border-border p-3">
-              <div>
-                <p className="text-sm font-semibold text-foreground">{t.name}, {t.age}</p>
-                <p className="text-xs text-muted-foreground">{t.relationship}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => removeTraveler(i)}
-                aria-label={`Remove ${t.name}`}
-                className="flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-destructive"
-              >
-                <Trash2 className="size-4" aria-hidden="true" />
-              </button>
+            <li key={`${t.name}-${i}`}>
+              <Card size="sm">
+                <CardContent className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">{t.name}, {t.age}</p>
+                    <p className="text-xs text-muted-foreground">{t.relationship}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeTraveler(i)}
+                    aria-label={`Remove ${t.name}`}
+                    className="flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-destructive"
+                  >
+                    <Trash2 className="size-4" aria-hidden="true" />
+                  </button>
+                </CardContent>
+              </Card>
             </li>
           ))}
         </ul>

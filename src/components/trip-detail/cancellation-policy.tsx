@@ -1,3 +1,5 @@
+import { Card, CardContent } from "@/components/ui/card";
+
 const POLICY_ITEMS = [
   { title: "Booking & payments", body: "Full payment is required to confirm your trip. Partial payments may be accepted at MITRAM's discretion; registration timelines and requirements will be shared at the time of booking." },
   { title: "Cancellation timeline & fees", body: "60+ days before departure: 10% fee · 30–59 days: 50% fee · 15–29 days: 75% fee · Under 15 days: non-refundable. Unused services are non-refundable." },
@@ -9,18 +11,22 @@ const POLICY_ITEMS = [
 
 export function CancellationPolicy() {
   return (
-    <section aria-labelledby="cancellation-heading" className="rounded-2xl border border-border bg-card p-5 shadow-sm">
-      <h2 id="cancellation-heading" className="font-heading text-lg font-bold text-foreground">
-        Our Cancellation Policy
-      </h2>
-      <div className="mt-4 space-y-4">
-        {POLICY_ITEMS.map((item) => (
-          <div key={item.title}>
-            <p className="text-sm font-semibold text-foreground">{item.title}</p>
-            <p className="mt-0.5 text-sm text-muted-foreground">{item.body}</p>
+    <section aria-labelledby="cancellation-heading">
+      <Card>
+        <CardContent>
+          <h2 id="cancellation-heading" className="font-heading text-lg font-bold text-foreground">
+            Our Cancellation Policy
+          </h2>
+          <div className="mt-4 space-y-4">
+            {POLICY_ITEMS.map((item) => (
+              <div key={item.title}>
+                <p className="text-sm font-semibold text-foreground">{item.title}</p>
+                <p className="mt-0.5 text-sm text-muted-foreground">{item.body}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </CardContent>
+      </Card>
     </section>
   );
 }

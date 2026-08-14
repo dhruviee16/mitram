@@ -1,4 +1,5 @@
 import { ShieldCheck, Users, Radio, Heart, Accessibility, FileCheck, BookUser, Lock } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const metadata = { title: "Safety & Trust — MITRAM" };
 
@@ -23,11 +24,13 @@ export default function SafetyPage() {
       </p>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {sections.map(({ icon: Icon, title, body }) => (
-          <div key={title} className="rounded-lg border border-border bg-card p-4">
-            <Icon className="size-5 text-primary" aria-hidden="true" />
-            <p className="mt-2 font-heading text-sm font-bold text-foreground">{title}</p>
-            <p className="mt-1 text-xs text-muted-foreground">{body}</p>
-          </div>
+          <Card key={title}>
+            <CardContent>
+              <Icon className="size-5 text-primary" aria-hidden="true" />
+              <p className="mt-2 font-heading text-sm font-bold text-foreground">{title}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{body}</p>
+            </CardContent>
+          </Card>
         ))}
       </div>
     </div>

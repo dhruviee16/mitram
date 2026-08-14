@@ -1,17 +1,29 @@
+import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export function HomeCta() {
   return (
-    <section className="px-4 py-10 text-center sm:px-6">
-      <h2 className="font-heading text-xl font-bold text-foreground">
+    <section className="relative overflow-hidden px-4 py-16 text-center sm:px-6 sm:py-20">
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src="/images/scenes/mountain-road.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-foreground/70" />
+      </div>
+      <h2 className="font-heading text-2xl font-extrabold text-primary-foreground sm:text-3xl">
         Ready to plan their next yatra?
       </h2>
-      <Link
-        href="/trips"
-        className="mt-4 inline-block rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-      >
+      <p className="mx-auto mt-2 max-w-md text-sm text-primary-foreground/85 sm:text-base">
+        A verified Saathi, a paced itinerary and live updates for the family — booked in minutes.
+      </p>
+      <Button size="lg" className="mt-6" render={<Link href="/trips" />}>
         Explore trips
-      </Link>
+      </Button>
     </section>
   );
 }

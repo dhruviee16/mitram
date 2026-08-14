@@ -63,7 +63,7 @@ Next.js 16 renamed middleware convention to `proxy.ts` (`src/proxy.ts` here, def
 
 ### Theming
 
-Brand palette lives in `src/app/globals.css` (`:root`/`.dark` CSS variables — maroon `#8B1A1A` primary, gold `#F5A623` accent, cream `#FFFDF5` background), consumed via shadcn semantic classes (`bg-primary`, `text-primary-foreground`, etc.) — never hardcode hex/Tailwind palette colors in components. Headings use `font-heading` (Playfair Display), body defaults `font-body` (DM Sans), both loaded via `next/font/google` in `src/app/layout.tsx`.
+Brand palette lives in `src/app/globals.css` (`:root`/`.dark` CSS variables — maroon `#8B1A1A` primary, gold `#F5A623` accent, cream `#FFFDF5` background), consumed via shadcn semantic classes (`bg-primary`, `text-primary-foreground`, etc.) — never hardcode hex/Tailwind palette colors in components. Single-family typography (Poppins, Khyaal-inspired): `font-heading` and `font-body` both resolve to Poppins, hierarchy driven by weight (400–800) not by mixing families, loaded via `next/font/google` in `src/app/layout.tsx`.
 
 shadcn configured with `style: "base-nova"`, built on **Base UI** (`@base-ui/react`), not Radix — component internals differ from most shadcn examples/tutorials online (e.g. no `@radix-ui/react-slot`; `Button`/`Dialog` wrap `@base-ui/react` primitives instead). Keep in mind adding/hand-writing components — `src/components/ui/form.tsx` hand-written for this reason (CLI's `add form` didn't complete cleanly against this style).
 

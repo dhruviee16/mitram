@@ -5,6 +5,7 @@ import { ShieldAlert, ShieldCheck, ShieldX } from "lucide-react";
 import { listTripsForVendor, getVendorAnalytics, getVendorProfile } from "@/server/services/vendorService";
 import { VendorTripCard } from "@/components/vendor/vendor-trip-card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const VERIFICATION_COPY: Record<string, { label: string; icon: typeof ShieldCheck; tone: string }> = {
   pending: { label: "Your application is pending MITRAM review.", icon: ShieldAlert, tone: "border-accent/40 bg-accent/10 text-foreground" },
@@ -36,33 +37,45 @@ export default async function VendorDashboardPage() {
       </div>
 
       {verification && (
-        <div className={`mt-4 flex items-center gap-2.5 rounded-lg border p-3 text-sm ${verification.tone}`}>
-          <verification.icon className="size-4 shrink-0" aria-hidden="true" />
-          {verification.label}
-        </div>
+        <Card className={`mt-4 flex-row items-center gap-2.5 ${verification.tone}`} size="sm">
+          <CardContent className="flex flex-1 items-center gap-2.5 text-sm">
+            <verification.icon className="size-4 shrink-0" aria-hidden="true" />
+            {verification.label}
+          </CardContent>
+        </Card>
       )}
 
       <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
-        <div className="rounded-lg border border-border bg-card p-3">
-          <p className="text-xs text-muted-foreground">Trips</p>
-          <p className="mt-1 font-heading text-xl font-bold text-foreground">{analytics.tripCount}</p>
-        </div>
-        <div className="rounded-lg border border-border bg-card p-3">
-          <p className="text-xs text-muted-foreground">Bookings</p>
-          <p className="mt-1 font-heading text-xl font-bold text-foreground">{analytics.bookingCount}</p>
-        </div>
-        <div className="rounded-lg border border-border bg-card p-3">
-          <p className="text-xs text-muted-foreground">Conversion</p>
-          <p className="mt-1 font-heading text-xl font-bold text-foreground">{analytics.conversionRate}%</p>
-        </div>
-        <div className="rounded-lg border border-border bg-card p-3">
-          <p className="text-xs text-muted-foreground">Upcoming departures</p>
-          <p className="mt-1 font-heading text-xl font-bold text-foreground">{analytics.upcomingDates}</p>
-        </div>
-        <div className="rounded-lg border border-border bg-card p-3">
-          <p className="text-xs text-muted-foreground">Revenue (paid)</p>
-          <p className="mt-1 font-heading text-xl font-bold text-primary">₹{analytics.revenue.toLocaleString("en-IN")}</p>
-        </div>
+        <Card size="sm">
+          <CardContent>
+            <p className="text-xs text-muted-foreground">Trips</p>
+            <p className="mt-1 font-heading text-xl font-bold text-foreground">{analytics.tripCount}</p>
+          </CardContent>
+        </Card>
+        <Card size="sm">
+          <CardContent>
+            <p className="text-xs text-muted-foreground">Bookings</p>
+            <p className="mt-1 font-heading text-xl font-bold text-foreground">{analytics.bookingCount}</p>
+          </CardContent>
+        </Card>
+        <Card size="sm">
+          <CardContent>
+            <p className="text-xs text-muted-foreground">Conversion</p>
+            <p className="mt-1 font-heading text-xl font-bold text-foreground">{analytics.conversionRate}%</p>
+          </CardContent>
+        </Card>
+        <Card size="sm">
+          <CardContent>
+            <p className="text-xs text-muted-foreground">Upcoming departures</p>
+            <p className="mt-1 font-heading text-xl font-bold text-foreground">{analytics.upcomingDates}</p>
+          </CardContent>
+        </Card>
+        <Card size="sm">
+          <CardContent>
+            <p className="text-xs text-muted-foreground">Revenue (paid)</p>
+            <p className="mt-1 font-heading text-xl font-bold text-primary">₹{analytics.revenue.toLocaleString("en-IN")}</p>
+          </CardContent>
+        </Card>
       </div>
 
       {trips.length === 0 ? (

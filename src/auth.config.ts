@@ -8,6 +8,9 @@ import type { NextAuthConfig } from "next-auth";
  */
 export const authConfig = {
   providers: [],
+  // Vercel auto-trusts its own host; local `next start` (production mode,
+  // unlike `next dev`) doesn't, and throws UntrustedHost without this.
+  trustHost: true,
   session: { strategy: "jwt" },
   pages: { signIn: "/customer/login" },
   callbacks: {

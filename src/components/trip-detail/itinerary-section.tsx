@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 
 type TripDay = {
   dayNumber: number;
@@ -34,43 +35,45 @@ export function ItinerarySection({
   if (days.length === 0) {
     return (
       <div className="grid gap-6">
-        <section
-          aria-labelledby="trip-overview-heading"
-          className="rounded-2xl border border-border bg-card p-5 shadow-sm"
-        >
-          <h2
-            id="trip-overview-heading"
-            className="font-heading text-xl font-bold text-foreground"
-          >
-            About this trip
-          </h2>
-          <p className="mt-3 text-sm leading-7 text-foreground">{summary}</p>
+        <section aria-labelledby="trip-overview-heading">
+          <Card>
+            <CardContent>
+              <h2
+                id="trip-overview-heading"
+                className="font-heading text-xl font-bold text-foreground"
+              >
+                About this trip
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-foreground">{summary}</p>
+            </CardContent>
+          </Card>
         </section>
 
         {inclusions.length > 0 && (
-          <section
-            aria-labelledby="included-heading"
-            className="rounded-2xl border border-border bg-card p-5 shadow-sm"
-          >
-            <h3
-              id="included-heading"
-              className="font-heading text-lg font-bold text-foreground"
-            >
-              What&rsquo;s included
-            </h3>
-            <ul
-              className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2"
-              role="list"
-            >
-              {inclusions.map((item) => (
-                <li
-                  key={item}
-                  className="rounded-lg border border-border/70 bg-secondary/40 px-3 py-2"
+          <section aria-labelledby="included-heading">
+            <Card>
+              <CardContent>
+                <h3
+                  id="included-heading"
+                  className="font-heading text-lg font-bold text-foreground"
                 >
-                  {item}
-                </li>
-              ))}
-            </ul>
+                  What&rsquo;s included
+                </h3>
+                <ul
+                  className="mt-4 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2"
+                  role="list"
+                >
+                  {inclusions.map((item) => (
+                    <li
+                      key={item}
+                      className="rounded-lg border border-border/70 bg-secondary/40 px-3 py-2"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
           </section>
         )}
       </div>
@@ -91,7 +94,8 @@ export function ItinerarySection({
         </TabsList>
 
         <TabsContent value="itinerary" className="space-y-4">
-          <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+          <Card>
+          <CardContent>
             <h3 className="font-heading text-xl font-bold text-foreground">
               Day-by-day itinerary
             </h3>
@@ -135,11 +139,13 @@ export function ItinerarySection({
                 </AccordionItem>
               ))}
             </Accordion>
-          </div>
+          </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="policies" className="space-y-4">
-          <div className="grid gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm lg:grid-cols-2">
+          <Card>
+          <CardContent className="grid gap-4 lg:grid-cols-2">
             <div>
               <h3 className="font-heading text-xl font-bold text-foreground">
                 Care features
@@ -178,11 +184,13 @@ export function ItinerarySection({
                 </p>
               </div>
             </div>
-          </div>
+          </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="summary" className="space-y-4">
-          <div className="grid gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm lg:grid-cols-[1.35fr_1fr]">
+          <Card>
+          <CardContent className="grid gap-4 lg:grid-cols-[1.35fr_1fr]">
             <div>
               <h3 className="font-heading text-xl font-bold text-foreground">
                 Trip summary
@@ -212,7 +220,8 @@ export function ItinerarySection({
                 </ul>
               </div>
             )}
-          </div>
+          </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </section>

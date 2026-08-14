@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 
 type VendorTripCardTrip = {
   id: string;
@@ -29,7 +30,8 @@ const STATUS_LABEL: Record<string, string> = {
 
 export function VendorTripCard({ trip }: { trip: VendorTripCardTrip }) {
   return (
-    <div className="flex items-center justify-between gap-4 rounded-lg border border-border bg-card p-4">
+    <Card className="flex-row items-center justify-between gap-4">
+    <CardContent className="flex flex-1 items-center justify-between gap-4">
       <div className="min-w-0">
         <div className="flex items-center gap-2">
           <p className="font-heading text-base font-bold text-foreground">{trip.title}</p>
@@ -47,6 +49,7 @@ export function VendorTripCard({ trip }: { trip: VendorTripCardTrip }) {
         <Button variant="outline" size="sm" render={<Link href={`/vendor/trips/${trip.id}/bookings`}>Bookings</Link>} />
         <Button variant="secondary" size="sm" render={<Link href={`/vendor/trips/${trip.id}/edit`}>Edit</Link>} />
       </div>
-    </div>
+    </CardContent>
+    </Card>
   );
 }

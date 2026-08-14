@@ -12,6 +12,9 @@ import { walkingIntensityValues, mealsPlanValues } from "@/lib/validations/vendo
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent } from "@/components/ui/card";
+import { Field, FieldLabel, FieldTitle } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -369,7 +372,8 @@ export function TripForm({
           />
         </FormItem>
 
-        <div className="space-y-4 rounded-lg border border-border p-4">
+        <Card>
+        <CardContent className="space-y-4">
           <h2 className="font-heading text-base font-bold text-foreground">Senior-care details</h2>
 
           <FormField
@@ -464,39 +468,40 @@ export function TripForm({
             <FormLabel>Meals plan</FormLabel>
             <div className="flex gap-4">
               {mealsPlanValues.map((meal) => (
-                <label key={meal} className="flex min-h-11 items-center gap-2 text-sm capitalize text-foreground">
-                  <input
-                    type="checkbox"
-                    checked={mealsPlan.includes(meal)}
-                    onChange={() => toggleMeal(meal)}
-                    className="size-[18px] accent-primary"
-                  />
-                  {meal}
-                </label>
+                <FieldLabel key={meal} htmlFor={`meal-${meal}`}>
+                  <Field orientation="horizontal">
+                    <Checkbox
+                      id={`meal-${meal}`}
+                      checked={mealsPlan.includes(meal)}
+                      onCheckedChange={() => toggleMeal(meal)}
+                    />
+                    <FieldTitle className="font-normal capitalize">{meal}</FieldTitle>
+                  </Field>
+                </FieldLabel>
               ))}
             </div>
           </FormItem>
 
-          <div className="flex items-center justify-between">
-            <FormLabel>Insurance included</FormLabel>
+          <Field orientation="horizontal" className="justify-between">
+            <FieldLabel htmlFor="insurance-included-switch">Insurance included</FieldLabel>
             <FormField
               control={form.control}
               name="insuranceIncluded"
               render={({ field }) => (
-                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                <Switch id="insurance-included-switch" checked={field.value} onCheckedChange={field.onChange} />
               )}
             />
-          </div>
-          <div className="flex items-center justify-between">
-            <FormLabel>MITRAM coordinator included</FormLabel>
+          </Field>
+          <Field orientation="horizontal" className="justify-between">
+            <FieldLabel htmlFor="coordinator-included-switch">MITRAM coordinator included</FieldLabel>
             <FormField
               control={form.control}
               name="coordinatorIncluded"
               render={({ field }) => (
-                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                <Switch id="coordinator-included-switch" checked={field.value} onCheckedChange={field.onChange} />
               )}
             />
-          </div>
+          </Field>
 
           <FormField
             control={form.control}
@@ -511,7 +516,8 @@ export function TripForm({
               </FormItem>
             )}
           />
-        </div>
+        </CardContent>
+        </Card>
 
         <FormField
           control={form.control}

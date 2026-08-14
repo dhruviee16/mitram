@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { getAdminOverview } from "@/server/services/adminService";
 import { AdminNav } from "@/components/admin/admin-nav";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default async function AdminOverviewPage() {
   const session = await auth();
@@ -24,10 +25,12 @@ export default async function AdminOverviewPage() {
       <h1 className="font-heading text-2xl font-bold text-foreground">MITRAM Operations</h1>
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c) => (
-          <div key={c.label} className="rounded-lg border border-border bg-card p-4">
-            <p className="text-xs text-muted-foreground">{c.label}</p>
-            <p className="mt-1 font-heading text-2xl font-bold text-primary">{c.value}</p>
-          </div>
+          <Card key={c.label}>
+            <CardContent>
+              <p className="text-xs text-muted-foreground">{c.label}</p>
+              <p className="mt-1 font-heading text-2xl font-bold text-primary">{c.value}</p>
+            </CardContent>
+          </Card>
         ))}
       </div>
     </div>

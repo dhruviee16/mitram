@@ -1,6 +1,13 @@
 import { Mail, Phone, MessageCircle } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const metadata = { title: "Need a Hand? — MITRAM" };
+
+const channels = [
+  { icon: Phone, label: "Call us", value: "+91 22 4896 3888" },
+  { icon: Mail, label: "Email us", value: "support@mitram.example" },
+  { icon: MessageCircle, label: "WhatsApp", value: "Available 9am–8pm IST" },
+];
 
 export default function ContactPage() {
   return (
@@ -10,21 +17,15 @@ export default function ContactPage() {
         Our support desk is here for travellers, family members and travel partners alike.
       </p>
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-lg border border-border bg-card p-4 text-center">
-          <Phone className="mx-auto size-5 text-primary" aria-hidden="true" />
-          <p className="mt-2 text-sm font-semibold text-foreground">Call us</p>
-          <p className="text-xs text-muted-foreground">+91 22 4896 3888</p>
-        </div>
-        <div className="rounded-lg border border-border bg-card p-4 text-center">
-          <Mail className="mx-auto size-5 text-primary" aria-hidden="true" />
-          <p className="mt-2 text-sm font-semibold text-foreground">Email us</p>
-          <p className="text-xs text-muted-foreground">support@mitram.example</p>
-        </div>
-        <div className="rounded-lg border border-border bg-card p-4 text-center">
-          <MessageCircle className="mx-auto size-5 text-primary" aria-hidden="true" />
-          <p className="mt-2 text-sm font-semibold text-foreground">WhatsApp</p>
-          <p className="text-xs text-muted-foreground">Available 9am–8pm IST</p>
-        </div>
+        {channels.map(({ icon: Icon, label, value }) => (
+          <Card key={label}>
+            <CardContent className="text-center">
+              <Icon className="mx-auto size-5 text-primary" aria-hidden="true" />
+              <p className="mt-2 text-sm font-semibold text-foreground">{label}</p>
+              <p className="text-xs text-muted-foreground">{value}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );

@@ -1,10 +1,13 @@
 import { CheckCircle2, XCircle } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 export function IncludesExcludes({ inclusions, exclusions }: { inclusions: string[]; exclusions: string[] }) {
   if (inclusions.length === 0 && exclusions.length === 0) return null;
 
   return (
-    <section aria-labelledby="includes-heading" className="grid gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm sm:grid-cols-2">
+    <section aria-labelledby="includes-heading">
+    <Card>
+    <CardContent className="grid gap-4 sm:grid-cols-2">
       {inclusions.length > 0 && (
         <div>
           <h2 id="includes-heading" className="font-heading text-lg font-bold text-foreground">
@@ -33,6 +36,8 @@ export function IncludesExcludes({ inclusions, exclusions }: { inclusions: strin
           </ul>
         </div>
       )}
+    </CardContent>
+    </Card>
     </section>
   );
 }

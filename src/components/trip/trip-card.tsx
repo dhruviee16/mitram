@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ShieldCheck, Footprints, UtensilsCrossed, Users, ArrowRight } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { formatRoute } from "@/lib/format-route";
 
 type TripCardTrip = {
@@ -35,8 +36,9 @@ export function TripCard({ trip }: { trip: TripCardTrip }) {
   return (
     <Link
       href={`/trips/${trip.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className="group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl"
     >
+    <Card className="h-full gap-0 overflow-hidden border border-border py-0 transition-colors group-hover:border-primary">
       <div className="relative h-40 w-full">
         <Image
           src={image}
@@ -93,6 +95,7 @@ export function TripCard({ trip }: { trip: TripCardTrip }) {
           </span>
         </div>
       </div>
+    </Card>
     </Link>
   );
 }

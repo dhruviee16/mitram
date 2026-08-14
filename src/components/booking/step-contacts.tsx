@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Field, FieldLabel, FieldTitle } from "@/components/ui/field";
 import { useBookingDraftStore } from "@/stores/booking-draft-store";
 
 export function StepContacts({ onBack, onNext }: { onBack: () => void; onNext: () => void }) {
@@ -52,15 +54,16 @@ export function StepContacts({ onBack, onNext }: { onBack: () => void; onNext: (
         />
       </div>
 
-      <label className="mt-6 flex min-h-11 items-center gap-2.5 rounded-lg border border-border p-3 text-sm text-foreground">
-        <input
-          type="checkbox"
-          checked={draft.linkFamilyContact}
-          onChange={(e) => update({ linkFamilyContact: e.target.checked })}
-          className="size-[18px] accent-primary"
-        />
-        Link a family member for trip updates
-      </label>
+      <FieldLabel htmlFor="link-family-contact" className="mt-6">
+        <Field orientation="horizontal">
+          <Checkbox
+            id="link-family-contact"
+            checked={draft.linkFamilyContact}
+            onCheckedChange={(checked) => update({ linkFamilyContact: checked === true })}
+          />
+          <FieldTitle className="font-normal">Link a family member for trip updates</FieldTitle>
+        </Field>
+      </FieldLabel>
       <p className="mt-1 text-xs text-muted-foreground">
         Miles apart. Still connected. Your family can see trip status, photos and live
         location — you control exactly what&apos;s shared.

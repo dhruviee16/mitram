@@ -5,6 +5,7 @@ import { MapPin, HeartPulse } from "lucide-react";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
 import { useSetTrackingVisibility } from "@/hooks/use-set-tracking-visibility";
 
 type TripUpdate = {
@@ -55,10 +56,9 @@ export function LiveTrackingPanel({
   }
 
   return (
-    <section
-      aria-labelledby="tracking-heading"
-      className="mt-6 rounded-lg border border-border bg-card p-4"
-    >
+    <section aria-labelledby="tracking-heading" className="mt-6">
+      <Card>
+      <CardContent>
       <div className="flex items-center justify-between gap-4">
         <h2
           id="tracking-heading"
@@ -147,6 +147,8 @@ export function LiveTrackingPanel({
           updates.
         </p>
       )}
+      </CardContent>
+      </Card>
     </section>
   );
 }

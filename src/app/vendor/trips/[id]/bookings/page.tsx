@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { listBookingsForVendorTrip } from "@/server/services/vendorService";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { StartTripButton } from "@/components/vendor/start-trip-button";
 
 export default async function VendorTripBookingsPage({
@@ -42,10 +43,9 @@ export default async function VendorTripBookingsPage({
       ) : (
         <ul className="mt-6 space-y-3">
           {bookings.map((booking) => (
-            <li
-              key={booking.id}
-              className="flex items-center justify-between rounded-lg border border-border bg-card p-4"
-            >
+            <li key={booking.id}>
+            <Card className="flex-row items-center justify-between">
+            <CardContent className="flex flex-1 items-center justify-between">
               <div>
                 <p className="font-semibold text-foreground">{booking.user.name}</p>
                 <p className="text-xs text-muted-foreground">
@@ -65,6 +65,8 @@ export default async function VendorTripBookingsPage({
                   />
                 )}
               </div>
+            </CardContent>
+            </Card>
             </li>
           ))}
         </ul>

@@ -5,6 +5,7 @@ import { CheckCircle2 } from "lucide-react";
 import { auth } from "@/auth";
 import { getBookingById } from "@/server/services/bookingService";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { formatRoute } from "@/lib/format-route";
 
 export default async function BookingConfirmationPage({
@@ -34,7 +35,8 @@ export default async function BookingConfirmationPage({
         Booking ID: <span className="font-mono">{booking.id}</span>
       </p>
 
-      <div className="mt-6 rounded-lg border border-border bg-card p-5 text-left">
+      <Card className="mt-6 text-left">
+      <CardContent>
         <div className="flex gap-3">
           <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-md">
             <Image
@@ -81,7 +83,8 @@ export default async function BookingConfirmationPage({
             </dd>
           </div>
         </dl>
-      </div>
+      </CardContent>
+      </Card>
 
       <Button className="mt-6" render={<Link href="/dashboard">View my bookings</Link>} />
     </div>
