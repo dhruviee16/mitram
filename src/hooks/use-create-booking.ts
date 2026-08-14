@@ -1,15 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { postJson } from "@/lib/api";
-import type { BookedFor, TravelerValues, RoomCareValues } from "@/lib/validations/booking";
-
-type CreateBookingInput = {
-  tripSlug: string;
-  bookedFor: BookedFor;
-  traveler: TravelerValues;
-  travelDate: Date;
-  roomType: RoomCareValues["roomType"];
-  specialCareRequests: string[];
-};
+import type { BookingRequestValues } from "@/lib/validations/booking";
 
 type CreateBookingResult = {
   bookingId: string;
@@ -18,7 +9,7 @@ type CreateBookingResult = {
 
 export function useCreateBooking() {
   return useMutation({
-    mutationFn: (input: CreateBookingInput) =>
+    mutationFn: (input: BookingRequestValues) =>
       postJson<CreateBookingResult>("/api/bookings", input),
   });
 }

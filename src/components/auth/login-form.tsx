@@ -21,10 +21,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-export function LoginForm() {
+export function LoginForm({ variant = "customer" }: { variant?: "customer" | "vendor" }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = getSafeCallbackUrl(searchParams.get("callbackUrl"));
+  const defaultTarget = variant === "vendor" ? "/vendor/dashboard" : "/dashboard";
+  const callbackUrl = searchParams.get("callbackUrl")
+    ? getSafeCallbackUrl(searchParams.get("callbackUrl"))
+    : defaultTarget;
+  const signupHref = variant === "vendor" ? "/vendor/signup" : "/signup";
   const [submitting, setSubmitting] = useState(false);
 
   const form = useForm<LoginValues>({
@@ -86,7 +90,7 @@ export function LoginForm() {
         <p className="text-center text-sm text-muted-foreground">
           New here?{" "}
           <Link
-            href={`/signup${callbackUrl !== "/" ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ""}`}
+            href={`${signupHref}${callbackUrl !== defaultTarget ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ""}`}
             className="font-medium text-primary hover:underline"
           >
             Create an account

@@ -13,7 +13,7 @@ export default function VendorLandingPage() {
       </p>
       <div className="mt-6 flex gap-3">
         <Button render={<Link href="/vendor/signup">Become a partner</Link>} />
-        <Button variant="outline" render={<Link href="/login">Vendor sign in</Link>} />
+        <Button variant="outline" render={<Link href="/vendor/login">Vendor sign in</Link>} />
       </div>
     </div>
   );

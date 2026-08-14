@@ -12,8 +12,10 @@ datasource db {
 
 enum UserRole {
   traveler
-  nri
   vendor
+  admin
+  operations
+  coordinator
 }
 
 enum BookedFor {
@@ -42,17 +44,75 @@ enum HealthStatus {
   monitor
 }
 
+enum VendorVerificationStatus {
+  pending
+  under_review
+  verified
+  rejected
+  suspended
+}
+
+enum TripStatus {
+  draft
+  pending_approval
+  approved
+  rejected
+  paused
+}
+
+enum WalkingIntensity {
+  easy
+  moderate
+  challenging
+}
+
 model User {
-  id               String            @id @default(cuid())
-  email            String            @unique
-  passwordHash     String
-  name             String
-  phone            String?
-  role             UserRole          @default(traveler)
-  travelerProfiles TravelerProfile[]
-  bookings         Booking[]
-  vendorTrips      Trip[]            @relation("VendorTrips")
-  createdAt        DateTime          @default(now())
+  id                String             @id @default(cuid())
+  email             String             @unique
+  passwordHash      String
+  name              String
+  phone             String?
+  role              UserRole           @default(traveler)
+  travelerProfiles  TravelerProfile[]
+  bookings          Booking[]
+  vendorTrips       Trip[]             @relation("VendorTrips")
+  vendorProfile     VendorProfile?
+  familyConnections FamilyConnection[]
+  savedTrips        SavedTrip[]
+  notifications     Notification[]
+  reviews           Review[]
+  supportTickets    SupportTicket[]
+  createdAt         DateTime           @default(now())
+}
+
+model VendorProfile {
+  id                  String                    @id @default(cuid())
+  user                User                      @relation(fields: [userId], references: [id])
+  userId              String                    @unique
+  businessName        String
+  ownerName           String
+  gst                 String?
+  pan                 String?
+  businessAddress     String?
+  yearsInBusiness      Int?
+  destinationsServed  String[]                  @default([])
+  website             String?
+  verificationStatus  VendorVerificationStatus  @default(pending)
+  identityVerified    Boolean                   @default(false)
+  businessVerified    Boolean                   @default(false)
+  experienceVerified  Boolean                   @default(false)
+  safetyVerified      Boolean                   @default(false)
+  documents           VendorDocument[]
+  createdAt           DateTime                  @default(now())
+}
+
+model VendorDocument {
+  id              String        @id @default(cuid())
+  vendorProfile   VendorProfile @relation(fields: [vendorProfileId], references: [id])
+  vendorProfileId String
+  type            String
+  url             String
+  uploadedAt      DateTime      @default(now())
 }
 
 model TravelerProfile {
@@ -68,23 +128,93 @@ model TravelerProfile {
   createdAt    DateTime  @default(now())
 }
 
+model FamilyConnection {
+  id                     String    @id @default(cuid())
+  user                   User      @relation(fields: [userId], references: [id])
+  userId                 String
+  name                   String
+  email                  String?
+  phone                  String?
+  relationship           String
+  tripUpdates            Boolean   @default(true)
+  arrivalUpdates         Boolean   @default(true)
+  photos                 Boolean   @default(true)
+  liveLocation           Boolean   @default(false)
+  emergencyNotifications Boolean   @default(true)
+  accessToken            String    @unique @default(cuid())
+  bookings               Booking[]
+  createdAt              DateTime  @default(now())
+}
+
+model Destination {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  state       String?
+  heroImage   String?
+  bestTime    String?
+  description String?
+  trips       Trip[]
+  createdAt   DateTime @default(now())
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  trips       Trip[]
+  createdAt   DateTime @default(now())
+}
+
 model Trip {
+  id                   String           @id @default(cuid())
+  slug                 String           @unique
+  title                String
+  category             Category         @relation(fields: [categoryId], references: [id])
+  categoryId           String
+  destination          Destination?     @relation(fields: [destinationId], references: [id])
+  destinationId        String?
+  routeSummary         String
+  durationDays         Int
+  durationNights       Int
+  basePrice            Int // INR
+  images               String[]         @default([])
+  careFeatures         String[]         @default([])
+  inclusions           String[]         @default([])
+  exclusions           String[]         @default([])
+  summary              String
+  walkingIntensity     WalkingIntensity @default(easy)
+  groupSizeMin         Int?
+  groupSizeMax         Int?
+  ageGroupMin          Int?
+  ageGroupMax          Int?
+  hotelCategory        Int? // star rating 1-5
+  mealsPlan            String[]         @default([])
+  insuranceIncluded    Boolean          @default(false)
+  coordinatorIncluded  Boolean          @default(true)
+  accessibilityNotes   String?
+  communityTag         String?
+  status               TripStatus       @default(pending_approval)
+  days                 TripDay[]
+  dates                TripDate[]
+  bookings             Booking[]
+  savedBy              SavedTrip[]
+  reviews              Review[]
+  vendor               User?            @relation("VendorTrips", fields: [vendorId], references: [id])
+  vendorId             String?
+  createdAt            DateTime         @default(now())
+}
+
+model TripDate {
   id             String    @id @default(cuid())
-  slug           String    @unique
-  title          String
-  category       String // "pilgrimage" | "international" | "heritage" | "hill"
-  routeSummary   String
-  durationDays   Int
-  durationNights Int
-  basePrice      Int // INR
-  images         String[]  @default([])
-  careFeatures   String[]  @default([])
-  inclusions     String[]  @default([])
-  summary        String
-  days           TripDay[]
+  trip           Trip      @relation(fields: [tripId], references: [id])
+  tripId         String
+  departureDate  DateTime
+  returnDate     DateTime?
+  seatsTotal     Int?
+  seatsAvailable Int?
   bookings       Booking[]
-  vendor         User?     @relation("VendorTrips", fields: [vendorId], references: [id])
-  vendorId       String?
   createdAt      DateTime  @default(now())
 }
 
@@ -101,23 +231,33 @@ model TripDay {
 }
 
 model Booking {
-  id                  String            @id @default(cuid())
-  user                User              @relation(fields: [userId], references: [id])
-  userId              String
-  trip                Trip              @relation(fields: [tripId], references: [id])
-  tripId              String
-  bookedFor           BookedFor
-  travelers           TravelerProfile[]
-  numTravelers        Int
-  travelDate          DateTime
-  roomType            String
-  specialCareRequests String[]          @default([])
-  totalAmount         Int
-  status              BookingStatus     @default(pending)
-  trackingVisible     Boolean           @default(true)
-  payment             Payment?
-  tripUpdates         TripUpdate[]
-  createdAt           DateTime          @default(now())
+  id                        String            @id @default(cuid())
+  user                      User              @relation(fields: [userId], references: [id])
+  userId                    String
+  trip                      Trip              @relation(fields: [tripId], references: [id])
+  tripId                    String
+  tripDate                  TripDate?         @relation(fields: [tripDateId], references: [id])
+  tripDateId                String?
+  bookedFor                 BookedFor
+  travelers                 TravelerProfile[]
+  numTravelers              Int               @default(1)
+  travelDate                DateTime
+  roomType                  String
+  emergencyContactName      String?
+  emergencyContactPhone     String?
+  emergencyContactRelation  String?
+  familyConnection          FamilyConnection? @relation(fields: [familyConnectionId], references: [id])
+  familyConnectionId        String?
+  insuranceOpted            Boolean           @default(false)
+  specialCareRequests       String[]          @default([])
+  totalAmount               Int
+  status                    BookingStatus     @default(pending)
+  trackingVisible           Boolean           @default(true)
+  payment                   Payment?
+  refund                    Refund?
+  tripUpdates               TripUpdate[]
+  review                    Review?
+  createdAt                 DateTime          @default(now())
 }
 
 model Payment {
@@ -129,6 +269,17 @@ model Payment {
   status            PaymentStatus @default(created)
   amount            Int
   createdAt         DateTime      @default(now())
+}
+
+model Refund {
+  id          String    @id @default(cuid())
+  booking     Booking   @relation(fields: [bookingId], references: [id])
+  bookingId   String    @unique
+  amount      Int
+  status      String    @default("pending")
+  reason      String?
+  processedAt DateTime?
+  createdAt   DateTime  @default(now())
 }
 
 model TripUpdate {
@@ -147,4 +298,76 @@ model TripUpdate {
   healthStatus  HealthStatus?
 
   @@index([bookingId, timestamp])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  bookingId String   @unique
+  trip      Trip     @relation(fields: [tripId], references: [id])
+  tripId    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  rating    Int
+  comment   String?
+  status    String   @default("published")
+  createdAt DateTime @default(now())
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  age       Int?
+  city      String?
+  tripTitle String?
+  quote     String
+  rating    Int?
+  photoUrl  String?
+  isSample  Boolean  @default(true)
+  featured  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model SavedTrip {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  trip      Trip     @relation(fields: [tripId], references: [id])
+  tripId    String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, tripId])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String
+  type      String
+  title     String
+  message   String
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model Coupon {
+  id           String    @id @default(cuid())
+  code         String    @unique
+  discountType String // "percent" | "flat"
+  value        Int
+  validFrom    DateTime?
+  validUntil   DateTime?
+  usageLimit   Int?
+  timesUsed    Int       @default(0)
+  createdAt    DateTime  @default(now())
+}
+
+model SupportTicket {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  subject   String
+  message   String
+  status    String   @default("open")
+  createdAt DateTime @default(now())
 }

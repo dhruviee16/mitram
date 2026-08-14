@@ -14,7 +14,7 @@ export default async function VendorTripBookingsPage({
 }) {
   const session = await auth();
   if (!session?.user?.id || (session.user as { role?: string }).role !== "vendor") {
-    redirect("/login");
+    redirect("/vendor/login");
   }
 
   const { id } = await params;

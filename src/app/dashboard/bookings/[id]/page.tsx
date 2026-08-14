@@ -7,6 +7,8 @@ import { getBookingById } from "@/server/services/bookingService";
 import { Badge } from "@/components/ui/badge";
 import { ItineraryRecap } from "@/components/dashboard/itinerary-recap";
 import { LiveTrackingPanel } from "@/components/dashboard/live-tracking-panel";
+import { ReviewForm } from "@/components/dashboard/review-form";
+import { StarRating } from "@/components/ui/star-rating";
 import { formatRoute } from "@/lib/format-route";
 
 const FALLBACK_IMAGE =
@@ -28,8 +30,6 @@ export default async function BookingDetailPage({
   if (!booking || booking.userId !== session.user.id) {
     notFound();
   }
-
-  const traveler = booking.travelers[0];
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
@@ -59,24 +59,28 @@ export default async function BookingDetailPage({
       </div>
 
       <div className="mt-6 rounded-lg border border-border bg-card p-4">
-        <h2 className="text-sm font-semibold text-foreground">Traveler</h2>
-        {traveler && (
-          <div className="mt-2 text-sm text-foreground">
-            <p>
-              {traveler.name}, {traveler.age} · {traveler.relationship}
-            </p>
-            {traveler.healthNotes.length > 0 && (
-              <p className="mt-1 text-muted-foreground">
-                Health notes: {traveler.healthNotes.join(", ")}
+        <h2 className="text-sm font-semibold text-foreground">
+          Traveler{booking.travelers.length === 1 ? "" : "s"}
+        </h2>
+        <div className="mt-2 space-y-2 text-sm text-foreground">
+          {booking.travelers.map((traveler) => (
+            <div key={traveler.id}>
+              <p>
+                {traveler.name}, {traveler.age} · {traveler.relationship}
               </p>
-            )}
-            {traveler.dietaryNeeds.length > 0 && (
-              <p className="text-muted-foreground">
-                Dietary: {traveler.dietaryNeeds.join(", ")}
-              </p>
-            )}
-          </div>
-        )}
+              {traveler.healthNotes.length > 0 && (
+                <p className="mt-0.5 text-muted-foreground">
+                  Health notes: {traveler.healthNotes.join(", ")}
+                </p>
+              )}
+              {traveler.dietaryNeeds.length > 0 && (
+                <p className="text-muted-foreground">
+                  Dietary: {traveler.dietaryNeeds.join(", ")}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
 
         <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
           <div>
@@ -89,6 +93,18 @@ export default async function BookingDetailPage({
               ₹{booking.totalAmount.toLocaleString("en-IN")} · {booking.payment?.status ?? "pending"}
             </p>
           </div>
+          {booking.tripDate && (
+            <div>
+              <p className="text-muted-foreground">Departure</p>
+              <p className="text-foreground">
+                {booking.tripDate.departureDate.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+              </p>
+            </div>
+          )}
+          <div>
+            <p className="text-muted-foreground">Insurance</p>
+            <p className="text-foreground">{booking.insuranceOpted ? "Opted in" : "Not opted"}</p>
+          </div>
         </div>
 
         {booking.specialCareRequests.length > 0 && (
@@ -96,11 +112,45 @@ export default async function BookingDetailPage({
             Care requests: {booking.specialCareRequests.join(", ")}
           </p>
         )}
+
+        {(booking.emergencyContactName || booking.familyConnection) && (
+          <div className="mt-3 space-y-1 border-t border-border pt-3 text-sm">
+            {booking.emergencyContactName && (
+              <p className="text-foreground">
+                Emergency contact: {booking.emergencyContactName} ({booking.emergencyContactRelation}) ·{" "}
+                {booking.emergencyContactPhone}
+              </p>
+            )}
+            {booking.familyConnection && (
+              <p className="text-foreground">
+                Family contact: {booking.familyConnection.name} ({booking.familyConnection.relationship})
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="mt-6">
         <ItineraryRecap days={booking.trip.days} />
       </div>
+
+      {booking.status === "completed" && (
+        <div className="mt-6">
+          {booking.review ? (
+            <div className="rounded-lg border border-border bg-card p-4">
+              <p className="text-sm font-semibold text-foreground">Your review</p>
+              <div className="mt-1.5">
+                <StarRating value={booking.review.rating} readOnly />
+              </div>
+              {booking.review.comment && (
+                <p className="mt-2 text-sm text-muted-foreground">{booking.review.comment}</p>
+              )}
+            </div>
+          ) : (
+            <ReviewForm bookingId={booking.id} />
+          )}
+        </div>
+      )}
 
       {booking.status === "ongoing" ? (
         <LiveTrackingPanel

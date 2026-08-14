@@ -11,6 +11,19 @@ export function timingSafeEqualHex(a: string, b: string): boolean {
   return crypto.timingSafeEqual(bufA, bufB);
 }
 
+async function decrementSeatsForBooking(bookingId: string) {
+  const booking = await prisma.booking.findUnique({ where: { id: bookingId } });
+  if (!booking?.tripDateId) return;
+
+  const tripDate = await prisma.tripDate.findUnique({ where: { id: booking.tripDateId } });
+  if (!tripDate || tripDate.seatsAvailable === null) return;
+
+  await prisma.tripDate.update({
+    where: { id: booking.tripDateId },
+    data: { seatsAvailable: Math.max(0, tripDate.seatsAvailable - booking.numTravelers) },
+  });
+}
+
 function getRazorpayClient() {
   const keyId = process.env.RAZORPAY_KEY_ID;
   const keySecret = process.env.RAZORPAY_KEY_SECRET;
@@ -106,6 +119,7 @@ export async function verifyAndConfirmPayment(input: {
     where: { id: input.bookingId },
     data: { status: "confirmed" },
   });
+  await decrementSeatsForBooking(input.bookingId);
 
   return { confirmed: true as const };
 }
@@ -136,4 +150,5 @@ export async function confirmPaymentFromWebhook(razorpayOrderId: string, razorpa
     where: { id: payment.bookingId },
     data: { status: "confirmed" },
   });
+  await decrementSeatsForBooking(payment.bookingId);
 }

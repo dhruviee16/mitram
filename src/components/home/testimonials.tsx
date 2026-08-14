@@ -1,27 +1,16 @@
-// Placeholder testimonials — Mitram is pre-launch with no real customers yet.
-// Replace with real quotes once available; this is the one section the design
-// spec explicitly sanctions placeholder content for.
-const testimonials = [
-  {
-    quote:
-      "I could see exactly where Papa was on the Shikharji trek, every step. That mattered more than anything else.",
-    name: "Arjun J.",
-    role: "Son, booked from Dubai",
-  },
-  {
-    quote:
-      "The companion knew Ma's medication schedule better than I did some days. That's what peace of mind looks like.",
-    name: "Priya S.",
-    role: "Daughter, Bangalore",
-  },
-  {
-    quote: "First trip in years where I didn't feel like a burden on anyone.",
-    name: "Ramesh J.",
-    role: "Traveler, 72",
-  },
-];
+type Testimonial = {
+  id: string;
+  name: string;
+  city: string | null;
+  tripTitle: string | null;
+  quote: string;
+};
 
-export function Testimonials() {
+// Testimonials are admin-managed (Testimonial model, isSample flag) — Mitram is
+// pre-launch, so seeded rows are clearly marked as sample content per spec.
+export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
+  if (testimonials.length === 0) return null;
+
   return (
     <section
       aria-labelledby="testimonials-heading"
@@ -32,12 +21,12 @@ export function Testimonials() {
           id="testimonials-heading"
           className="font-heading text-xl font-bold text-foreground"
         >
-          What families say
+          Loved by travellers. Trusted by families.
         </h2>
         <ul className="mt-4 grid gap-4 sm:grid-cols-3" role="list">
           {testimonials.map((t) => (
             <li
-              key={t.name}
+              key={t.id}
               className="rounded-lg border border-border bg-card p-4"
             >
               <p className="text-sm italic text-foreground">
@@ -46,7 +35,9 @@ export function Testimonials() {
               <p className="mt-3 text-xs font-semibold text-foreground">
                 {t.name}
               </p>
-              <p className="text-xs text-muted-foreground">{t.role}</p>
+              <p className="text-xs text-muted-foreground">
+                {[t.tripTitle, t.city].filter(Boolean).join(" · ")}
+              </p>
             </li>
           ))}
         </ul>

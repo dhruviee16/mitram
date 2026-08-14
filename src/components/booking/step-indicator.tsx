@@ -1,4 +1,4 @@
-const steps = ["Who's this for", "Traveler", "Room & care", "Review"];
+const steps = ["Who's this for", "Departure & travelers", "Care & insurance", "Contacts", "Review"];
 
 export function StepIndicator({ current }: { current: number }) {
   return (

@@ -57,7 +57,7 @@ export function SignupForm() {
 
     if (result?.error) {
       toast.warning("Account created — please sign in.");
-      router.push("/login");
+      router.push("/customer/login");
       return;
     }
 

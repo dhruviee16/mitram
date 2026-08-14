@@ -8,8 +8,10 @@ import { toast } from "sonner";
 import { X } from "lucide-react";
 
 import { TRIP_CATEGORIES } from "@/lib/trip-categories";
+import { walkingIntensityValues, mealsPlanValues } from "@/lib/validations/vendor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -31,6 +33,7 @@ import {
 type TripFormDefaultValues = {
   title: string;
   category: string;
+  destinationId: string;
   routeSummary: string;
   durationDays: number;
   durationNights: number;
@@ -38,18 +41,31 @@ type TripFormDefaultValues = {
   images: string[];
   careFeatures: string;
   inclusions: string;
+  exclusions: string;
   summary: string;
+  walkingIntensity: (typeof walkingIntensityValues)[number];
+  groupSizeMin: number | undefined;
+  groupSizeMax: number | undefined;
+  ageGroupMin: number | undefined;
+  ageGroupMax: number | undefined;
+  hotelCategory: number | undefined;
+  mealsPlan: string[];
+  insuranceIncluded: boolean;
+  coordinatorIncluded: boolean;
+  accessibilityNotes: string;
   days: {
     dayNumber: number;
     title: string;
     description: string;
     activities: string;
   }[];
+  dates: { departureDate: string; seatsTotal: number }[];
 };
 
 const emptyDefaults: TripFormDefaultValues = {
   title: "",
   category: TRIP_CATEGORIES[0].value,
+  destinationId: "",
   routeSummary: "",
   durationDays: 1,
   durationNights: 0,
@@ -57,17 +73,31 @@ const emptyDefaults: TripFormDefaultValues = {
   images: [],
   careFeatures: "",
   inclusions: "",
+  exclusions: "",
   summary: "",
+  walkingIntensity: "easy",
+  groupSizeMin: undefined,
+  groupSizeMax: undefined,
+  ageGroupMin: undefined,
+  ageGroupMax: undefined,
+  hotelCategory: undefined,
+  mealsPlan: [],
+  insuranceIncluded: false,
+  coordinatorIncluded: true,
+  accessibilityNotes: "",
   days: [{ dayNumber: 1, title: "", description: "", activities: "" }],
+  dates: [{ departureDate: "", seatsTotal: 20 }],
 };
 
 export function TripForm({
   mode,
   tripId,
+  destinations,
   defaultValues,
 }: {
   mode: "create" | "edit";
   tripId?: string;
+  destinations: { id: string; name: string }[];
   defaultValues?: TripFormDefaultValues;
 }) {
   const router = useRouter();
@@ -83,7 +113,17 @@ export function TripForm({
     control: form.control,
     name: "days",
   });
+  const dateFields = useFieldArray({
+    control: form.control,
+    name: "dates",
+  });
   const [images, setImages] = useState<string[]>(defaultValues?.images ?? []);
+  const mealsPlan = form.watch("mealsPlan");
+
+  function toggleMeal(meal: string) {
+    const next = mealsPlan.includes(meal) ? mealsPlan.filter((m) => m !== meal) : [...mealsPlan, meal];
+    form.setValue("mealsPlan", next);
+  }
 
   async function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? []);
@@ -135,7 +175,7 @@ export function TripForm({
       return;
     }
 
-    toast.success(mode === "create" ? "Trip created." : "Trip updated.");
+    toast.success(mode === "create" ? "Trip submitted for MITRAM approval." : "Trip updated.");
     router.push("/vendor/dashboard");
     router.refresh();
   }
@@ -161,30 +201,56 @@ export function TripForm({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="category"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Category</FormLabel>
-              <Select value={field.value} onValueChange={field.onChange}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Choose a category" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {TRIP_CATEGORIES.map((c) => (
-                    <SelectItem key={c.value} value={c.value}>
-                      {c.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Category</FormLabel>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choose a category" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {TRIP_CATEGORIES.map((c) => (
+                      <SelectItem key={c.value} value={c.value}>
+                        {c.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="destinationId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Destination</FormLabel>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choose a destination" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {destinations.map((d) => (
+                      <SelectItem key={d.id} value={d.id}>
+                        {d.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <FormField
           control={form.control}
@@ -303,6 +369,150 @@ export function TripForm({
           />
         </FormItem>
 
+        <div className="space-y-4 rounded-lg border border-border p-4">
+          <h2 className="font-heading text-base font-bold text-foreground">Senior-care details</h2>
+
+          <FormField
+            control={form.control}
+            name="walkingIntensity"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Walking intensity</FormLabel>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {walkingIntensityValues.map((v) => (
+                      <SelectItem key={v} value={v} className="capitalize">
+                        {v}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="groupSizeMin"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Group size (min)</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={1} {...field} value={field.value ?? ""} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="groupSizeMax"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Group size (max)</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={1} {...field} value={field.value ?? ""} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="ageGroupMin"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Age group (min)</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={0} {...field} value={field.value ?? ""} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="ageGroupMax"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Age group (max)</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={0} {...field} value={field.value ?? ""} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="hotelCategory"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Hotel category (stars)</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={1} max={5} {...field} value={field.value ?? ""} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <FormItem>
+            <FormLabel>Meals plan</FormLabel>
+            <div className="flex gap-4">
+              {mealsPlanValues.map((meal) => (
+                <label key={meal} className="flex min-h-11 items-center gap-2 text-sm capitalize text-foreground">
+                  <input
+                    type="checkbox"
+                    checked={mealsPlan.includes(meal)}
+                    onChange={() => toggleMeal(meal)}
+                    className="size-[18px] accent-primary"
+                  />
+                  {meal}
+                </label>
+              ))}
+            </div>
+          </FormItem>
+
+          <div className="flex items-center justify-between">
+            <FormLabel>Insurance included</FormLabel>
+            <FormField
+              control={form.control}
+              name="insuranceIncluded"
+              render={({ field }) => (
+                <Switch checked={field.value} onCheckedChange={field.onChange} />
+              )}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <FormLabel>MITRAM coordinator included</FormLabel>
+            <FormField
+              control={form.control}
+              name="coordinatorIncluded"
+              render={({ field }) => (
+                <Switch checked={field.value} onCheckedChange={field.onChange} />
+              )}
+            />
+          </div>
+
+          <FormField
+            control={form.control}
+            name="accessibilityNotes"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Accessibility notes</FormLabel>
+                <FormControl>
+                  <Textarea rows={2} {...field} placeholder="Wheelchair/porter assistance available on request" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <FormField
           control={form.control}
           name="careFeatures"
@@ -334,6 +544,69 @@ export function TripForm({
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="exclusions"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Exclusions (one per line)</FormLabel>
+              <FormControl>
+                <Textarea rows={3} {...field} placeholder="Flight tickets" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="font-heading text-lg font-bold text-foreground">Departure dates</h2>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => dateFields.append({ departureDate: "", seatsTotal: 20 })}
+            >
+              Add date
+            </Button>
+          </div>
+          {dateFields.fields.map((date, index) => (
+            <div key={date.id} className="flex items-end gap-3">
+              <FormField
+                control={form.control}
+                name={`dates.${index}.departureDate`}
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Departure date</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name={`dates.${index}.seatsTotal`}
+                render={({ field }) => (
+                  <FormItem className="w-28">
+                    <FormLabel>Seats</FormLabel>
+                    <FormControl>
+                      <Input type="number" min={1} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {dateFields.fields.length > 1 && (
+                <Button type="button" variant="ghost" size="sm" onClick={() => dateFields.remove(index)}>
+                  Remove
+                </Button>
+              )}
+            </div>
+          ))}
+        </div>
 
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -431,11 +704,11 @@ export function TripForm({
           ))}
         </div>
 
-        <Button type="submit" disabled={submitting}>
+        <Button type="submit" disabled={submitting} className="min-h-11">
           {submitting
             ? "Saving..."
             : mode === "create"
-              ? "Create trip"
+              ? "Submit for approval"
               : "Save changes"}
         </Button>
       </form>

@@ -1,5 +1,3 @@
-export { signupSchema as vendorSignupSchema, type SignupValues as VendorSignupValues } from "@/lib/validations/auth";
-
 import { z } from "zod";
 import { TRIP_CATEGORIES } from "@/lib/trip-categories";
 
@@ -12,6 +10,29 @@ function listFromLines(value: string) {
     .filter(Boolean);
 }
 
+function listFromCsv(value: string) {
+  return value
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+export const vendorRegisterSchema = z.object({
+  businessName: z.string().min(1, "Enter your business name."),
+  ownerName: z.string().min(1, "Enter the owner's name."),
+  email: z.string().email("Enter a valid email address."),
+  password: z.string().min(8, "Password must be at least 8 characters."),
+  phone: z.string().min(6, "Enter a valid phone number.").optional().or(z.literal("")),
+  gst: z.string().optional().or(z.literal("")),
+  pan: z.string().optional().or(z.literal("")),
+  businessAddress: z.string().optional().or(z.literal("")),
+  yearsInBusiness: z.coerce.number().int().min(0).optional(),
+  destinationsServed: z.string().transform(listFromCsv).default([]),
+  website: z.string().optional().or(z.literal("")),
+});
+
+export type VendorRegisterValues = z.infer<typeof vendorRegisterSchema>;
+
 export const vendorTripDaySchema = z.object({
   dayNumber: z.coerce.number().int().min(1),
   title: z.string().min(1, "Enter a day title."),
@@ -19,9 +40,18 @@ export const vendorTripDaySchema = z.object({
   activities: z.string().transform(listFromLines).default([]),
 });
 
+export const vendorTripDateSchema = z.object({
+  departureDate: z.string().min(1, "Pick a departure date."),
+  seatsTotal: z.coerce.number().int().min(1).default(20),
+});
+
+export const walkingIntensityValues = ["easy", "moderate", "challenging"] as const;
+export const mealsPlanValues = ["breakfast", "lunch", "dinner"] as const;
+
 export const vendorTripSchema = z.object({
   title: z.string().min(1, "Enter a trip title."),
   category: z.enum(categoryValues),
+  destinationId: z.string().optional(),
   routeSummary: z.string().min(1, "Enter a route summary."),
   durationDays: z.coerce.number().int().min(1),
   durationNights: z.coerce.number().int().min(0),
@@ -29,8 +59,20 @@ export const vendorTripSchema = z.object({
   images: z.array(z.string()).default([]),
   careFeatures: z.string().transform(listFromLines).default([]),
   inclusions: z.string().transform(listFromLines).default([]),
+  exclusions: z.string().transform(listFromLines).default([]),
   summary: z.string().min(1, "Enter a trip summary."),
+  walkingIntensity: z.enum(walkingIntensityValues).default("easy"),
+  groupSizeMin: z.coerce.number().int().min(1).optional(),
+  groupSizeMax: z.coerce.number().int().min(1).optional(),
+  ageGroupMin: z.coerce.number().int().min(0).optional(),
+  ageGroupMax: z.coerce.number().int().min(0).optional(),
+  hotelCategory: z.coerce.number().int().min(1).max(5).optional(),
+  mealsPlan: z.array(z.enum(mealsPlanValues)).default([]),
+  insuranceIncluded: z.boolean().default(false),
+  coordinatorIncluded: z.boolean().default(true),
+  accessibilityNotes: z.string().optional().or(z.literal("")),
   days: z.array(vendorTripDaySchema).min(1, "Add at least one itinerary day."),
+  dates: z.array(vendorTripDateSchema).min(1, "Add at least one departure date."),
 });
 
 export type VendorTripValues = z.infer<typeof vendorTripSchema>;

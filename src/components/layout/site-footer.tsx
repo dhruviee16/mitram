@@ -1,37 +1,46 @@
 import Link from "next/link";
+import { listCategories } from "@/server/services/categoryService";
 
-const footerColumns = [
-  {
-    heading: "Trips",
-    links: [
-      { href: "/trips?category=spiritual", label: "Spiritual Yatras" },
-      { href: "/trips?category=heritage", label: "Heritage Trails" },
-      { href: "/trips?category=leisure", label: "International Leisure" },
-    ],
-  },
-  {
-    heading: "Support",
-    links: [
-      { href: "/dashboard", label: "My Bookings" },
-      { href: "/vendor", label: "Contact Saathi desk" },
-      { href: "/vendor", label: "Safety & medical policy" },
-    ],
-  },
-  {
-    heading: "Partner",
-    links: [{ href: "/vendor", label: "List your trips on Mitram" }],
-  },
-];
+export async function SiteFooter() {
+  const categories = await listCategories();
 
-export function SiteFooter() {
+  const footerColumns = [
+    {
+      heading: "Explore",
+      links: [
+        { href: "/trips", label: "All Trips" },
+        { href: "/destinations", label: "Destinations" },
+        { href: "/categories", label: "Categories" },
+        ...categories.slice(0, 3).map((c) => ({ href: `/trips?category=${c.slug}`, label: c.name })),
+      ],
+    },
+    {
+      heading: "Company",
+      links: [
+        { href: "/about", label: "About MITRAM" },
+        { href: "/how-it-works", label: "How MITRAM Works" },
+        { href: "/safety", label: "Safety & Trust" },
+        { href: "/vendor", label: "For Vendors" },
+      ],
+    },
+    {
+      heading: "Support",
+      links: [
+        { href: "/dashboard", label: "My Journey" },
+        { href: "/contact", label: "Need a Hand?" },
+        { href: "/faq", label: "FAQ" },
+      ],
+    },
+  ];
+
   return (
     <footer className="border-t border-border bg-card">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-[2fr_1fr_1fr_1fr]">
         <div>
           <p className="font-heading text-lg font-bold text-primary">Mitram</p>
           <p className="mt-2.5 max-w-xs text-[13px] text-muted-foreground">
-            Senior-assisted travel, done right. A trust layer that makes senior travel safe for
-            the traveler and visible for the family paying for it.
+            More Journeys, Together. Senior-friendly group travel — comfortable, safe and
+            social — with peace of mind for the family back home.
           </p>
         </div>
         {footerColumns.map((column) => (

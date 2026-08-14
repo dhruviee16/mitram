@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
 import { nanoid } from "nanoid";
 import { auth } from "@/auth";
+import { uploadToR2 } from "@/server/r2";
 
 const ALLOWED_TYPES: Record<string, string> = {
   "image/jpeg": "jpg",
@@ -35,12 +34,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Image must be under 5MB." }, { status: 400 });
   }
 
-  const uploadDir = path.join(process.cwd(), "public", "uploads", "vendor-trips");
-  await mkdir(uploadDir, { recursive: true });
-
-  const filename = `${session.user.id}-${nanoid(10)}.${extension}`;
+  const key = `vendor-trips/${session.user.id}-${nanoid(10)}.${extension}`;
   const bytes = Buffer.from(await file.arrayBuffer());
-  await writeFile(path.join(uploadDir, filename), bytes);
 
-  return NextResponse.json({ url: `/uploads/vendor-trips/${filename}` }, { status: 201 });
+  try {
+    const url = await uploadToR2(key, bytes, file.type);
+    return NextResponse.json({ url }, { status: 201 });
+  } catch (err) {
+    console.error("R2 upload failed:", err);
+    return NextResponse.json({ error: "Could not upload image." }, { status: 500 });
+  }
 }

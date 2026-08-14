@@ -27,7 +27,7 @@ export function Hero() {
   }
 
   return (
-    <section className="relative bg-linear-to-br from-[#5c1010] via-primary to-[#6e1414] px-4 py-12 sm:px-6 sm:py-16">
+    <section className="relative bg-linear-to-br from-foreground via-primary to-foreground px-4 py-12 sm:px-6 sm:py-16">
       <div className="absolute inset-0 overflow-hidden">
         <Image
           src="/images/brand/senior-pilgrims.jpg"

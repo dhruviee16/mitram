@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useBookingDraftStore } from "@/stores/booking-draft-store";
 import type { BookedFor } from "@/lib/validations/booking";
 
 const options: { value: BookedFor; label: string; description: string }[] = [
@@ -10,14 +10,9 @@ const options: { value: BookedFor; label: string; description: string }[] = [
   { value: "nri", label: "NRI booking from abroad", description: "I live outside India." },
 ];
 
-export function StepWhoFor({
-  value,
-  onNext,
-}: {
-  value: BookedFor | null;
-  onNext: (value: BookedFor) => void;
-}) {
-  const [selected, setSelected] = useState<BookedFor | null>(value);
+export function StepWhoFor({ onNext }: { onNext: () => void }) {
+  const bookedFor = useBookingDraftStore((s) => s.draft.bookedFor);
+  const update = useBookingDraftStore((s) => s.update);
 
   return (
     <div>
@@ -28,10 +23,10 @@ export function StepWhoFor({
             key={opt.value}
             type="button"
             role="radio"
-            aria-checked={selected === opt.value}
-            onClick={() => setSelected(opt.value)}
+            aria-checked={bookedFor === opt.value}
+            onClick={() => update({ bookedFor: opt.value })}
             className={
-              selected === opt.value
+              bookedFor === opt.value
                 ? "block w-full rounded-lg border-2 border-primary bg-secondary/40 p-4 text-left"
                 : "block w-full rounded-lg border border-border p-4 text-left hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             }
@@ -41,12 +36,7 @@ export function StepWhoFor({
           </button>
         ))}
       </div>
-      <Button
-        type="button"
-        className="mt-6 w-full"
-        disabled={!selected}
-        onClick={() => selected && onNext(selected)}
-      >
+      <Button type="button" className="mt-6 w-full min-h-11" disabled={!bookedFor} onClick={onNext}>
         Continue
       </Button>
     </div>

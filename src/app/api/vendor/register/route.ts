@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import { vendorSignupSchema } from "@/lib/validations/vendor";
-import { registerUser, DuplicateEmailError } from "@/server/services/authService";
+import { vendorRegisterSchema } from "@/lib/validations/vendor";
+import { registerVendor } from "@/server/services/vendorService";
+import { DuplicateEmailError } from "@/server/services/authService";
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const parsed = vendorSignupSchema.safeParse(body);
+  const parsed = vendorRegisterSchema.safeParse(body);
 
   if (!parsed.success) {
     return NextResponse.json(
@@ -14,18 +15,13 @@ export async function POST(req: Request) {
   }
 
   try {
-    const user = await registerUser(
-      parsed.data.email,
-      parsed.data.password,
-      parsed.data.name,
-      "vendor"
-    );
+    const user = await registerVendor(parsed.data);
     return NextResponse.json(user, { status: 201 });
   } catch (err) {
     if (err instanceof DuplicateEmailError) {
       return NextResponse.json({ error: err.message }, { status: 409 });
     }
-    console.error("vendor registerUser failed:", err);
+    console.error("registerVendor failed:", err);
     return NextResponse.json({ error: "Could not create account." }, { status: 500 });
   }
 }

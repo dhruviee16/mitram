@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { BookingWizard } from "@/components/booking/booking-wizard";
-import { getTripBySlug } from "@/server/services/tripService";
+import { getTripForBooking } from "@/server/services/tripService";
 
 export default async function BookTripPage({
   params,
@@ -8,7 +8,7 @@ export default async function BookTripPage({
   params: Promise<{ tripSlug: string }>;
 }) {
   const { tripSlug } = await params;
-  const trip = await getTripBySlug(tripSlug);
+  const trip = await getTripForBooking(tripSlug);
 
   if (!trip) {
     notFound();
@@ -24,6 +24,13 @@ export default async function BookTripPage({
         durationDays: trip.durationDays,
         durationNights: trip.durationNights,
         images: trip.images,
+        insuranceIncluded: trip.insuranceIncluded,
+        dates: trip.dates.map((d) => ({
+          id: d.id,
+          departureDate: d.departureDate.toISOString(),
+          returnDate: d.returnDate?.toISOString() ?? null,
+          seatsAvailable: d.seatsAvailable,
+        })),
       }}
     />
   );

@@ -44,9 +44,8 @@ next-env.d.ts
 /src/generated/prisma
 .superpowers/
 
-# vendor-uploaded trip images (user content, not source)
-/public/uploads/vendor-trips/*
-!/public/uploads/vendor-trips/.gitkeep
+# vendor trip images now upload to Cloudflare R2 (src/server/r2.ts), not local disk
+scripts/.r2-image-mapping.json
 
 # design-sync
 .ds-sync/

@@ -9,7 +9,7 @@ import type { NextAuthConfig } from "next-auth";
 export const authConfig = {
   providers: [],
   session: { strategy: "jwt" },
-  pages: { signIn: "/login" },
+  pages: { signIn: "/customer/login" },
   callbacks: {
     jwt({ token, user }) {
       if (user) {

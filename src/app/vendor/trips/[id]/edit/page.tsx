@@ -3,6 +3,7 @@ import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getTripForVendor } from "@/server/services/vendorService";
+import { listDestinations } from "@/server/services/destinationService";
 import { TripForm } from "@/components/vendor/trip-form";
 
 export default async function EditVendorTripPage({
@@ -12,7 +13,7 @@ export default async function EditVendorTripPage({
 }) {
   const session = await auth();
   if (!session?.user?.id || (session.user as { role?: string }).role !== "vendor") {
-    redirect("/login");
+    redirect("/vendor/login");
   }
 
   const { id } = await params;
@@ -23,6 +24,8 @@ export default async function EditVendorTripPage({
   } catch {
     notFound();
   }
+
+  const destinations = await listDestinations();
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
@@ -38,9 +41,11 @@ export default async function EditVendorTripPage({
         <TripForm
           mode="edit"
           tripId={trip.id}
+          destinations={destinations}
           defaultValues={{
             title: trip.title,
-            category: trip.category,
+            category: trip.category.slug,
+            destinationId: trip.destinationId ?? "",
             routeSummary: trip.routeSummary,
             durationDays: trip.durationDays,
             durationNights: trip.durationNights,
@@ -48,13 +53,31 @@ export default async function EditVendorTripPage({
             images: trip.images,
             careFeatures: trip.careFeatures.join("\n"),
             inclusions: trip.inclusions.join("\n"),
+            exclusions: trip.exclusions.join("\n"),
             summary: trip.summary,
+            walkingIntensity: trip.walkingIntensity,
+            groupSizeMin: trip.groupSizeMin ?? undefined,
+            groupSizeMax: trip.groupSizeMax ?? undefined,
+            ageGroupMin: trip.ageGroupMin ?? undefined,
+            ageGroupMax: trip.ageGroupMax ?? undefined,
+            hotelCategory: trip.hotelCategory ?? undefined,
+            mealsPlan: trip.mealsPlan,
+            insuranceIncluded: trip.insuranceIncluded,
+            coordinatorIncluded: trip.coordinatorIncluded,
+            accessibilityNotes: trip.accessibilityNotes ?? "",
             days: trip.days.map((d) => ({
               dayNumber: d.dayNumber,
               title: d.title,
               description: d.description,
               activities: d.activities.join("\n"),
             })),
+            dates:
+              trip.dates.length > 0
+                ? trip.dates.map((d) => ({
+                    departureDate: d.departureDate.toISOString().slice(0, 10),
+                    seatsTotal: d.seatsTotal ?? 20,
+                  }))
+                : [{ departureDate: "", seatsTotal: 20 }],
           }}
         />
       </div>
