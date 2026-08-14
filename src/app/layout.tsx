@@ -5,6 +5,7 @@ import { SessionProvider } from "@/components/providers/session-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { SkipLink } from "@/components/layout/skip-link";
+import { TopOfferStrip } from "@/components/layout/top-offer-strip";
 import { SiteNav } from "@/components/layout/site-nav";
 import { SiteFooter } from "@/components/layout/site-footer";
 import "./globals.css";
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <SessionProvider>
             <QueryProvider>
               <SkipLink />
+              <TopOfferStrip />
               <SiteNav />
               <main id="main-content" className="flex-1">
                 {children}

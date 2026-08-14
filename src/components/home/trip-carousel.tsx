@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { TripCard } from "@/components/trip/trip-card";
 import {
   Carousel,
@@ -11,11 +12,16 @@ type Trip = Parameters<typeof TripCard>[0]["trip"];
 
 export function TripCarousel({ trips }: { trips: Trip[] }) {
   return (
-    <section aria-labelledby="carousel-heading" className="px-4 py-8 sm:px-6">
+    <section id="trips" aria-labelledby="carousel-heading" className="px-4 py-8 sm:px-6">
       <div className="mx-auto max-w-6xl">
-        <h2 id="carousel-heading" className="font-heading text-xl font-bold text-foreground">
-          Mitram&rsquo;s Most-Loved Yatras
-        </h2>
+        <div className="flex items-baseline justify-between gap-4">
+          <h2 id="carousel-heading" className="font-heading text-2xl font-bold text-foreground">
+            Mitram&rsquo;s Most-Loved Yatras
+          </h2>
+          <Link href="/trips" className="text-sm font-semibold text-primary hover:underline">
+            View all packages →
+          </Link>
+        </div>
         <Carousel opts={{ align: "start" }} className="mt-4">
           <CarouselContent>
             {trips.map((trip) => (

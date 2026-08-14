@@ -10,7 +10,7 @@ type Trip = Parameters<typeof TripCard>[0]["trip"] & { category: string };
 export function TripsBrowser({ trips }: { trips: Trip[] }) {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") ?? "";
-  const [category, setCategory] = useState("all");
+  const [category, setCategory] = useState(searchParams.get("category") ?? "all");
 
   const filtered = useMemo(() => {
     return trips.filter((trip) => {

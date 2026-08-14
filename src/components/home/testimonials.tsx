@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 // Placeholder testimonials — Mitram is pre-launch with no real customers yet.
 // Replace with real quotes once available; this is the one section the design
 // spec explicitly sanctions placeholder content for.
@@ -30,15 +28,6 @@ export function Testimonials() {
       className="px-4 py-8 sm:px-6"
     >
       <div className="mx-auto max-w-6xl">
-        <div className="relative mb-6 h-40 w-full overflow-hidden rounded-lg sm:h-56">
-          <Image
-            src="/images/trips/dwarka-rann-of-kutch-1.jpg"
-            alt="Senior pilgrims gathered at a temple courtyard"
-            fill
-            sizes="(min-width: 1024px) 1152px, 100vw"
-            className="object-cover"
-          />
-        </div>
         <h2
           id="testimonials-heading"
           className="font-heading text-xl font-bold text-foreground"
