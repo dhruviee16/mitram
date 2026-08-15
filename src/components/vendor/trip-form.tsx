@@ -9,6 +9,8 @@ import { X } from "lucide-react";
 
 import { TRIP_CATEGORIES } from "@/lib/trip-categories";
 import { walkingIntensityValues, mealsPlanValues } from "@/lib/validations/vendor";
+import { useUploadVendorImage } from "@/hooks/use-upload-vendor-image";
+import { useSaveVendorTrip } from "@/hooks/use-save-vendor-trip";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -97,15 +99,17 @@ export function TripForm({
   tripId,
   destinations,
   defaultValues,
+  redirectTo = "/vendor/dashboard",
 }: {
   mode: "create" | "edit";
   tripId?: string;
   destinations: { id: string; name: string }[];
   defaultValues?: TripFormDefaultValues;
+  redirectTo?: string;
 }) {
   const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
-  const [uploading, setUploading] = useState(false);
+  const uploadImage = useUploadVendorImage();
+  const saveTrip = useSaveVendorTrip();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<TripFormDefaultValues>({
@@ -132,55 +136,33 @@ export function TripForm({
     const files = Array.from(e.target.files ?? []);
     if (files.length === 0) return;
     e.target.value = "";
-    setUploading(true);
 
     for (const file of files) {
-      const body = new FormData();
-      body.append("file", file);
-      const res = await fetch("/api/vendor/uploads", { method: "POST", body });
-      if (!res.ok) {
-        const data = await res
-          .json()
-          .catch(() => ({ error: "Could not upload image." }));
-        toast.error(data.error ?? "Could not upload image.");
-        continue;
+      try {
+        const { url } = await uploadImage.mutateAsync(file);
+        setImages((prev) => [...prev, url]);
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "Could not upload image.");
       }
-      const { url } = (await res.json()) as { url: string };
-      setImages((prev) => [...prev, url]);
     }
-
-    setUploading(false);
   }
 
   function removeImage(index: number) {
     setImages((prev) => prev.filter((_, i) => i !== index));
   }
 
-  async function onSubmit(values: TripFormDefaultValues) {
-    setSubmitting(true);
-
-    const url =
-      mode === "create" ? "/api/vendor/trips" : `/api/vendor/trips/${tripId}`;
-    const method = mode === "create" ? "POST" : "PUT";
-
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...values, images }),
-    });
-
-    if (!res.ok) {
-      const data = await res
-        .json()
-        .catch(() => ({ error: "Could not save trip." }));
-      toast.error(data.error ?? "Could not save trip.");
-      setSubmitting(false);
-      return;
-    }
-
-    toast.success(mode === "create" ? "Trip submitted for MITRAM approval." : "Trip updated.");
-    router.push("/vendor/dashboard");
-    router.refresh();
+  function onSubmit(values: TripFormDefaultValues) {
+    saveTrip.mutate(
+      { mode, tripId, values: { ...values, images } },
+      {
+        onError: (err) => toast.error(err instanceof Error ? err.message : "Could not save trip."),
+        onSuccess: () => {
+          toast.success(mode === "create" ? "Trip submitted for MITRAM approval." : "Trip updated.");
+          router.push(redirectTo);
+          router.refresh();
+        },
+      },
+    );
   }
 
   return (
@@ -356,10 +338,10 @@ export function TripForm({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              disabled={uploading}
+              disabled={uploadImage.isPending}
               className="flex size-24 flex-col items-center justify-center gap-1 rounded-md border border-dashed border-input text-xs text-muted-foreground hover:border-primary hover:text-primary disabled:opacity-50"
             >
-              {uploading ? "Uploading..." : "+ Add photo"}
+              {uploadImage.isPending ? "Uploading..." : "+ Add photo"}
             </button>
           </div>
           <input
@@ -710,8 +692,8 @@ export function TripForm({
           ))}
         </div>
 
-        <Button type="submit" disabled={submitting} className="min-h-11">
-          {submitting
+        <Button type="submit" disabled={saveTrip.isPending} className="min-h-11">
+          {saveTrip.isPending
             ? "Saving..."
             : mode === "create"
               ? "Submit for approval"

@@ -7,20 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent } from "@/components/ui/card";
-import { postJson, patchJson, deleteJson } from "@/lib/api";
+import {
+  type FamilyConnection,
+  useAddFamilyConnection,
+  useUpdateFamilyConnection,
+  useRemoveFamilyConnection,
+} from "@/hooks/use-family-connections";
 
-type Connection = {
-  id: string;
-  name: string;
-  relationship: string;
-  email: string | null;
-  phone: string | null;
-  tripUpdates: boolean;
-  arrivalUpdates: boolean;
-  photos: boolean;
-  liveLocation: boolean;
-  emergencyNotifications: boolean;
-};
+type Connection = FamilyConnection;
 
 const PERMISSION_FIELDS: { key: keyof Connection; label: string }[] = [
   { key: "tripUpdates", label: "Trip updates" },
@@ -35,16 +29,17 @@ const emptyForm = { name: "", relationship: "", email: "", phone: "" };
 export function FamilyConnectionsManager({ initialConnections }: { initialConnections: Connection[] }) {
   const [connections, setConnections] = useState(initialConnections);
   const [form, setForm] = useState(emptyForm);
-  const [submitting, setSubmitting] = useState(false);
+  const addConnection = useAddFamilyConnection();
+  const updateConnection = useUpdateFamilyConnection();
+  const removeConnection = useRemoveFamilyConnection();
 
-  async function handleAdd() {
+  function handleAdd() {
     if (!form.name.trim() || !form.relationship.trim()) {
       toast.error("Enter a name and relationship.");
       return;
     }
-    setSubmitting(true);
-    try {
-      const created = await postJson<Connection>("/api/family-connections", {
+    addConnection.mutate(
+      {
         name: form.name,
         relationship: form.relationship,
         email: form.email,
@@ -54,36 +49,40 @@ export function FamilyConnectionsManager({ initialConnections }: { initialConnec
         photos: true,
         liveLocation: false,
         emergencyNotifications: true,
-      });
-      setConnections((prev) => [created, ...prev]);
-      setForm(emptyForm);
-      toast.success("Family connection added.");
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Could not add family connection.");
-    } finally {
-      setSubmitting(false);
-    }
+      },
+      {
+        onSuccess: (created) => {
+          setConnections((prev) => [created, ...prev]);
+          setForm(emptyForm);
+          toast.success("Family connection added.");
+        },
+        onError: (err) => toast.error(err instanceof Error ? err.message : "Could not add family connection."),
+      },
+    );
   }
 
-  async function togglePermission(id: string, key: keyof Connection, value: boolean) {
+  function togglePermission(id: string, key: keyof Connection, value: boolean) {
     setConnections((prev) => prev.map((c) => (c.id === id ? { ...c, [key]: value } : c)));
-    try {
-      await patchJson(`/api/family-connections/${id}`, { [key]: value });
-    } catch {
-      toast.error("Could not update permission.");
-      setConnections((prev) => prev.map((c) => (c.id === id ? { ...c, [key]: !value } : c)));
-    }
+    updateConnection.mutate(
+      { id, [key]: value },
+      {
+        onError: () => {
+          toast.error("Could not update permission.");
+          setConnections((prev) => prev.map((c) => (c.id === id ? { ...c, [key]: !value } : c)));
+        },
+      },
+    );
   }
 
-  async function handleRemove(id: string) {
+  function handleRemove(id: string) {
     const prev = connections;
     setConnections((c) => c.filter((conn) => conn.id !== id));
-    try {
-      await deleteJson(`/api/family-connections/${id}`);
-    } catch {
-      toast.error("Could not remove family connection.");
-      setConnections(prev);
-    }
+    removeConnection.mutate(id, {
+      onError: () => {
+        toast.error("Could not remove family connection.");
+        setConnections(prev);
+      },
+    });
   }
 
   return (
@@ -158,9 +157,9 @@ export function FamilyConnectionsManager({ initialConnections }: { initialConnec
             aria-label="Phone"
           />
         </div>
-        <Button type="button" className="mt-3 w-full min-h-11" onClick={handleAdd} disabled={submitting}>
+        <Button type="button" className="mt-3 w-full min-h-11" onClick={handleAdd} disabled={addConnection.isPending}>
           <Plus className="size-4" aria-hidden="true" />
-          {submitting ? "Adding..." : "Add family member"}
+          {addConnection.isPending ? "Adding..." : "Add family member"}
         </Button>
       </CardContent>
       </Card>

@@ -1,13 +1,13 @@
 "use client";
 
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
-import { Search, Star, ShieldCheck } from "lucide-react";
-import { useTripSearch } from "@/hooks/use-trip-search";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { useTripSearch } from "@/hooks/use-trip-search";
+import { Search, ShieldCheck, Star } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { SubmitEvent, useState } from "react";
 
 type HeroStats = {
   averageRating: number;
@@ -20,7 +20,7 @@ export function Hero({ stats }: { stats?: HeroStats }) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const { matches, isLoading } = useTripSearch(destination);
 
-  function handleSubmit(e: FormEvent) {
+  function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setShowSuggestions(false);
     const params = destination.trim()
@@ -35,7 +35,7 @@ export function Hero({ stats }: { stats?: HeroStats }) {
   }
 
   return (
-    <section className="overflow-hidden bg-secondary px-4 py-12 sm:px-6 sm:py-16">
+    <section className="bg-secondary px-4 py-12 sm:px-6 sm:py-16">
       <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
         <div>
           <span className="inline-block rounded-full bg-accent px-4 py-1.5 text-xs font-bold text-accent-foreground">
@@ -53,7 +53,10 @@ export function Hero({ stats }: { stats?: HeroStats }) {
           {stats ? (
             <div className="mt-5 flex items-center gap-2 text-sm text-foreground">
               <span className="flex items-center gap-1 font-bold">
-                <Star className="size-4 fill-accent text-accent" aria-hidden="true" />
+                <Star
+                  className="size-4 fill-accent text-accent"
+                  aria-hidden="true"
+                />
                 {stats.averageRating.toFixed(1)}/5
               </span>
               <span className="text-muted-foreground">
@@ -74,7 +77,10 @@ export function Hero({ stats }: { stats?: HeroStats }) {
               className="flex flex-col flex-wrap gap-4 border-t border-border p-5 sm:flex-row sm:items-center sm:gap-4"
             >
               <Field className="min-w-36 flex-1 border-b border-border pb-2 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-4">
-                <FieldLabel htmlFor="hero-search-from" className="text-[10px] font-bold text-muted-foreground uppercase">
+                <FieldLabel
+                  htmlFor="hero-search-from"
+                  className="text-[10px] font-bold text-muted-foreground uppercase"
+                >
                   From
                 </FieldLabel>
                 <Input
@@ -85,7 +91,10 @@ export function Hero({ stats }: { stats?: HeroStats }) {
                 />
               </Field>
               <Field className="relative min-w-36 flex-1 border-b border-border pb-2 sm:border-b-0 sm:border-r sm:pb-0 sm:px-4">
-                <FieldLabel htmlFor="hero-search-to" className="text-[10px] font-bold text-muted-foreground uppercase">
+                <FieldLabel
+                  htmlFor="hero-search-to"
+                  className="text-[10px] font-bold text-muted-foreground uppercase"
+                >
                   Going to
                 </FieldLabel>
                 <Input
@@ -99,7 +108,9 @@ export function Hero({ stats }: { stats?: HeroStats }) {
                     setShowSuggestions(true);
                   }}
                   onFocus={() => setShowSuggestions(true)}
-                  onBlur={() => setTimeout(() => setShowSuggestions(false), 100)}
+                  onBlur={() =>
+                    setTimeout(() => setShowSuggestions(false), 100)
+                  }
                   className="h-auto border-0 bg-transparent p-0 text-sm text-foreground shadow-none focus-visible:ring-0"
                 />
 
@@ -137,18 +148,11 @@ export function Hero({ stats }: { stats?: HeroStats }) {
                   </ul>
                 )}
               </Field>
-              <Field className="w-32.5 shrink-0 sm:pr-2">
-                <FieldLabel htmlFor="hero-search-travelers" className="text-[10px] font-bold text-muted-foreground uppercase">
-                  Travelers
-                </FieldLabel>
-                <Input
-                  id="hero-search-travelers"
-                  type="text"
-                  placeholder="2 adults"
-                  className="h-auto border-0 bg-transparent p-0 text-sm text-foreground shadow-none focus-visible:ring-0"
-                />
-              </Field>
-              <Button type="submit" size="lg" className="shrink-0 gap-2 rounded-lg px-6 py-3 text-sm font-bold">
+              <Button
+                type="submit"
+                size="lg"
+                className="shrink-0 gap-2 rounded-lg px-6 py-3 text-sm font-bold"
+              >
                 <Search className="size-4" aria-hidden="true" />
                 Search
               </Button>
@@ -157,8 +161,14 @@ export function Hero({ stats }: { stats?: HeroStats }) {
         </div>
 
         <div className="relative mx-auto hidden w-full max-w-md lg:block">
-          <div className="absolute -top-8 -right-6 -z-10 size-40 rounded-full bg-accent/30" aria-hidden="true" />
-          <div className="absolute -bottom-8 -left-8 -z-10 size-32 rounded-full bg-primary/20" aria-hidden="true" />
+          <div
+            className="absolute -top-8 -right-6 -z-10 size-40 rounded-full bg-accent/30"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute -bottom-8 -left-8 -z-10 size-32 rounded-full bg-primary/20"
+            aria-hidden="true"
+          />
           <div className="relative aspect-3/4 overflow-hidden rounded-[2rem]">
             <Image
               src="/images/hero/himalaya-path.jpg"
@@ -174,8 +184,12 @@ export function Hero({ stats }: { stats?: HeroStats }) {
               <ShieldCheck className="size-5 text-primary" aria-hidden="true" />
             </span>
             <div>
-              <p className="text-[13px] font-bold text-foreground">Police-verified Saathi</p>
-              <p className="text-xs text-muted-foreground">On every Mitram journey</p>
+              <p className="text-[13px] font-bold text-foreground">
+                Police-verified Saathi
+              </p>
+              <p className="text-xs text-muted-foreground">
+                On every Mitram journey
+              </p>
             </div>
           </div>
         </div>

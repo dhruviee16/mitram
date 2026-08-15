@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { RowActionsMenu } from "@/components/ui/row-actions-menu";
-import { patchJson } from "@/lib/api";
+import { useUpdateStatus } from "@/hooks/use-update-status";
 
 export function StatusActionButtons({
   endpoint,
@@ -14,19 +13,19 @@ export function StatusActionButtons({
   actions: { label: string; status: string; variant?: "default" | "outline" | "destructive" }[];
 }) {
   const router = useRouter();
-  const [submitting, setSubmitting] = useState<string | null>(null);
+  const { mutate, isPending } = useUpdateStatus();
 
-  async function handleClick(status: string) {
-    setSubmitting(status);
-    try {
-      await patchJson(endpoint, { status });
-      toast.success("Status updated.");
-      router.refresh();
-    } catch {
-      toast.error("Could not update status.");
-    } finally {
-      setSubmitting(null);
-    }
+  function handleClick(status: string) {
+    mutate(
+      { endpoint, status },
+      {
+        onSuccess: () => {
+          toast.success("Status updated.");
+          router.refresh();
+        },
+        onError: () => toast.error("Could not update status."),
+      },
+    );
   }
 
   return (
@@ -34,7 +33,7 @@ export function StatusActionButtons({
       actions={actions.map((action) => ({
         label: action.label,
         variant: action.variant === "destructive" ? "destructive" : "default",
-        disabled: submitting !== null,
+        disabled: isPending,
         onClick: () => handleClick(action.status),
       }))}
     />

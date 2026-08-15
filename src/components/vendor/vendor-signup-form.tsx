@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,6 +9,7 @@ import Link from "next/link";
 import type { z } from "zod";
 
 import { vendorRegisterSchema } from "@/lib/validations/vendor";
+import { useRegisterVendor } from "@/hooks/use-register-vendor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -26,7 +26,7 @@ type FormInput = z.input<typeof vendorRegisterSchema>;
 
 export function VendorSignupForm() {
   const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
+  const registerVendor = useRegisterVendor();
 
   const form = useForm<FormInput>({
     resolver: zodResolver(vendorRegisterSchema) as unknown as Resolver<FormInput>,
@@ -45,36 +45,25 @@ export function VendorSignupForm() {
   });
 
   async function onSubmit(values: FormInput) {
-    setSubmitting(true);
+    registerVendor.mutate(values, {
+      onError: (err) => toast.error(err instanceof Error ? err.message : "Could not create account."),
+      onSuccess: async () => {
+        const result = await signIn("credentials", {
+          email: values.email,
+          password: values.password,
+          redirect: false,
+        });
 
-    const res = await fetch("/api/vendor/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
+        if (result?.error) {
+          toast.warning("Account created — please sign in.");
+          router.push("/vendor/login");
+          return;
+        }
+
+        toast.success("Application submitted — your account is pending MITRAM verification.");
+        router.push("/vendor/dashboard");
+      },
     });
-
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({ error: "Could not create account." }));
-      toast.error(data.error ?? "Could not create account.");
-      setSubmitting(false);
-      return;
-    }
-
-    const result = await signIn("credentials", {
-      email: values.email,
-      password: values.password,
-      redirect: false,
-    });
-    setSubmitting(false);
-
-    if (result?.error) {
-      toast.warning("Account created — please sign in.");
-      router.push("/vendor/login");
-      return;
-    }
-
-    toast.success("Application submitted — your account is pending MITRAM verification.");
-    router.push("/vendor/dashboard");
   }
 
   return (
@@ -226,8 +215,8 @@ export function VendorSignupForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full min-h-11" disabled={submitting}>
-          {submitting ? "Creating account..." : "Apply to become a MITRAM partner"}
+        <Button type="submit" className="w-full min-h-11" disabled={registerVendor.isPending}>
+          {registerVendor.isPending ? "Creating account..." : "Apply to become a MITRAM partner"}
         </Button>
         <p className="text-center text-sm text-muted-foreground">
           Already a partner?{" "}

@@ -22,6 +22,10 @@ export function patchJson<TResponse>(url: string, body: unknown): Promise<TRespo
   return requestJson<TResponse>(url, "PATCH", body);
 }
 
+export function putJson<TResponse>(url: string, body: unknown): Promise<TResponse> {
+  return requestJson<TResponse>(url, "PUT", body);
+}
+
 export function deleteJson<TResponse>(url: string): Promise<TResponse> {
   return requestJson<TResponse>(url, "DELETE");
 }

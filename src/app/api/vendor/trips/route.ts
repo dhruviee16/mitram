@@ -5,7 +5,8 @@ import { createTrip } from "@/server/services/vendorService";
 
 export async function POST(req: Request) {
   const session = await auth();
-  if (!session?.user?.id || (session.user as { role?: string }).role !== "vendor") {
+  const role = (session?.user as { role?: string } | undefined)?.role;
+  if (!session?.user?.id || (role !== "vendor" && role !== "admin")) {
     return NextResponse.json({ error: "Not signed in as a vendor." }, { status: 401 });
   }
 
@@ -19,7 +20,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const result = await createTrip(session.user.id, parsed.data);
+    const result = await createTrip(session.user.id, parsed.data, { autoApprove: role === "admin" });
     return NextResponse.json(result, { status: 201 });
   } catch (err) {
     console.error("createTrip failed:", err);

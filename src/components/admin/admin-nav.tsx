@@ -6,6 +6,7 @@ const links = [
   { href: "/admin/trips", label: "Trips" },
   { href: "/admin/bookings", label: "Bookings" },
   { href: "/admin/testimonials", label: "Testimonials" },
+  { href: "/admin/users", label: "Users" },
 ];
 
 export function AdminNav({ active }: { active: string }) {

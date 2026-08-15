@@ -1,39 +1,37 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { RowActionsMenu } from "@/components/ui/row-actions-menu";
-import { patchJson, deleteJson } from "@/lib/api";
+import { useSetTestimonialFeatured, useDeleteTestimonial } from "@/hooks/use-testimonial-actions";
 
 export function TestimonialActions({ id, featured }: { id: string; featured: boolean }) {
   const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
+  const setFeatured = useSetTestimonialFeatured();
+  const deleteTestimonial = useDeleteTestimonial();
+  const submitting = setFeatured.isPending || deleteTestimonial.isPending;
 
-  async function toggleFeatured() {
-    setSubmitting(true);
-    try {
-      await patchJson(`/api/admin/testimonials/${id}`, { featured: !featured });
-      toast.success("Updated.");
-      router.refresh();
-    } catch {
-      toast.error("Could not update.");
-    } finally {
-      setSubmitting(false);
-    }
+  function toggleFeatured() {
+    setFeatured.mutate(
+      { id, featured: !featured },
+      {
+        onSuccess: () => {
+          toast.success("Updated.");
+          router.refresh();
+        },
+        onError: () => toast.error("Could not update."),
+      },
+    );
   }
 
-  async function handleDelete() {
-    setSubmitting(true);
-    try {
-      await deleteJson(`/api/admin/testimonials/${id}`);
-      toast.success("Removed.");
-      router.refresh();
-    } catch {
-      toast.error("Could not remove.");
-    } finally {
-      setSubmitting(false);
-    }
+  function handleDelete() {
+    deleteTestimonial.mutate(id, {
+      onSuccess: () => {
+        toast.success("Removed.");
+        router.refresh();
+      },
+      onError: () => toast.error("Could not remove."),
+    });
   }
 
   return (

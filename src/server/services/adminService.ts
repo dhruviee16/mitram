@@ -1,5 +1,5 @@
 import { prisma } from "@/server/db";
-import type { VendorVerificationStatus, TripStatus } from "@/generated/prisma/client";
+import type { VendorVerificationStatus, TripStatus, UserRole } from "@/generated/prisma/client";
 
 export function listVendors() {
   return prisma.vendorProfile.findMany({
@@ -50,6 +50,18 @@ export async function setTestimonialFeatured(id: string, featured: boolean) {
 
 export async function deleteTestimonial(id: string) {
   await prisma.testimonial.delete({ where: { id } });
+}
+
+export function listUsers() {
+  return prisma.user.findMany({
+    select: { id: true, name: true, email: true, phone: true, role: true, createdAt: true },
+    orderBy: { createdAt: "desc" },
+    take: 200,
+  });
+}
+
+export async function setUserRole(userId: string, role: UserRole) {
+  return prisma.user.update({ where: { id: userId }, data: { role } });
 }
 
 export async function getAdminOverview() {

@@ -1,9 +1,11 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { auth } from "@/auth";
 import { listTripsForApproval } from "@/server/services/adminService";
 import { AdminNav } from "@/components/admin/admin-nav";
 import { StatusActionButtons } from "@/components/admin/status-action-buttons";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { DataTable, type DataTableColumn } from "@/components/ui/data-table";
 
 const STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive"> = {
@@ -68,7 +70,10 @@ export default async function AdminTripsPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <AdminNav active="/admin/trips" />
-      <h1 className="font-heading text-2xl font-bold text-foreground">Trip approval</h1>
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="font-heading text-2xl font-bold text-foreground">Trip approval</h1>
+        <Button render={<Link href="/vendor/trips/new" />}>Add trip</Button>
+      </div>
 
       <div className="mt-6">
         <DataTable columns={columns} data={trips} rowKey={(trip) => trip.id} emptyMessage="No trips yet." />

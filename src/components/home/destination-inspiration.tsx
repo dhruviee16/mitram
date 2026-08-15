@@ -22,7 +22,11 @@ const BENTO_POSITION = [
   "md:col-start-4 md:row-start-2",
 ];
 
-export function DestinationInspiration({ destinations }: { destinations: Destination[] }) {
+export function DestinationInspiration({
+  destinations,
+}: {
+  destinations: Destination[];
+}) {
   if (destinations.length === 0) return null;
 
   return (
@@ -31,7 +35,7 @@ export function DestinationInspiration({ destinations }: { destinations: Destina
         <h2 className="font-heading text-2xl font-bold text-foreground">
           Where families are going this season
         </h2>
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4 md:auto-rows-[11.5rem]">
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4 md:auto-rows-46">
           {destinations.map((destination, index) => {
             const isBig = index === 0 || index === 3;
             return (

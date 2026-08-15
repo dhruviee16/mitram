@@ -59,7 +59,7 @@ function slugify(title: string) {
     .replace(/(^-|-$)/g, "")}-${nanoid(6)}`;
 }
 
-export async function createTrip(vendorId: string, input: VendorTripValues) {
+export async function createTrip(vendorId: string, input: VendorTripValues, options?: { autoApprove?: boolean }) {
   const category = await prisma.category.findUniqueOrThrow({ where: { slug: input.category } });
   const trip = await prisma.trip.create({
     data: {
@@ -67,7 +67,7 @@ export async function createTrip(vendorId: string, input: VendorTripValues) {
       title: input.title,
       categoryId: category.id,
       destinationId: input.destinationId || null,
-      status: "pending_approval",
+      status: options?.autoApprove ? "approved" : "pending_approval",
       routeSummary: input.routeSummary,
       durationDays: input.durationDays,
       durationNights: input.durationNights,

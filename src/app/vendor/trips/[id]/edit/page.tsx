@@ -12,7 +12,8 @@ export default async function EditVendorTripPage({
   params: Promise<{ id: string }>;
 }) {
   const session = await auth();
-  if (!session?.user?.id || (session.user as { role?: string }).role !== "vendor") {
+  const role = (session?.user as { role?: string } | undefined)?.role;
+  if (!session?.user?.id || (role !== "vendor" && role !== "admin")) {
     redirect("/vendor/login");
   }
 
@@ -30,11 +31,11 @@ export default async function EditVendorTripPage({
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
       <Link
-        href="/vendor/dashboard"
+        href={role === "admin" ? "/admin/trips" : "/vendor/dashboard"}
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
       >
         <ArrowLeft className="size-4" aria-hidden="true" />
-        Your trips
+        {role === "admin" ? "All trips" : "Your trips"}
       </Link>
       <h1 className="mt-4 font-heading text-2xl font-bold text-foreground">Edit trip</h1>
       <div className="mt-6">
@@ -42,6 +43,7 @@ export default async function EditVendorTripPage({
           mode="edit"
           tripId={trip.id}
           destinations={destinations}
+          redirectTo={role === "admin" ? "/admin/trips" : "/vendor/dashboard"}
           defaultValues={{
             title: trip.title,
             category: trip.category.slug,
