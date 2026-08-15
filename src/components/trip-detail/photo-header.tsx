@@ -10,7 +10,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { formatRoute } from "@/lib/format-route";
 
 const FALLBACK_IMAGE =
@@ -139,24 +145,27 @@ export function PhotoHeader({
                 Real photos from this route.
               </DialogDescription>
             </DialogHeader>
-            <ScrollArea className="max-h-[72vh] px-5 pb-5">
-              <div className="grid gap-3 sm:grid-cols-2">
-                {images.map((img, i) => (
-                  <div
-                    key={img}
-                    className="relative aspect-4/3 overflow-hidden rounded-xl"
-                  >
-                    <Image
-                      src={img}
-                      alt={`${title} gallery photo ${i + 1}`}
-                      fill
-                      sizes="(min-width: 768px) 420px, 80vw"
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
+            <div className="px-5 pb-5">
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {images.map((img, i) => (
+                    <CarouselItem key={img}>
+                      <div className="relative flex h-[60vh] w-full items-center justify-center overflow-hidden rounded-xl bg-muted">
+                        <Image
+                          src={img}
+                          alt={`${title} gallery photo ${i + 1}`}
+                          fill
+                          sizes="(min-width: 768px) 56rem, 92vw"
+                          className="object-contain"
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2" />
+                <CarouselNext className="right-2" />
+              </Carousel>
+            </div>
           </DialogContent>
         </Dialog>
       )}

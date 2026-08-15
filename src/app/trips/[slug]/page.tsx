@@ -6,9 +6,7 @@ import { IncludesExcludes } from "@/components/trip-detail/includes-excludes";
 import { CareLayer } from "@/components/trip-detail/care-layer";
 import { CancellationPolicy } from "@/components/trip-detail/cancellation-policy";
 import { RelatedTrips } from "@/components/trip-detail/related-trips";
-import { CallbackForm } from "@/components/trip-detail/callback-form";
 import { BookingBox } from "@/components/trip-detail/booking-box";
-import { SaveTripButton } from "@/components/trip-detail/save-trip-button";
 import { ReviewsSection } from "@/components/trip-detail/reviews-section";
 import { getTripBySlug, getRelatedTrips } from "@/server/services/tripService";
 import { isTripSaved } from "@/server/services/savedTripService";
@@ -46,7 +44,7 @@ export default async function TripDetailPage({
         images={trip.images}
       />
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0 space-y-6">
             <QuickInfo trip={trip} />
             <IncludesExcludes inclusions={trip.inclusions} exclusions={trip.exclusions} />
@@ -59,23 +57,23 @@ export default async function TripDetailPage({
             <CareLayer trip={trip} />
             <ReviewsSection reviews={reviews} average={ratingSummary.average} count={ratingSummary.count} />
             <CancellationPolicy />
-            <RelatedTrips trips={relatedTrips} />
           </div>
-          <div className="space-y-4">
+          <div>
             <BookingBox
               slug={trip.slug}
+              tripId={trip.id}
+              initialSaved={initialSaved}
               basePrice={trip.basePrice}
               durationDays={trip.durationDays}
               durationNights={trip.durationNights}
               inclusions={trip.inclusions}
               careFeatures={trip.careFeatures}
             />
-            <SaveTripButton tripId={trip.id} initialSaved={initialSaved} />
-            <div className="hidden lg:block">
-              <CallbackForm />
-            </div>
           </div>
         </div>
+      </div>
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <RelatedTrips trips={relatedTrips} />
       </div>
     </div>
   );

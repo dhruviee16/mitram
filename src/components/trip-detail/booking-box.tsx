@@ -5,9 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { SaveTripButton } from "@/components/trip-detail/save-trip-button";
 
 export function BookingBox({
   slug,
+  tripId,
+  initialSaved,
   basePrice,
   durationDays,
   durationNights,
@@ -15,6 +18,8 @@ export function BookingBox({
   careFeatures,
 }: {
   slug: string;
+  tripId: string;
+  initialSaved: boolean;
   basePrice: number;
   durationDays: number;
   durationNights: number;
@@ -39,6 +44,7 @@ export function BookingBox({
               </p>
             </div>
             <Button className="min-h-11" render={<Link href={`/book/${slug}`}>Book Now</Link>} />
+            <SaveTripButton tripId={tripId} initialSaved={initialSaved} />
           </CardHeader>
 
           <CardContent className="px-5 py-5">

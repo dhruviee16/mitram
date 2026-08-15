@@ -14,7 +14,7 @@ export function RelatedTrips({ trips }: { trips: Trip[] }) {
       <Carousel opts={{ align: "start" }} className="mt-4">
         <CarouselContent>
           {trips.map((trip) => (
-            <CarouselItem key={trip.slug} className="basis-[85%] sm:basis-1/2">
+            <CarouselItem key={trip.slug} className="basis-[85%] sm:basis-1/2 lg:basis-1/3">
               <TripCard trip={trip} />
             </CarouselItem>
           ))}
