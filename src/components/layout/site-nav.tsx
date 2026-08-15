@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Radio } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { UserMenu } from "@/components/layout/user-menu";
 import { auth } from "@/auth";
 import { listCategories } from "@/server/services/categoryService";
+import { getOngoingBookingForUser } from "@/server/services/bookingService";
 
 const vendorPrimaryLinks = [
   { href: "/", label: "Home" },
@@ -45,6 +47,9 @@ export async function SiteNav() {
   const categories = isVendor ? [] : await listCategories();
 
   const menuLinks = isVendor ? vendorMenuLinks : isAdmin ? adminMenuLinks : customerMenuLinks;
+  const ongoingBooking = session?.user?.id
+    ? await getOngoingBookingForUser(session.user.id)
+    : null;
 
   return (
     <header className="sticky top-0 z-30 border-b border-border/60 bg-card/75 backdrop-blur-md supports-backdrop-filter:bg-card/60">
@@ -121,11 +126,27 @@ export async function SiteNav() {
         )}
 
         {session?.user ? (
-          <UserMenu
-            name={session.user.name ?? "Account"}
-            email={session.user.email ?? ""}
-            links={menuLinks}
-          />
+          <div className="flex items-center gap-3">
+            {ongoingBooking && (
+              <Link
+                href={`/dashboard/bookings/${ongoingBooking.id}`}
+                className="flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/15"
+              >
+                <span className="relative flex size-2">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-75 motion-reduce:hidden" />
+                  <span className="relative inline-flex size-2 rounded-full bg-primary" />
+                </span>
+                <Radio className="hidden size-3.5 sm:inline" aria-hidden="true" />
+                <span className="hidden sm:inline">{ongoingBooking.trip.title} is live</span>
+                <span className="sm:hidden">Live</span>
+              </Link>
+            )}
+            <UserMenu
+              name={session.user.name ?? "Account"}
+              email={session.user.email ?? ""}
+              links={menuLinks}
+            />
+          </div>
         ) : (
           <div className="flex items-center gap-4">
             <Link

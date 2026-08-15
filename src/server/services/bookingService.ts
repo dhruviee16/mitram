@@ -90,6 +90,14 @@ export async function setTrackingVisibility(bookingId: string, userId: string, v
   return { trackingVisible: updated.trackingVisible };
 }
 
+export function getOngoingBookingForUser(userId: string) {
+  return prisma.booking.findFirst({
+    where: { userId, status: "ongoing" },
+    include: { trip: { select: { title: true } } },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 export function getBookingById(id: string) {
   return prisma.booking.findUnique({
     where: { id },

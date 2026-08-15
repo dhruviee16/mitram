@@ -62,6 +62,7 @@ export function VendorSignupForm() {
 
         toast.success("Application submitted — your account is pending MITRAM verification.");
         router.push("/vendor/dashboard");
+        router.refresh();
       },
     });
   }
