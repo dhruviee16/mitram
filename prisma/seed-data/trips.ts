@@ -140,7 +140,10 @@ export const trips = [
     durationDays: 11,
     durationNights: 10,
     basePrice: 52999,
-    images: [] as string[],
+    images: [
+      "https://pub-e2dcf0df0eed403bb4516ca57564bed7.r2.dev/seed/trips/char-dham-yatra-1.jpg",
+      "https://pub-e2dcf0df0eed403bb4516ca57564bed7.r2.dev/seed/trips/char-dham-yatra-2.webp",
+    ] as string[],
     careFeatures: ["Wheelchair & porter support", "Daily health vitals check", "Dedicated MITRAM Saathi companion"],
     inclusions: ["4 Star Hotels", "AC Transport", "All Meals", "Flight options available"],
     exclusions: ["Flight/helicopter tickets unless selected", "Personal expenses", "Pony/palanquin charges"],

@@ -1,22 +1,11 @@
-import { UserPlus, HeartHandshake, Radar } from "lucide-react";
+import { HandHeart, Stethoscope, MapPinned, Accessibility } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const steps = [
-  {
-    icon: UserPlus,
-    title: "Tell us who's travelling",
-    copy: "Age, mobility, medication and dietary needs — set once, applied to every booking.",
-  },
-  {
-    icon: HeartHandshake,
-    title: "We match care to the trip",
-    copy: "A verified Saathi companion, medical kit and paced itinerary get assigned before departure.",
-  },
-  {
-    icon: Radar,
-    title: "You track it, live",
-    copy: "Location, daily vitals and check-ins land in your dashboard — wherever you are.",
-  },
+  { icon: HandHeart, title: "Dedicated coordinators", copy: "All-time coordinators travel with the group, accompanying them throughout the journey." },
+  { icon: Stethoscope, title: "Twice-daily health checks", copy: "Oxygen cylinder on hand, with BP and sugar monitoring twice daily." },
+  { icon: MapPinned, title: "Live tracking & photos", copy: "Live location tracking and photo check-ins, shared as the journey happens." },
+  { icon: Accessibility, title: "Slow-paced, supported travel", copy: "Wheelchairs and constant physical support, at a pace built for comfort." },
 ];
 
 export function HowItWorks() {

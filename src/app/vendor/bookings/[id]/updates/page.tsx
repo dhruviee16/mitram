@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getBookingForVendorUpdate } from "@/server/services/vendorService";
 import { TripUpdateForm } from "@/components/vendor/trip-update-form";
+import { parseRouteStops } from "@/lib/format-route";
 
 export default async function VendorBookingUpdatesPage({
   params,
@@ -11,7 +12,8 @@ export default async function VendorBookingUpdatesPage({
   params: Promise<{ id: string }>;
 }) {
   const session = await auth();
-  if (!session?.user?.id || (session.user as { role?: string }).role !== "vendor") {
+  const role = (session?.user as { role?: string } | undefined)?.role;
+  if (!session?.user?.id || (role !== "vendor" && role !== "admin")) {
     redirect("/vendor/login");
   }
 
@@ -43,7 +45,7 @@ export default async function VendorBookingUpdatesPage({
         </p>
       ) : (
         <div className="mt-6">
-          <TripUpdateForm bookingId={booking.id} />
+          <TripUpdateForm bookingId={booking.id} stops={parseRouteStops(booking.trip.routeSummary)} />
         </div>
       )}
 

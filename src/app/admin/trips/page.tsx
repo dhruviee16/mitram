@@ -59,6 +59,7 @@ export default async function AdminTripsPage() {
         <StatusActionButtons
           endpoint={`/api/admin/trips/${trip.id}`}
           editHref={trip.vendorId === adminId ? `/vendor/trips/${trip.id}/edit` : undefined}
+          bookingsHref={trip.vendorId === adminId ? `/vendor/trips/${trip.id}/bookings` : undefined}
           actions={[
             { label: "Approve", status: "approved" },
             { label: "Pause", status: "paused" },

@@ -162,6 +162,7 @@ export default async function BookingDetailPage({
           bookingId={booking.id}
           trackingVisible={booking.trackingVisible}
           tripUpdates={booking.tripUpdates}
+          routeSummary={booking.trip.routeSummary}
         />
       ) : (
         booking.status === "confirmed" && (

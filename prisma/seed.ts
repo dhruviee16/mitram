@@ -190,9 +190,8 @@ async function main() {
 
   const baseTime = new Date("2026-02-17T06:00:00+05:30");
   const updates = [
-    { hoursOffset: 0, locationLabel: "Departed Deoghar", note: "Group departed for Madhuban, all well.", healthStatus: "ok" as const, healthBp: "126/82", healthSugar: "108", healthTemp: "98.2" },
-    { hoursOffset: 3, locationLabel: "Tonk 4 — Ajitnath Temple", note: "Papa is at Tonk 4 · All well · BP normal", healthStatus: "ok" as const, healthBp: "128/84", healthSugar: "112", healthTemp: "98.4" },
-    { hoursOffset: 6, locationLabel: "Returned to Madhuban", note: "Evening rest, medication administered on schedule.", healthStatus: "ok" as const, healthBp: "124/80", healthSugar: "110", healthTemp: "98.3" },
+    { hoursOffset: 0, locationLabel: "Delhi", note: "Group departed Delhi for Deoghar, all well.", healthStatus: "ok" as const, healthBp: "126/82", healthSugar: "108", healthTemp: "98.2" },
+    { hoursOffset: 3, locationLabel: "Deoghar", note: "Papa is at Tonk 4, Ajitnath Temple · All well · BP normal", healthStatus: "ok" as const, healthBp: "128/84", healthSugar: "112", healthTemp: "98.4" },
   ];
 
   for (const u of updates) {

@@ -1,9 +1,12 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { auth } from "@/auth";
 import { listAllBookings } from "@/server/services/adminService";
 import { AdminNav } from "@/components/admin/admin-nav";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { DataTable, type DataTableColumn } from "@/components/ui/data-table";
+import { StartTripButton } from "@/components/vendor/start-trip-button";
 
 const STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive"> = {
   confirmed: "default",
@@ -23,6 +26,7 @@ export default async function AdminBookingsPage() {
   }
 
   const bookings = await listAllBookings();
+  const adminId = session?.user?.id;
 
   const columns: DataTableColumn<BookingRow>[] = [
     {
@@ -48,6 +52,24 @@ export default async function AdminBookingsPage() {
       headerClassName: "text-right",
       className: "text-right",
       cell: (b) => `₹${b.totalAmount.toLocaleString("en-IN")}`,
+    },
+    {
+      header: "Tracking",
+      headerClassName: "text-right",
+      className: "text-right",
+      cell: (b) => {
+        if (b.trip.vendorId !== adminId) return null;
+        if (b.status === "confirmed") return <StartTripButton bookingId={b.id} />;
+        if (b.status === "ongoing") {
+          return (
+            <Button
+              size="sm"
+              render={<Link href={`/vendor/bookings/${b.id}/updates`}>Post update</Link>}
+            />
+          );
+        }
+        return null;
+      },
     },
   ];
 

@@ -6,7 +6,7 @@ const features = [
     title: "Medical support",
     content:
       "Trip coordinators trained for senior care, with tie-ups for on-trip medical assistance if it's ever needed.",
-    image: "/images/features/medical-support.jpg",
+    image: "/images/features/medical-support.png",
   },
   {
     step: "Live family tracking",
@@ -20,14 +20,14 @@ const features = [
     title: "Police-verified Saathi",
     content:
       "Every Saathi accompanying a group is background-checked and police-verified before they travel with you.",
-    image: "/images/features/police-verified-saathi.jpg",
+    image: "/images/features/police-verified-saathi.png",
   },
   {
     step: "Senior-first pacing",
     title: "Senior-first pacing",
     content:
       "Itineraries built around comfort — fewer rushed transfers, more rest, and walking levels set for the group.",
-    image: "/images/features/senior-pacing.jpg",
+    image: "/images/features/senior-pacing.png",
   },
 ];
 

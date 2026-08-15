@@ -9,10 +9,12 @@ export function StatusActionButtons({
   endpoint,
   actions,
   editHref,
+  bookingsHref,
 }: {
   endpoint: string;
   actions: { label: string; status: string; variant?: "default" | "outline" | "destructive" }[];
   editHref?: string;
+  bookingsHref?: string;
 }) {
   const router = useRouter();
   const { mutate, isPending } = useUpdateStatus();
@@ -33,11 +35,15 @@ export function StatusActionButtons({
   const editAction = editHref
     ? [{ label: "Edit", disabled: isPending, onClick: () => router.push(editHref) }]
     : [];
+  const bookingsAction = bookingsHref
+    ? [{ label: "Bookings", disabled: isPending, onClick: () => router.push(bookingsHref) }]
+    : [];
 
   return (
     <RowActionsMenu
       actions={[
         ...editAction,
+        ...bookingsAction,
         ...actions.map((action) => ({
           label: action.label,
           variant: action.variant === "destructive" ? "destructive" : "default",

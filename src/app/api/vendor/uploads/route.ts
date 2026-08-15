@@ -12,7 +12,8 @@ const MAX_SIZE_BYTES = 5 * 1024 * 1024;
 
 export async function POST(req: Request) {
   const session = await auth();
-  if (!session?.user?.id || (session.user as { role?: string }).role !== "vendor") {
+  const role = (session?.user as { role?: string } | undefined)?.role;
+  if (!session?.user?.id || (role !== "vendor" && role !== "admin")) {
     return NextResponse.json({ error: "Not signed in as a vendor." }, { status: 401 });
   }
 

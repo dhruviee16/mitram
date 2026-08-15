@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { TRIP_CATEGORIES } from "@/lib/trip-categories";
+import { parseRouteStops } from "@/lib/format-route";
 
 const categoryValues = TRIP_CATEGORIES.map((c) => c.value) as [
   string,
@@ -70,7 +71,13 @@ export const vendorTripSchema = z.object({
   title: z.string().min(1, "Enter a trip title."),
   category: z.enum(categoryValues),
   destinationId: z.string().optional(),
-  routeSummary: z.string().min(1, "Enter a route summary."),
+  routeSummary: z
+    .string()
+    .min(1, "Enter a route summary.")
+    .refine(
+      (value) => parseRouteStops(value).length >= 2,
+      "Add at least 2 stops so the route can be tracked (e.g. Delhi, Haridwar, Rishikesh).",
+    ),
   durationDays: z.coerce.number().int().min(1),
   durationNights: z.coerce.number().int().min(0),
   basePrice: z.coerce.number().int().min(1),
@@ -98,8 +105,9 @@ export const vendorTripSchema = z.object({
 export type VendorTripValues = z.infer<typeof vendorTripSchema>;
 
 export const vendorTripUpdateSchema = z.object({
-  locationLabel: z.string().min(1, "Enter a location."),
+  locationLabel: z.string().min(1, "Choose a stop."),
   note: z.string().optional(),
+  photoUrl: z.string().optional(),
   healthBp: z.string().optional(),
   healthSugar: z.string().optional(),
   healthTemp: z.string().optional(),

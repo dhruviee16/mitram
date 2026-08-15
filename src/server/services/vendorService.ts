@@ -280,6 +280,7 @@ export async function postTripUpdate(
       timestamp: new Date(),
       locationLabel: input.locationLabel,
       note: input.note,
+      photoUrl: input.photoUrl,
       healthBp: input.healthBp,
       healthSugar: input.healthSugar,
       healthTemp: input.healthTemp,

@@ -1,7 +1,10 @@
-export function formatRoute(routeSummary: string) {
+export function parseRouteStops(routeSummary: string) {
   return routeSummary
     .split(/→|,/)
     .map((stop) => stop.trim())
-    .filter(Boolean)
-    .join(" → ");
+    .filter(Boolean);
+}
+
+export function formatRoute(routeSummary: string) {
+  return parseRouteStops(routeSummary).join(" → ");
 }
