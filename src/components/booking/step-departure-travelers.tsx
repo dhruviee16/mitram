@@ -34,6 +34,10 @@ export function StepDepartureTravelers({
   const [form, setForm] = useState<BookingTraveler>(emptyTraveler);
   const [error, setError] = useState<string | null>(null);
 
+  function isFormFilled() {
+    return form.name.trim() || form.age || form.relationship.trim();
+  }
+
   function handleAddTraveler() {
     if (!form.name.trim() || !form.age || !form.relationship.trim()) {
       setError("Enter name, age and relationship before adding a traveler.");
@@ -49,10 +53,23 @@ export function StepDepartureTravelers({
       setError("Select a departure date.");
       return;
     }
-    if (draft.travelers.length === 0) {
+
+    let travelerCount = draft.travelers.length;
+    if (isFormFilled()) {
+      if (!form.name.trim() || !form.age || !form.relationship.trim()) {
+        setError("Enter name, age and relationship before adding a traveler.");
+        return;
+      }
+      addTraveler(form);
+      setForm(emptyTraveler);
+      travelerCount += 1;
+    }
+
+    if (travelerCount === 0) {
       setError("Add at least one traveler.");
       return;
     }
+    setError(null);
     onNext();
   }
 

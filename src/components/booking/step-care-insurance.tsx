@@ -19,7 +19,6 @@ const careOptions = [
   "BP & sugar monitoring",
   "Wheelchair assist",
   "Dedicated companion",
-  "Dietary accommodation",
 ];
 
 export function StepCareInsurance({
