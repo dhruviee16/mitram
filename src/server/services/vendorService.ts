@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { nanoid } from "nanoid";
 import { prisma } from "@/server/db";
 import { DuplicateEmailError } from "@/server/services/authService";
+import { deleteFromR2ByUrl } from "@/server/r2";
 import type { VendorTripValues, VendorTripUpdateValues, VendorRegisterValues } from "@/lib/validations/vendor";
 
 export async function registerVendor(input: VendorRegisterValues) {
@@ -182,6 +183,9 @@ export async function updateTrip(tripId: string, vendorId: string, input: Vendor
       },
     },
   });
+
+  const removedImages = existing.images.filter((url) => !input.images.includes(url));
+  await Promise.all(removedImages.map((url) => deleteFromR2ByUrl(url)));
 
   return { tripId: trip.id, slug: trip.slug };
 }
