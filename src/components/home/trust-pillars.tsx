@@ -13,7 +13,7 @@ const features = [
     title: "Live family tracking",
     content:
       "Family back home can follow the journey in real time — every stop, every day, without having to ask.",
-    image: "/images/features/live-tracking.jpg",
+    image: "/images/features/live-tracking.png",
   },
   {
     step: "Police-verified Saathi",
