@@ -10,6 +10,7 @@ import { X } from "lucide-react";
 import { TRIP_CATEGORIES } from "@/lib/trip-categories";
 import { walkingIntensityValues, mealsPlanValues } from "@/lib/validations/vendor";
 import { useUploadVendorImage } from "@/hooks/use-upload-vendor-image";
+import { useCreateDestination } from "@/hooks/use-create-destination";
 import { useSaveVendorTrip } from "@/hooks/use-save-vendor-trip";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -109,12 +110,30 @@ export function TripForm({
 }) {
   const router = useRouter();
   const uploadImage = useUploadVendorImage();
+  const createDestination = useCreateDestination();
   const saveTrip = useSaveVendorTrip();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [destinationList, setDestinationList] = useState(destinations);
+  const [addingDestination, setAddingDestination] = useState(false);
+  const [newDestinationName, setNewDestinationName] = useState("");
 
   const form = useForm<TripFormDefaultValues>({
     defaultValues: defaultValues ?? emptyDefaults,
   });
+
+  async function handleAddDestination() {
+    const name = newDestinationName.trim();
+    if (!name) return;
+    try {
+      const destination = await createDestination.mutateAsync(name);
+      setDestinationList((prev) => [...prev, destination]);
+      form.setValue("destinationId", destination.id, { shouldDirty: true });
+      setNewDestinationName("");
+      setAddingDestination(false);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not add destination.");
+    }
+  }
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -217,20 +236,68 @@ export function TripForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Destination</FormLabel>
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Choose a destination" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {destinations.map((d) => (
-                      <SelectItem key={d.id} value={d.id}>
-                        {d.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {addingDestination ? (
+                  <div className="flex gap-2">
+                    <Input
+                      autoFocus
+                      placeholder="e.g. Coorg, Karnataka"
+                      value={newDestinationName}
+                      onChange={(e) => setNewDestinationName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleAddDestination();
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={createDestination.isPending}
+                      onClick={handleAddDestination}
+                    >
+                      {createDestination.isPending ? "Adding..." : "Add"}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => {
+                        setAddingDestination(false);
+                        setNewDestinationName("");
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    <Select
+                      items={destinationList.map((d) => ({ value: d.id, label: d.name }))}
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Choose a destination" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {destinationList.map((d) => (
+                          <SelectItem key={d.id} value={d.id}>
+                            {d.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <button
+                      type="button"
+                      onClick={() => setAddingDestination(true)}
+                      className="text-left text-sm font-medium text-primary hover:underline"
+                    >
+                      Don&rsquo;t see your destination? Add a new one
+                    </button>
+                  </>
+                )}
                 <FormMessage />
               </FormItem>
             )}

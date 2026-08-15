@@ -15,11 +15,6 @@ import { auth } from "@/auth";
 import { listCategories } from "@/server/services/categoryService";
 import { getOngoingBookingForUser } from "@/server/services/bookingService";
 
-const vendorPrimaryLinks = [
-  { href: "/", label: "Home" },
-  { href: "/trips", label: "All Packages" },
-];
-
 const customerPrimaryLinks = [{ href: "/destinations", label: "Destinations" }];
 
 const companyLinks = [
@@ -44,7 +39,7 @@ export async function SiteNav() {
   const role = (session?.user as { role?: string } | undefined)?.role;
   const isVendor = role === "vendor";
   const isAdmin = role === "admin";
-  const categories = isVendor ? [] : await listCategories();
+  const categories = await listCategories();
 
   const menuLinks = isVendor ? vendorMenuLinks : isAdmin ? adminMenuLinks : customerMenuLinks;
   const ongoingBooking = session?.user?.id
@@ -65,65 +60,51 @@ export async function SiteNav() {
           />
         </Link>
 
-        {isVendor ? (
-          <NavigationMenu aria-label="Main" className="hidden md:flex">
-            <NavigationMenuList>
-              {vendorPrimaryLinks.map((link) => (
-                <NavigationMenuItem key={link.label}>
-                  <NavigationMenuLink
-                    render={<Link href={link.href}>{link.label}</Link>}
-                  />
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
-        ) : (
-          <NavigationMenu aria-label="Main" className="hidden md:flex">
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>
-                  Explore Trips
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="grid w-130 grid-cols-2 gap-x-7 gap-y-1 p-3">
-                    {categories.map((category) => (
-                      <NavigationMenuLink
-                        key={category.slug}
-                        render={<Link href={`/trips?category=${category.slug}`} />}
-                      >
-                        <span className="font-semibold text-foreground">
-                          {category.name}
-                        </span>
-                      </NavigationMenuLink>
-                    ))}
-                    <NavigationMenuLink render={<Link href="/trips" />}>
-                      <span className="font-semibold text-primary">
-                        View all packages →
+        <NavigationMenu aria-label="Main" className="hidden md:flex">
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>
+                Explore Trips
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="grid w-130 grid-cols-2 gap-x-7 gap-y-1 p-3">
+                  {categories.map((category) => (
+                    <NavigationMenuLink
+                      key={category.slug}
+                      render={<Link href={`/trips?category=${category.slug}`} />}
+                    >
+                      <span className="font-semibold text-foreground">
+                        {category.name}
                       </span>
                     </NavigationMenuLink>
-                  </div>
-                </NavigationMenuContent>
+                  ))}
+                  <NavigationMenuLink render={<Link href="/trips" />}>
+                    <span className="font-semibold text-primary">
+                      View all packages →
+                    </span>
+                  </NavigationMenuLink>
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+            {customerPrimaryLinks.map((link) => (
+              <NavigationMenuItem key={link.href}>
+                <NavigationMenuLink render={<Link href={link.href}>{link.label}</Link>} />
               </NavigationMenuItem>
-              {customerPrimaryLinks.map((link) => (
-                <NavigationMenuItem key={link.href}>
-                  <NavigationMenuLink render={<Link href={link.href}>{link.label}</Link>} />
-                </NavigationMenuItem>
-              ))}
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Company</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="flex w-52 flex-col gap-0.5 p-3">
-                    {companyLinks.map((link) => (
-                      <NavigationMenuLink key={link.href} render={<Link href={link.href} />}>
-                        <span className="font-semibold text-foreground">{link.label}</span>
-                      </NavigationMenuLink>
-                    ))}
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-        )}
+            ))}
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>Company</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="flex w-52 flex-col gap-0.5 p-3">
+                  {companyLinks.map((link) => (
+                    <NavigationMenuLink key={link.href} render={<Link href={link.href} />}>
+                      <span className="font-semibold text-foreground">{link.label}</span>
+                    </NavigationMenuLink>
+                  ))}
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
 
         {session?.user ? (
           <div className="flex items-center gap-3">
