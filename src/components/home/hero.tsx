@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useTripSearch } from "@/hooks/use-trip-search";
-import { Search, ShieldCheck, Star } from "lucide-react";
+import { Search, Star } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SubmitEvent, useState } from "react";
@@ -42,12 +42,12 @@ export function Hero({ stats }: { stats?: HeroStats }) {
             Introductory offer — save up to ₹6,000
           </span>
           <h1 className="mt-4 font-heading text-4xl leading-[1.05] font-extrabold text-foreground sm:text-5xl lg:text-6xl">
-            A yatra with dignity, booked with confidence.
+            Mitram — Relive. Connect. Celebrate Life.
           </h1>
           <p className="mt-4 max-w-lg text-[15px] text-muted-foreground sm:text-base">
-            Verified companions, daily health checks and live location — so the
-            person clicking &ldquo;Pay&rdquo; from another city feels as at ease
-            as the one on the road.
+            Mitram makes senior travel easier with verified companions,
+            thoughtful support and live family updates — so your parents can
+            travel with confidence.
           </p>
 
           {stats ? (
@@ -173,19 +173,6 @@ export function Hero({ stats }: { stats?: HeroStats }) {
               sizes="(min-width: 1024px) 28rem, 0px"
               className="object-cover object-[60%_50%]"
             />
-          </div>
-          <div className="absolute -bottom-6 left-1/2 flex w-[85%] -translate-x-1/2 items-center gap-2.5 rounded-xl bg-card px-4 py-3 shadow-[0_16px_32px_-8px_rgba(0,0,0,0.25)]">
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary">
-              <ShieldCheck className="size-5 text-primary" aria-hidden="true" />
-            </span>
-            <div>
-              <p className="text-[13px] font-bold text-foreground">
-                Police-verified Saathi
-              </p>
-              <p className="text-xs text-muted-foreground">
-                On every Mitram journey
-              </p>
-            </div>
           </div>
         </div>
       </div>
