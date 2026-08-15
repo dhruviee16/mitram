@@ -16,8 +16,8 @@ type StoryRow = {
 
 const rows: StoryRow[] = [
   {
-    image: "/images/story/backpack-traveler.jpg",
-    imageAlt: "A senior traveller setting out on a trip",
+    image: "/images/story/heritage-hikers.jpg",
+    imageAlt: "A senior couple exploring a heritage site together, hand in hand",
     heading: "Every journey, planned around them",
     body: "No two seniors travel the same way. Mitram matches a verified Saathi and paces the itinerary to your parent's mobility, medication schedule and comfort — not the other way around.",
     points: [
@@ -29,8 +29,8 @@ const rows: StoryRow[] = [
     ctaHref: "/how-it-works",
   },
   {
-    image: "/images/story/train-window.jpg",
-    imageAlt: "A senior traveller looking out of a train window",
+    image: "/images/story/friends-waterfall.jpg",
+    imageAlt: "A group of senior women laughing together in front of a waterfall",
     heading: "Family stays close, even from afar",
     body: "The person clicking “Pay” from another city gets the same peace of mind as the one on the road — live location, daily updates and a direct line to the Saathi, all in one dashboard.",
     points: [

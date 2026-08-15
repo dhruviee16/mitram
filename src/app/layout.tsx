@@ -17,9 +17,49 @@ const poppins = Poppins({
   display: "swap",
 });
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://mitram-travel.vercel.app";
+const TAGLINE =
+  "Mitram makes senior travel easier with verified companions, thoughtful support and live family updates — so your parents can travel with confidence.";
+
 export const metadata: Metadata = {
-  title: "MITRAM — Senior-assisted travel",
-  description: "Senior-assisted travel, done right.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Mitram — Relive. Connect. Celebrate Life.",
+    template: "%s · Mitram",
+  },
+  description: TAGLINE,
+  keywords: [
+    "senior travel",
+    "senior citizen tour packages",
+    "parents travel",
+    "elderly travel companion",
+    "yatra booking",
+    "India senior tours",
+  ],
+  authors: [{ name: "Mitram" }],
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: "/",
+    siteName: "Mitram",
+    title: "Mitram — Relive. Connect. Celebrate Life.",
+    description: TAGLINE,
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Mitram — Relive. Connect. Celebrate Life.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mitram — Relive. Connect. Celebrate Life.",
+    description: TAGLINE,
+    images: ["/opengraph-image"],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -30,7 +70,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-body">
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+        >
           <SessionProvider>
             <QueryProvider>
               <SkipLink />

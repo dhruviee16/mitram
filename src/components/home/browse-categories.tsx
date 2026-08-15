@@ -3,7 +3,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Flame, Landmark, Mountain, Globe, PartyPopper, MapPin, Users, ArrowRight } from "lucide-react";
+import {
+  Flame,
+  Landmark,
+  Mountain,
+  Globe,
+  PartyPopper,
+  MapPin,
+  Users,
+  ArrowRight,
+} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { MasonryGrid } from "@/components/ui/masonry-grid";
 
@@ -18,7 +27,7 @@ const ICONS: Record<string, LucideIcon> = {
 };
 
 const IMAGES: Record<string, string> = {
-  spiritual: "/images/categories/spiritual.jpg",
+  spiritual: "/images/categories/spiritual.jpeg",
   heritage: "/images/categories/heritage.jpg",
   "nature-wildlife": "/images/categories/nature-wildlife.jpg",
   leisure: "/images/categories/leisure.jpg",
@@ -82,7 +91,7 @@ export function BrowseCategories({ categories }: { categories: Category[] }) {
               <Link
                 key={slug}
                 href={`/trips?category=${slug}`}
-                className={`group relative block overflow-hidden rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${ASPECT[slug] ?? "aspect-[4/5]"}`}
+                className={`group relative block overflow-hidden rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${ASPECT[slug] ?? "aspect-4/5"}`}
               >
                 {image ? (
                   <Image

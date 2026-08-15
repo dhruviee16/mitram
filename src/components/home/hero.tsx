@@ -66,12 +66,6 @@ export function Hero({ stats }: { stats?: HeroStats }) {
           ) : null}
 
           <div className="mt-7 rounded-2xl bg-card text-left shadow-[0_24px_48px_-12px_rgba(0,0,0,0.2)]">
-            <div className="px-5 pt-4">
-              <span className="inline-block rounded-t-lg bg-secondary px-4 py-2.5 font-heading text-[13px] font-bold text-primary">
-                Domestic Yatra
-              </span>
-            </div>
-
             <form
               onSubmit={handleSubmit}
               className="flex flex-col flex-wrap gap-4 border-t border-border p-5 sm:flex-row sm:items-center sm:gap-4"
@@ -171,12 +165,13 @@ export function Hero({ stats }: { stats?: HeroStats }) {
           />
           <div className="relative aspect-3/4 overflow-hidden rounded-[2rem]">
             <Image
-              src="/images/hero/himalaya-path.jpg"
-              alt="A traveller walking a Himalayan valley path toward the mountains"
+              src="/images/hero/heritage-couple.jpg"
+              alt="A senior couple exploring a heritage archway together"
               fill
               priority
+              quality={100}
               sizes="(min-width: 1024px) 28rem, 0px"
-              className="object-cover"
+              className="object-cover object-[60%_50%]"
             />
           </div>
           <div className="absolute -bottom-6 left-1/2 flex w-[85%] -translate-x-1/2 items-center gap-2.5 rounded-xl bg-card px-4 py-3 shadow-[0_16px_32px_-8px_rgba(0,0,0,0.25)]">

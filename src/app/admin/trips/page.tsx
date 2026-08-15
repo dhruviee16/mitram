@@ -24,6 +24,7 @@ export default async function AdminTripsPage() {
   }
 
   const trips = await listTripsForApproval();
+  const adminId = session?.user?.id;
 
   const columns: DataTableColumn<TripRow>[] = [
     {
@@ -57,6 +58,7 @@ export default async function AdminTripsPage() {
       cell: (trip) => (
         <StatusActionButtons
           endpoint={`/api/admin/trips/${trip.id}`}
+          editHref={trip.vendorId === adminId ? `/vendor/trips/${trip.id}/edit` : undefined}
           actions={[
             { label: "Approve", status: "approved" },
             { label: "Pause", status: "paused" },

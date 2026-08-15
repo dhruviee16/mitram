@@ -9,7 +9,7 @@ if (process.env.R2_PUBLIC_URL) {
 }
 
 const nextConfig: NextConfig = {
-  images: { remotePatterns },
+  images: { remotePatterns, qualities: [75, 90, 100] },
 };
 
 export default nextConfig;

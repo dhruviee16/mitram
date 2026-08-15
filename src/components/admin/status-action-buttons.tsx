@@ -8,9 +8,11 @@ import { useUpdateStatus } from "@/hooks/use-update-status";
 export function StatusActionButtons({
   endpoint,
   actions,
+  editHref,
 }: {
   endpoint: string;
   actions: { label: string; status: string; variant?: "default" | "outline" | "destructive" }[];
+  editHref?: string;
 }) {
   const router = useRouter();
   const { mutate, isPending } = useUpdateStatus();
@@ -28,14 +30,21 @@ export function StatusActionButtons({
     );
   }
 
+  const editAction = editHref
+    ? [{ label: "Edit", disabled: isPending, onClick: () => router.push(editHref) }]
+    : [];
+
   return (
     <RowActionsMenu
-      actions={actions.map((action) => ({
-        label: action.label,
-        variant: action.variant === "destructive" ? "destructive" : "default",
-        disabled: isPending,
-        onClick: () => handleClick(action.status),
-      }))}
+      actions={[
+        ...editAction,
+        ...actions.map((action) => ({
+          label: action.label,
+          variant: action.variant === "destructive" ? "destructive" : "default",
+          disabled: isPending,
+          onClick: () => handleClick(action.status),
+        })),
+      ]}
     />
   );
 }

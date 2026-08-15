@@ -18,9 +18,13 @@ const vendorPrimaryLinks = [
   { href: "/trips", label: "All Packages" },
 ];
 
-const customerPrimaryLinks = [
-  { href: "/destinations", label: "Destinations" },
+const customerPrimaryLinks = [{ href: "/destinations", label: "Destinations" }];
+
+const companyLinks = [
+  { href: "/about", label: "About MITRAM" },
   { href: "/how-it-works", label: "How MITRAM Works" },
+  { href: "/safety", label: "Safety & Trust" },
+  { href: "/vendor", label: "For Vendors" },
 ];
 
 const customerMenuLinks = [
@@ -31,7 +35,7 @@ const customerMenuLinks = [
 
 const vendorMenuLinks = [{ href: "/vendor/dashboard", label: "Vendor Dashboard" }];
 
-const adminMenuLinks = [{ href: "/admin", label: "Admin" }];
+const adminMenuLinks = [{ href: "/admin", label: "Admin" }, ...customerMenuLinks];
 
 export async function SiteNav() {
   const session = await auth();
@@ -100,6 +104,18 @@ export async function SiteNav() {
                   <NavigationMenuLink render={<Link href={link.href}>{link.label}</Link>} />
                 </NavigationMenuItem>
               ))}
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Company</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="flex w-52 flex-col gap-0.5 p-3">
+                    {companyLinks.map((link) => (
+                      <NavigationMenuLink key={link.href} render={<Link href={link.href} />}>
+                        <span className="font-semibold text-foreground">{link.label}</span>
+                      </NavigationMenuLink>
+                    ))}
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
         )}

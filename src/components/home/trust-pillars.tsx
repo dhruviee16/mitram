@@ -20,7 +20,7 @@ const features = [
     title: "Police-verified Saathi",
     content:
       "Every Saathi accompanying a group is background-checked and police-verified before they travel with you.",
-    image: "/images/features/verified-saathi.jpg",
+    image: "/images/features/police-verified-saathi.jpg",
   },
   {
     step: "Senior-first pacing",
