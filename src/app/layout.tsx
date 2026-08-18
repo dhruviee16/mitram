@@ -20,12 +20,12 @@ const poppins = Poppins({
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://mitram-travel.vercel.app";
 const TAGLINE =
-  "Mitram makes senior travel easier with verified companions, thoughtful support and live family updates — so your parents can travel with confidence.";
+  "Mitram makes senior travel easier with verified companions, thoughtful support and live family updates, so your parents can travel with confidence.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Mitram — Relive. Connect. Celebrate Life.",
+    default: "Mitram: Relive. Connect. Celebrate Life.",
     template: "%s · Mitram",
   },
   description: TAGLINE,
@@ -43,20 +43,20 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: "/",
     siteName: "Mitram",
-    title: "Mitram — Relive. Connect. Celebrate Life.",
+    title: "Mitram: Relive. Connect. Celebrate Life.",
     description: TAGLINE,
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Mitram — Relive. Connect. Celebrate Life.",
+        alt: "Mitram: Relive. Connect. Celebrate Life.",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mitram — Relive. Connect. Celebrate Life.",
+    title: "Mitram: Relive. Connect. Celebrate Life.",
     description: TAGLINE,
     images: ["/opengraph-image"],
   },

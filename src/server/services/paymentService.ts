@@ -133,13 +133,13 @@ export async function verifyAndConfirmPayment(input: {
  * but before /api/payments/verify was called.
  *
  * Authenticity here comes from the caller (the webhook route) having already
- * verified the webhook signature over the raw request body — this function
+ * verified the webhook signature over the raw request body; this function
  * trusts that and just does the idempotent state transition.
  */
 export async function confirmPaymentFromWebhook(razorpayOrderId: string, razorpayPaymentId: string) {
   const payment = await prisma.payment.findFirst({ where: { razorpayOrderId } });
   if (!payment || payment.status === "paid") {
-    return; // unknown order, or already reconciled by the client-driven path — no-op either way
+    return; // unknown order, or already reconciled by the client-driven path; no-op either way
   }
 
   await prisma.payment.update({

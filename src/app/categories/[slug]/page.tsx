@@ -26,7 +26,7 @@ export default async function CategoryDetailPage({
       </h2>
       {trips.length === 0 ? (
         <p className="mt-4 text-sm text-muted-foreground">
-          No trips in this category yet — check back soon.
+          No trips in this category yet. Check back soon.
         </p>
       ) : (
         <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" role="list">

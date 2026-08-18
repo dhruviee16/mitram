@@ -32,7 +32,7 @@ export function ReviewForm({ bookingId }: { bookingId: string }) {
     return (
       <Card className="border-primary/30 bg-secondary/30">
         <CardContent className="text-sm text-foreground">
-          Thanks — your review has been submitted.
+          Thanks, your review has been submitted.
         </CardContent>
       </Card>
     );

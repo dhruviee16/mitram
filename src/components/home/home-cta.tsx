@@ -19,7 +19,7 @@ export function HomeCta() {
         Ready to plan their next yatra?
       </h2>
       <p className="mx-auto mt-2 max-w-md text-sm text-primary-foreground/85 sm:text-base">
-        A verified Saathi, a paced itinerary and live updates for the family — booked in minutes.
+        A verified Saathi, a paced itinerary and live updates for the family, booked in minutes.
       </p>
       <Button size="lg" className="mt-6" render={<Link href="/trips" />}>
         Explore trips

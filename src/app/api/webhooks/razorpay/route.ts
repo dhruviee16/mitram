@@ -2,11 +2,11 @@ import crypto from "node:crypto";
 import { NextResponse } from "next/server";
 import { confirmPaymentFromWebhook, timingSafeEqualHex } from "@/server/services/paymentService";
 
-// Razorpay webhook events (https://razorpay.com/docs/webhooks/) — authenticated
+// Razorpay webhook events (https://razorpay.com/docs/webhooks/), authenticated
 // via HMAC-SHA256 over the raw request body using a webhook secret configured
 // separately in the Razorpay dashboard (Settings > Webhooks). This is NOT the
 // same secret or signature scheme as the checkout verification in
-// /api/payments/verify — that one signs `order_id|payment_id` with the API
+// /api/payments/verify: that one signs `order_id|payment_id` with the API
 // key secret; this one signs the entire raw payload with the webhook secret.
 export async function POST(req: Request) {
   const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;

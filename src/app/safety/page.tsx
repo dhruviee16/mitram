@@ -1,15 +1,15 @@
 import { ShieldCheck, Users, Radio, Heart, Accessibility, FileCheck, BookUser, Lock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
-export const metadata = { title: "Safety & Trust — MITRAM" };
+export const metadata = { title: "Safety & Trust | MITRAM" };
 
 const sections = [
   { icon: ShieldCheck, title: "Verified partners", body: "Every vendor on MITRAM goes through identity, business, experience and safety verification before their trips go live." },
-  { icon: Users, title: "Coordinator support", body: "A dedicated MITRAM coordinator accompanies every group trip — a familiar face for check-ins, transfers and daily coordination." },
+  { icon: Users, title: "Coordinator support", body: "A dedicated MITRAM coordinator accompanies every group trip, a familiar face for check-ins, transfers and daily coordination." },
   { icon: Radio, title: "Emergency assistance", body: "An emergency escalation plan is in place on every trip, with a named contact and clear escalation path." },
-  { icon: Heart, title: "Family updates", body: "With consent, family members can see trip status, photos and live location — visible by default, always adjustable." },
+  { icon: Heart, title: "Family updates", body: "With consent, family members can see trip status, photos and live location. Visible by default, always adjustable." },
   { icon: Accessibility, title: "Mobility support", body: "Walking intensity, accessibility notes and wheelchair availability are shown on every trip before booking." },
-  { icon: FileCheck, title: "Insurance", body: "Travel insurance availability is shown clearly per trip — never claimed unless actually included." },
+  { icon: FileCheck, title: "Insurance", body: "Travel insurance availability is shown clearly per trip, never claimed unless actually included." },
   { icon: BookUser, title: "Traveller guidelines", body: "Every booking includes clear guidance on what to expect, what's included, and how to reach support." },
   { icon: Lock, title: "Privacy", body: "Health and personal information is only shared with your explicit consent, and never exposed to unrelated parties." },
 ];

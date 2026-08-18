@@ -66,7 +66,7 @@ export function StepContacts({ onBack, onNext }: { onBack: () => void; onNext: (
       </FieldLabel>
       <p className="mt-1 text-xs text-muted-foreground">
         Miles apart. Still connected. Your family can see trip status, photos and live
-        location — you control exactly what&apos;s shared.
+        location, you control exactly what&apos;s shared.
       </p>
 
       {draft.linkFamilyContact && (

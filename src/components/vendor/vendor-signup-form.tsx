@@ -55,12 +55,12 @@ export function VendorSignupForm() {
         });
 
         if (result?.error) {
-          toast.warning("Account created — please sign in.");
+          toast.warning("Account created, please sign in.");
           router.push("/vendor/login");
           return;
         }
 
-        toast.success("Application submitted — your account is pending MITRAM verification.");
+        toast.success("Application submitted, your account is pending MITRAM verification.");
         router.push("/vendor/dashboard");
         router.refresh();
       },

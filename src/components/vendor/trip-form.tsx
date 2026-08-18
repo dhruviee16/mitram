@@ -314,7 +314,7 @@ export function TripForm({
                 <Input {...field} placeholder="Delhi, Haridwar, Rishikesh" />
               </FormControl>
               <FormDescription>
-                Just the place names, separated by commas — we&rsquo;ll add the arrows for you.
+                Just the place names, separated by commas. We&rsquo;ll add the arrows for you.
               </FormDescription>
               <FormMessage />
             </FormItem>

@@ -38,8 +38,8 @@ export async function SiteFooter() {
         <div>
           <p className="font-heading text-lg font-bold text-primary">Mitram</p>
           <p className="mt-2.5 max-w-xs text-[13px] text-muted-foreground">
-            More Journeys, Together. Senior-friendly group travel — comfortable, safe and
-            social — with peace of mind for the family back home.
+            More Journeys, Together. Senior-friendly group travel, comfortable, safe and
+            social, with peace of mind for the family back home.
           </p>
         </div>
         {footerColumns.map((column) => (

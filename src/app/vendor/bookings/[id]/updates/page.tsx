@@ -37,7 +37,7 @@ export default async function VendorBookingUpdatesPage({
       </Link>
 
       <h1 className="mt-4 font-heading text-2xl font-bold text-foreground">
-        {booking.trip.title} — {booking.user.name}
+        {booking.trip.title}: {booking.user.name}
       </h1>
       {booking.status !== "ongoing" ? (
         <p className="mt-4 text-sm text-muted-foreground">

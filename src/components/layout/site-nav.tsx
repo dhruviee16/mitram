@@ -52,7 +52,7 @@ export async function SiteNav() {
         <Link href="/" className="flex shrink-0 items-center">
           <Image
             src="/images/brand/logo-full.png"
-            alt="Mitram — More Journeys, Together"
+            alt="Mitram: More Journeys, Together"
             width={1536}
             height={1024}
             priority

@@ -11,7 +11,7 @@ export default function VendorLandingPage() {
             List your trips on Mitram
           </h1>
           <p className="mt-4 max-w-md text-[15px] text-muted-foreground sm:text-base">
-            Reach families booking safe, senior-friendly travel — manage your
+            Reach families booking safe, senior-friendly travel. Manage your
             trips, bookings, and live updates in one place.
           </p>
           <div className="mt-7 flex gap-3">

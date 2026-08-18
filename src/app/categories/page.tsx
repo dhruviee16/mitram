@@ -2,7 +2,7 @@ import Link from "next/link";
 import { listCategories } from "@/server/services/categoryService";
 import { Card, CardContent } from "@/components/ui/card";
 
-export const metadata = { title: "Categories — MITRAM" };
+export const metadata = { title: "Categories | MITRAM" };
 
 export default async function CategoriesPage() {
   const categories = await listCategories();

@@ -5,7 +5,7 @@ export const metadata = { title: "How MITRAM Works" };
 
 const steps = [
   { icon: Compass, title: "Choose Your Journey", body: "Explore senior-friendly trips, filtered by pace, destination and community." },
-  { icon: ShieldCheck, title: "Book With Confidence", body: "Know exactly what is included — hotels, meals, transport, coordinator and insurance — before you pay." },
+  { icon: ShieldCheck, title: "Book With Confidence", body: "Know exactly what is included (hotels, meals, transport, coordinator and insurance) before you pay." },
   { icon: Users, title: "Travel With MITRAM", body: "A dedicated coordinator supports the group throughout, at a comfortable, unrushed pace." },
   { icon: Heart, title: "Stay Connected", body: "Family receives trip updates, photos and live status where enabled." },
 ];

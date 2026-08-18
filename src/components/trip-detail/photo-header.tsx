@@ -79,7 +79,7 @@ export function PhotoHeader({
         <div className="relative h-56 w-full overflow-hidden rounded-[1.25rem] sm:h-80">
           <Image
             src={heroImage}
-            alt={`${title} — ${formatRoute(routeSummary)}`}
+            alt={`${title}: ${formatRoute(routeSummary)}`}
             fill
             sizes="100vw"
             priority
@@ -99,7 +99,7 @@ export function PhotoHeader({
             <DialogTrigger className="group relative h-56 overflow-hidden rounded-[1.25rem] text-left outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:h-80">
               <Image
                 src={heroImage}
-                alt={`${title} — ${formatRoute(routeSummary)}`}
+                alt={`${title}: ${formatRoute(routeSummary)}`}
                 fill
                 sizes="(min-width: 640px) 60vw, 100vw"
                 priority
@@ -126,7 +126,7 @@ export function PhotoHeader({
                 >
                   <Image
                     src={img}
-                    alt={`${title} — additional photo ${i + 1}`}
+                    alt={`${title}: additional photo ${i + 1}`}
                     fill
                     sizes="(min-width: 640px) 25vw, 45vw"
                     className="object-cover"

@@ -1,7 +1,7 @@
 import { Mail, Phone, MessageCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
-export const metadata = { title: "Need a Hand? — MITRAM" };
+export const metadata = { title: "Need a Hand? | MITRAM" };
 
 const channels = [
   { icon: Phone, label: "Call us", value: "+91 22 4896 3888" },

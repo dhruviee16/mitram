@@ -1,6 +1,6 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 
-// Cloudflare R2 is S3-compatible — same client, R2's account-scoped endpoint.
+// Cloudflare R2 is S3-compatible, same client, R2's account-scoped endpoint.
 // See: https://developers.cloudflare.com/r2/api/s3/api/
 function getR2Client() {
   const accountId = process.env.R2_ACCOUNT_ID;
@@ -39,7 +39,7 @@ export async function uploadToR2(key: string, body: Buffer, contentType: string)
   return `${publicUrl.replace(/\/$/, "")}/${key}`;
 }
 
-// Best-effort cleanup — trip image edits should not fail if a stale R2 object can't be removed.
+// Best-effort cleanup: trip image edits should not fail if a stale R2 object can't be removed.
 export async function deleteFromR2ByUrl(url: string) {
   const bucket = process.env.R2_BUCKET_NAME;
   const publicUrl = process.env.R2_PUBLIC_URL;

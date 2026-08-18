@@ -42,7 +42,7 @@ export default async function DestinationDetailPage({
         </h2>
         {trips.length === 0 ? (
           <p className="mt-4 text-sm text-muted-foreground">
-            No trips are live in {destination.name} right now — check back soon.
+            No trips are live in {destination.name} right now. Check back soon.
           </p>
         ) : (
           <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" role="list">

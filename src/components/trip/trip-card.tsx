@@ -42,7 +42,7 @@ export function TripCard({ trip }: { trip: TripCardTrip }) {
       <div className="relative h-40 w-full">
         <Image
           src={image}
-          alt={`${trip.title} — ${formatRoute(trip.routeSummary)}`}
+          alt={`${trip.title}: ${formatRoute(trip.routeSummary)}`}
           fill
           sizes="(min-width: 768px) 320px, 90vw"
           className="object-cover"

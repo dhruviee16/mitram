@@ -8,7 +8,7 @@ import type { TripSort } from "@/server/services/tripService";
 import type { TripsSearchParams } from "@/lib/trip-query";
 import { toStringArray } from "@/lib/trip-query";
 
-export const metadata = { title: "All Trips — MITRAM" };
+export const metadata = { title: "All Trips | MITRAM" };
 
 export default async function TripsPage({
   searchParams,

@@ -49,7 +49,7 @@ function QuoteIcon({ className, ...props }: React.ComponentProps<"svg">) {
   );
 }
 
-// Testimonials are admin-managed (Testimonial model, isSample flag) — Mitram is
+// Testimonials are admin-managed (Testimonial model, isSample flag). Mitram is
 // pre-launch, so seeded rows are clearly marked as sample content per spec.
 export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
   if (testimonials.length === 0) return null;

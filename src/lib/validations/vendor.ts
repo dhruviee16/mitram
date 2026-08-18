@@ -22,7 +22,7 @@ function listFromCsv(value: string) {
 }
 
 // zodResolver hands react-hook-form's onSubmit the *transformed* (output) value,
-// so a client submit re-sends an already-split array here — accept both shapes
+// so a client submit re-sends an already-split array here. Accept both shapes
 // since this schema is reused to re-validate on the server.
 const csvOrArray = z
   .union([z.string().transform(listFromCsv), z.array(z.string())])

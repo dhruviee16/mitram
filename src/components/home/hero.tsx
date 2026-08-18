@@ -39,14 +39,14 @@ export function Hero({ stats }: { stats?: HeroStats }) {
       <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
         <div>
           <span className="inline-block rounded-full bg-accent px-4 py-1.5 text-xs font-bold text-accent-foreground">
-            Introductory offer — save up to ₹6,000
+            Introductory offer: save up to ₹6,000
           </span>
           <h1 className="mt-4 font-heading text-4xl leading-[1.05] font-extrabold text-foreground sm:text-5xl lg:text-6xl">
-            Mitram — Relive. Connect. Celebrate Life.
+            Mitram: Relive. Connect. Celebrate Life.
           </h1>
           <p className="mt-4 max-w-lg text-[15px] text-muted-foreground sm:text-base">
             Mitram makes senior travel easier with verified companions,
-            thoughtful support and live family updates — so your parents can
+            thoughtful support and live family updates, so your parents can
             travel with confidence.
           </p>
 

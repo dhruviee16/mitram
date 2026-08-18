@@ -12,7 +12,7 @@ const features = [
     step: "Live family tracking",
     title: "Live family tracking",
     content:
-      "Family back home can follow the journey in real time — every stop, every day, without having to ask.",
+      "Family back home can follow the journey in real time: every stop, every day, without having to ask.",
     image: "/images/features/live-tracking.png",
   },
   {
@@ -26,7 +26,7 @@ const features = [
     step: "Senior-first pacing",
     title: "Senior-first pacing",
     content:
-      "Itineraries built around comfort — fewer rushed transfers, more rest, and walking levels set for the group.",
+      "Itineraries built around comfort: fewer rushed transfers, more rest, and walking levels set for the group.",
     image: "/images/features/senior-pacing.png",
   },
 ];

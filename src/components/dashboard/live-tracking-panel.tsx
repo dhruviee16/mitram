@@ -85,7 +85,7 @@ export function LiveTrackingPanel({
         </div>
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
-        On by default so you can follow the trip as it happens — turn off any
+        On by default so you can follow the trip as it happens. Turn off any
         time to keep it more private.
       </p>
 

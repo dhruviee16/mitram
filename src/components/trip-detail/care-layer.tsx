@@ -13,7 +13,7 @@ export function CareLayer({ trip }: { trip: CareLayerTrip }) {
     "Family trip updates where enabled",
     "Slow-paced, senior-friendly itinerary",
     trip.walkingIntensity !== "challenging" && "Mobility assistance where available",
-    "Wellness support on applicable trips — operational support, not a substitute for professional medical care",
+    "Wellness support on applicable trips: operational support, not a substitute for professional medical care",
     "Emergency escalation plan",
     trip.insuranceIncluded && "Travel insurance included",
     "Group companionship with fellow senior travellers",
