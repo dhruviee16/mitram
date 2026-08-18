@@ -19,6 +19,7 @@ export default async function AdminTestimonialsPage() {
   const columns: DataTableColumn<TestimonialRow>[] = [
     {
       header: "Testimonial",
+      className: "max-w-md whitespace-normal align-top",
       cell: (t) => (
         <div>
           <div className="flex items-center gap-2">
@@ -35,8 +36,8 @@ export default async function AdminTestimonialsPage() {
     },
     {
       header: "Actions",
-      headerClassName: "text-right",
-      className: "text-right",
+      headerClassName: "text-right whitespace-nowrap",
+      className: "text-right whitespace-nowrap align-top",
       cell: (t) => <TestimonialActions id={t.id} featured={t.featured} />,
     },
   ];

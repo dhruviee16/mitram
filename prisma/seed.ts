@@ -5,6 +5,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { categories } from "./seed-data/categories";
 import { destinations } from "./seed-data/destinations";
 import { trips } from "./seed-data/trips";
+import { reviews as dummyReviews } from "./seed-data/reviews";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -275,6 +276,55 @@ async function main() {
       status: "published",
     },
   });
+
+  // Dummy launch reviews, all posted under the admin account so trip pages
+  // have social proof before real traveler reviews come in. Fixed booking
+  // ids keep re-seeding idempotent (upsert instead of duplicating).
+  const day = (n: number) => n * 24 * 60 * 60 * 1000;
+  for (const trip of trips) {
+    const entries = dummyReviews[trip.slug];
+    if (!entries || entries.length === 0) continue;
+    const tripRow = await prisma.trip.findUniqueOrThrow({ where: { slug: trip.slug } });
+
+    for (const [index, entry] of entries.entries()) {
+      const bookingId = `seed-review-booking-${trip.slug}-${index}`;
+      const travelDate = new Date(Date.now() - (entry.daysAgo + trip.durationDays) * day(1));
+      const booking = await prisma.booking.upsert({
+        where: { id: bookingId },
+        update: {},
+        create: {
+          id: bookingId,
+          userId: vendorUser.id,
+          tripId: tripRow.id,
+          bookedFor: "self",
+          numTravelers: 1,
+          travelDate,
+          roomType: "twin",
+          totalAmount: trip.basePrice,
+          status: "completed",
+          trackingVisible: false,
+        },
+      });
+
+      await prisma.review.upsert({
+        where: { bookingId: booking.id },
+        update: {
+          rating: entry.rating,
+          comment: entry.comment,
+          images: entry.images ?? [],
+        },
+        create: {
+          bookingId: booking.id,
+          tripId: tripRow.id,
+          userId: vendorUser.id,
+          rating: entry.rating,
+          comment: entry.comment,
+          images: entry.images ?? [],
+          createdAt: new Date(Date.now() - entry.daysAgo * day(1)),
+        },
+      });
+    }
+  }
 
   const testimonials = [
     { name: "Arjun J.", age: null, city: "Dubai", tripTitle: "Sammed Shikharji Yatra", quote: "I could see exactly where Papa was on the Shikharji trek, every step. That mattered more than anything else.", rating: 5, isSample: true, featured: true },

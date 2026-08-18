@@ -46,3 +46,21 @@ export async function getTripRatingSummary(tripId: string) {
 export function getReviewForBooking(bookingId: string) {
   return prisma.review.findUnique({ where: { bookingId } });
 }
+
+export function listAllReviews() {
+  return prisma.review.findMany({
+    include: { user: true, trip: true },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+export function getReviewById(id: string) {
+  return prisma.review.findUnique({ where: { id }, include: { trip: true } });
+}
+
+export function updateReview(
+  id: string,
+  data: { rating: number; comment: string | null; images: string[] },
+) {
+  return prisma.review.update({ where: { id }, data });
+}
