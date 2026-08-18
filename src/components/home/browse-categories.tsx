@@ -27,13 +27,13 @@ const ICONS: Record<string, LucideIcon> = {
 };
 
 const IMAGES: Record<string, string> = {
-  spiritual: "/images/categories/spiritual.jpeg",
-  heritage: "/images/categories/heritage.jpg",
-  "nature-wildlife": "/images/categories/nature-wildlife.jpg",
-  leisure: "/images/categories/leisure.jpg",
-  festival: "/images/categories/festival.jpg",
-  "state-focused": "/images/categories/state-focused.jpg",
-  community: "/images/categories/community.jpg",
+  spiritual: "/images/categories/spiritual.png",
+  heritage: "/images/categories/heritage.png",
+  "nature-wildlife": "/images/categories/nature-wildlife.png",
+  leisure: "/images/categories/leisure.png",
+  festival: "/images/categories/festival.png",
+  "state-focused": "/images/categories/state-focused.png",
+  community: "/images/categories/community.png",
 };
 
 const ASPECT: Record<string, string> = {

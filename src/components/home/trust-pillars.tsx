@@ -29,6 +29,13 @@ const features = [
       "Itineraries built around comfort: fewer rushed transfers, more rest, and walking levels set for the group.",
     image: "/images/features/senior-pacing.png",
   },
+  {
+    step: "Memories, beautifully captured",
+    title: "Memories, beautifully captured",
+    content:
+      "A dedicated Mitram coordinator captures photos and memories throughout the journey, so travellers can simply enjoy the experience while their special moments are taken care of.",
+    image: "/images/features/memories-captured.png",
+  },
 ];
 
 export function TrustPillars() {
@@ -36,7 +43,7 @@ export function TrustPillars() {
     <FeatureSteps
       features={features}
       title="Built for peace of mind"
-      subtitle="The four things every Mitram journey is designed around."
+      subtitle="The five things every Mitram journey is designed around."
     />
   );
 }
