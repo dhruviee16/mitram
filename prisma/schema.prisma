@@ -291,7 +291,7 @@ model TripUpdate {
   lat           Float?
   lng           Float?
   note          String?
-  photoUrl      String?
+  photoUrls     String[]      @default([])
   healthBp      String?
   healthSugar   String?
   healthTemp    String?

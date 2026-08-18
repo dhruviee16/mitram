@@ -107,7 +107,7 @@ export type VendorTripValues = z.infer<typeof vendorTripSchema>;
 export const vendorTripUpdateSchema = z.object({
   locationLabel: z.string().min(1, "Choose a stop."),
   note: z.string().optional(),
-  photoUrl: z.string().optional(),
+  photoUrls: z.array(z.string()).optional(),
   healthBp: z.string().optional(),
   healthSugar: z.string().optional(),
   healthTemp: z.string().optional(),

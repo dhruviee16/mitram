@@ -16,7 +16,7 @@ export interface RouteUpdate {
   locationLabel: string;
   timestamp: string | Date;
   note: string | null;
-  photoUrl: string | null;
+  photoUrls: string[];
   healthBp: string | null;
   healthSugar: string | null;
   healthTemp: string | null;
@@ -143,15 +143,22 @@ function StopCard({
                   <p className="text-xs text-muted-foreground">
                     {relativeTime(new Date(update.timestamp))}
                   </p>
-                  {update.photoUrl && (
-                    <div className="relative mt-2 h-40 w-full overflow-hidden rounded-md">
-                      <Image
-                        src={update.photoUrl}
-                        alt={`Photo from ${label}`}
-                        fill
-                        sizes="400px"
-                        className="object-cover"
-                      />
+                  {update.photoUrls.length > 0 && (
+                    <div className="mt-2 flex gap-2 overflow-x-auto">
+                      {update.photoUrls.map((photoUrl) => (
+                        <div
+                          key={photoUrl}
+                          className="relative h-40 w-40 shrink-0 overflow-hidden rounded-md"
+                        >
+                          <Image
+                            src={photoUrl}
+                            alt={`Photo from ${label}`}
+                            fill
+                            sizes="160px"
+                            className="object-cover"
+                          />
+                        </div>
+                      ))}
                     </div>
                   )}
                   {update.note && <p className="mt-2 text-muted-foreground">{update.note}</p>}

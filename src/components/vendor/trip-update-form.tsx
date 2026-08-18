@@ -1,20 +1,17 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Camera } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { X } from "lucide-react";
 
 import { vendorTripUpdateSchema, type VendorTripUpdateValues } from "@/lib/validations/vendor";
 import { usePostTripUpdate } from "@/hooks/use-post-trip-update";
-import { useUploadVendorImage } from "@/hooks/use-upload-vendor-image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { ImageUpload } from "@/components/ui/image-upload";
 import {
   Select,
   SelectContent,
@@ -34,10 +31,7 @@ import {
 export function TripUpdateForm({ bookingId, stops }: { bookingId: string; stops: string[] }) {
   const router = useRouter();
   const postTripUpdate = usePostTripUpdate();
-  const uploadImage = useUploadVendorImage();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const cameraInputRef = useRef<HTMLInputElement>(null);
-  const [photoUrl, setPhotoUrl] = useState<string | undefined>(undefined);
+  const [photoUrls, setPhotoUrls] = useState<string[]>([]);
 
   const form = useForm<VendorTripUpdateValues>({
     resolver: zodResolver(vendorTripUpdateSchema),
@@ -50,26 +44,14 @@ export function TripUpdateForm({ bookingId, stops }: { bookingId: string; stops:
     },
   });
 
-  async function handlePhotoSelect(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    e.target.value = "";
-    if (!file) return;
-    try {
-      const { url } = await uploadImage.mutateAsync(file);
-      setPhotoUrl(url);
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Could not upload photo.");
-    }
-  }
-
   function onSubmit(values: VendorTripUpdateValues) {
     postTripUpdate.mutate(
-      { bookingId, values: { ...values, photoUrl } },
+      { bookingId, values: { ...values, photoUrls } },
       {
         onSuccess: () => {
           toast.success("Update posted.");
           form.reset();
-          setPhotoUrl(undefined);
+          setPhotoUrls([]);
           router.refresh();
         },
         onError: (err) => toast.error(err.message),
@@ -119,55 +101,8 @@ export function TripUpdateForm({ bookingId, stops }: { bookingId: string; stops:
         />
 
         <FormItem>
-          <FormLabel>Photo (optional)</FormLabel>
-          {photoUrl ? (
-            <div className="relative size-24 overflow-hidden rounded-md border border-border">
-              <Image src={photoUrl} alt="" fill sizes="96px" className="object-cover" />
-              <button
-                type="button"
-                onClick={() => setPhotoUrl(undefined)}
-                aria-label="Remove photo"
-                className="absolute top-1 right-1 flex size-5 items-center justify-center rounded-full bg-foreground/70 text-background"
-              >
-                <X className="size-3" aria-hidden="true" />
-              </button>
-            </div>
-          ) : (
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => cameraInputRef.current?.click()}
-                disabled={uploadImage.isPending}
-                className="flex size-24 flex-col items-center justify-center gap-1 rounded-md border border-dashed border-input text-xs text-muted-foreground hover:border-primary hover:text-primary disabled:opacity-50"
-              >
-                <Camera className="size-5" aria-hidden="true" />
-                {uploadImage.isPending ? "Uploading..." : "Take photo"}
-              </button>
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={uploadImage.isPending}
-                className="flex size-24 flex-col items-center justify-center gap-1 rounded-md border border-dashed border-input text-xs text-muted-foreground hover:border-primary hover:text-primary disabled:opacity-50"
-              >
-                {uploadImage.isPending ? "Uploading..." : "+ Add photo"}
-              </button>
-            </div>
-          )}
-          <input
-            ref={cameraInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            capture="environment"
-            onChange={handlePhotoSelect}
-            className="hidden"
-          />
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            onChange={handlePhotoSelect}
-            className="hidden"
-          />
+          <FormLabel>Photos (optional)</FormLabel>
+          <ImageUpload value={photoUrls} onChange={setPhotoUrls} camera />
         </FormItem>
 
         <div className="grid grid-cols-3 gap-4">
@@ -208,7 +143,7 @@ export function TripUpdateForm({ bookingId, stops }: { bookingId: string; stops:
             )}
           />
         </div>
-        <Button type="submit" disabled={postTripUpdate.isPending || uploadImage.isPending}>
+        <Button type="submit" disabled={postTripUpdate.isPending}>
           {postTripUpdate.isPending ? "Posting..." : "Post update"}
         </Button>
       </form>

@@ -15,7 +15,7 @@ type TripUpdate = {
   timestamp: string | Date;
   locationLabel: string;
   note: string | null;
-  photoUrl: string | null;
+  photoUrls: string[];
   healthBp: string | null;
   healthSugar: string | null;
   healthTemp: string | null;

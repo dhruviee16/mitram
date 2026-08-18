@@ -9,7 +9,7 @@ import { Testimonials } from "@/components/home/testimonials";
 import { HomeCta } from "@/components/home/home-cta";
 import { listTrips } from "@/server/services/tripService";
 import { listCategories } from "@/server/services/categoryService";
-import { listDestinations } from "@/server/services/destinationService";
+import { listPublishedDestinations } from "@/server/services/destinationService";
 import { listFeaturedTestimonials } from "@/server/services/testimonialService";
 import { getHomeStats } from "@/server/services/statsService";
 
@@ -17,7 +17,7 @@ export default async function Home() {
   const [trips, categories, destinations, testimonials, stats] = await Promise.all([
     listTrips(),
     listCategories(),
-    listDestinations(),
+    listPublishedDestinations(6),
     listFeaturedTestimonials(),
     getHomeStats(),
   ]);

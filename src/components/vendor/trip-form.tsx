@@ -1,15 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { useForm, useFieldArray } from "react-hook-form";
 import { toast } from "sonner";
-import { X } from "lucide-react";
 
 import { TRIP_CATEGORIES } from "@/lib/trip-categories";
 import { walkingIntensityValues, mealsPlanValues } from "@/lib/validations/vendor";
-import { useUploadVendorImage } from "@/hooks/use-upload-vendor-image";
 import { useCreateDestination } from "@/hooks/use-create-destination";
 import { useSaveVendorTrip } from "@/hooks/use-save-vendor-trip";
 import { Button } from "@/components/ui/button";
@@ -17,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { Field, FieldLabel, FieldTitle } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -109,10 +107,8 @@ export function TripForm({
   redirectTo?: string;
 }) {
   const router = useRouter();
-  const uploadImage = useUploadVendorImage();
   const createDestination = useCreateDestination();
   const saveTrip = useSaveVendorTrip();
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [destinationList, setDestinationList] = useState(destinations);
   const [addingDestination, setAddingDestination] = useState(false);
   const [newDestinationName, setNewDestinationName] = useState("");
@@ -149,25 +145,6 @@ export function TripForm({
   function toggleMeal(meal: string) {
     const next = mealsPlan.includes(meal) ? mealsPlan.filter((m) => m !== meal) : [...mealsPlan, meal];
     form.setValue("mealsPlan", next);
-  }
-
-  async function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files ?? []);
-    if (files.length === 0) return;
-    e.target.value = "";
-
-    for (const file of files) {
-      try {
-        const { url } = await uploadImage.mutateAsync(file);
-        setImages((prev) => [...prev, url]);
-      } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Could not upload image.");
-      }
-    }
-  }
-
-  function removeImage(index: number) {
-    setImages((prev) => prev.filter((_, i) => i !== index));
   }
 
   function onSubmit(values: TripFormDefaultValues) {
@@ -379,46 +356,7 @@ export function TripForm({
 
         <FormItem>
           <FormLabel>Photos</FormLabel>
-          <div className="flex flex-wrap gap-3">
-            {images.map((url, index) => (
-              <div
-                key={url}
-                className="relative size-24 overflow-hidden rounded-md border border-border"
-              >
-                <Image
-                  src={url}
-                  alt=""
-                  fill
-                  sizes="96px"
-                  className="object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeImage(index)}
-                  aria-label="Remove photo"
-                  className="absolute top-1 right-1 flex size-5 items-center justify-center rounded-full bg-foreground/70 text-background"
-                >
-                  <X className="size-3" aria-hidden="true" />
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={uploadImage.isPending}
-              className="flex size-24 flex-col items-center justify-center gap-1 rounded-md border border-dashed border-input text-xs text-muted-foreground hover:border-primary hover:text-primary disabled:opacity-50"
-            >
-              {uploadImage.isPending ? "Uploading..." : "+ Add photo"}
-            </button>
-          </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            multiple
-            onChange={handleImageSelect}
-            className="hidden"
-          />
+          <ImageUpload value={images} onChange={setImages} />
         </FormItem>
 
         <Card>
