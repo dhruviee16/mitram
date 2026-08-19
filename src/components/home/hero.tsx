@@ -154,7 +154,7 @@ export function Hero({ stats }: { stats?: HeroStats }) {
           </div>
         </div>
 
-        <div className="relative mx-auto hidden w-full max-w-md lg:block">
+        <div className="relative mx-auto hidden w-full max-w-lg lg:block">
           <div
             className="absolute -top-8 -right-6 -z-10 size-40 rounded-full bg-accent/30"
             aria-hidden="true"
@@ -163,15 +163,14 @@ export function Hero({ stats }: { stats?: HeroStats }) {
             className="absolute -bottom-8 -left-8 -z-10 size-32 rounded-full bg-primary/20"
             aria-hidden="true"
           />
-          <div className="relative aspect-3/4 overflow-hidden rounded-[2rem]">
+          <div className="relative aspect-1450/1085 overflow-hidden rounded-[2rem] bg-secondary">
             <Image
-              src="/images/hero/heritage-couple.jpg"
-              alt="A senior couple exploring a heritage archway together"
+              src="/images/hero/coordinator-trio.png"
+              alt="A Mitram coordinator walking and chatting with a senior couple"
               fill
               priority
-              quality={100}
               sizes="(min-width: 1024px) 28rem, 0px"
-              className="object-cover object-[60%_50%]"
+              className="object-contain"
             />
           </div>
         </div>
