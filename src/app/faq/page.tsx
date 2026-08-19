@@ -1,3 +1,11 @@
+import Image from "next/image";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
 export const metadata = { title: "FAQ | MITRAM" };
 
 const faqs = [
@@ -11,16 +19,51 @@ const faqs = [
 
 export default function FaqPage() {
   return (
-    <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
-      <h1 className="font-heading text-3xl font-bold text-foreground">Frequently asked questions</h1>
-      <div className="mt-8 space-y-6">
-        {faqs.map(({ q, a }) => (
-          <div key={q}>
-            <p className="font-heading text-base font-bold text-foreground">{q}</p>
-            <p className="mt-1 text-sm text-muted-foreground">{a}</p>
-          </div>
-        ))}
+    <section className="relative flex flex-col overflow-hidden bg-background lg:min-h-[calc(100svh-8rem)] lg:justify-center">
+      <div className="relative mx-auto grid w-full max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-8">
+        <div className="relative z-10">
+          <span className="font-heading text-xs font-bold tracking-wide text-primary uppercase">
+            FAQ
+          </span>
+          <h1 className="mt-2 font-heading text-3xl leading-[1.1] font-extrabold text-foreground sm:text-4xl">
+            Frequently asked questions
+          </h1>
+          <p className="mt-3 max-w-md text-[15px] text-muted-foreground sm:text-base">
+            Everything you need to know before your next journey with Mitram.
+          </p>
+
+          <Accordion className="mt-7 gap-3" multiple>
+            {faqs.map(({ q, a }) => (
+              <AccordionItem
+                key={q}
+                value={q}
+                className="rounded-xl border-b-0 bg-card px-4 ring-1 ring-foreground/10"
+              >
+                <AccordionTrigger className="font-heading text-sm font-bold text-foreground hover:no-underline">
+                  {q}
+                </AccordionTrigger>
+                <AccordionContent className="text-sm text-muted-foreground">
+                  {a}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+
+        <div aria-hidden="true" className="hidden lg:block" />
       </div>
-    </div>
+
+      <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[38%] lg:block">
+        <Image
+          src="/images/faq/support-question.png"
+          alt="A Mitram support team member with her phone, a speech bubble reading Got a question? We're here to help"
+          fill
+          priority
+          unoptimized
+          sizes="38vw"
+          className="object-contain object-bottom"
+        />
+      </div>
+    </section>
   );
 }

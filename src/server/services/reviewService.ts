@@ -64,3 +64,7 @@ export function updateReview(
 ) {
   return prisma.review.update({ where: { id }, data });
 }
+
+export function deleteReview(id: string) {
+  return prisma.review.delete({ where: { id } });
+}

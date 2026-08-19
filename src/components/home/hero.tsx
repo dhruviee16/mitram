@@ -35,9 +35,9 @@ export function Hero({ stats }: { stats?: HeroStats }) {
   }
 
   return (
-    <section className="bg-secondary px-4 py-12 sm:px-6 sm:py-16">
-      <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
-        <div>
+    <section className="relative overflow-hidden bg-background lg:min-h-184 xl:min-h-200">
+      <div className="relative mx-auto grid max-w-7xl gap-10 px-4 pt-12 pb-12 sm:px-6 sm:pt-16 lg:grid-cols-[1fr_1.15fr] lg:items-center lg:gap-8 lg:pb-0">
+        <div className="relative z-10">
           <span className="inline-block rounded-full bg-accent px-4 py-1.5 text-xs font-bold text-accent-foreground">
             Introductory offer: save up to ₹6,000
           </span>
@@ -65,10 +65,10 @@ export function Hero({ stats }: { stats?: HeroStats }) {
             </div>
           ) : null}
 
-          <div className="mt-7 rounded-2xl bg-card text-left shadow-[0_24px_48px_-12px_rgba(0,0,0,0.2)]">
+          <div className="relative z-20 mt-7 rounded-2xl bg-card text-left shadow-[0_16px_32px_-16px_rgba(0,0,0,0.18)]">
             <form
               onSubmit={handleSubmit}
-              className="flex flex-col flex-wrap gap-4 border-t border-border p-5 sm:flex-row sm:items-center sm:gap-4"
+              className="flex flex-col flex-wrap gap-4 p-5 sm:flex-row sm:items-center sm:gap-4"
             >
               <Field className="min-w-36 flex-1 border-b border-border pb-2 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-4">
                 <FieldLabel
@@ -154,26 +154,19 @@ export function Hero({ stats }: { stats?: HeroStats }) {
           </div>
         </div>
 
-        <div className="relative mx-auto hidden w-full max-w-lg lg:block">
-          <div
-            className="absolute -top-8 -right-6 -z-10 size-40 rounded-full bg-accent/30"
-            aria-hidden="true"
-          />
-          <div
-            className="absolute -bottom-8 -left-8 -z-10 size-32 rounded-full bg-primary/20"
-            aria-hidden="true"
-          />
-          <div className="relative aspect-1450/1085 overflow-hidden rounded-[2rem] bg-secondary">
-            <Image
-              src="/images/hero/coordinator-trio.png"
-              alt="A Mitram coordinator walking and chatting with a senior couple"
-              fill
-              priority
-              sizes="(min-width: 1024px) 28rem, 0px"
-              className="object-contain"
-            />
-          </div>
-        </div>
+        <div aria-hidden="true" className="hidden lg:block" />
+      </div>
+
+      <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[68%] lg:block">
+        <Image
+          src="/images/hero/coordinator-trio.png"
+          alt="A Mitram coordinator walking with a senior couple past a heritage monument"
+          fill
+          priority
+          unoptimized
+          sizes="68vw"
+          className="object-contain object-bottom"
+        />
       </div>
     </section>
   );

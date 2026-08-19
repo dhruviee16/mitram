@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/auth";
-import { updateReview } from "@/server/services/reviewService";
+import { updateReview, deleteReview } from "@/server/services/reviewService";
 
 const bodySchema = z.object({
   rating: z.coerce.number().int().min(1).max(5),
@@ -34,4 +34,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     images: parsed.data.images,
   });
   return NextResponse.json(review);
+}
+
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await requireAdmin())) {
+    return NextResponse.json({ error: "Not authorized." }, { status: 403 });
+  }
+  const { id } = await params;
+  await deleteReview(id);
+  return NextResponse.json({ deleted: true });
 }

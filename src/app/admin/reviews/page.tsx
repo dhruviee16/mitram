@@ -1,10 +1,9 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { auth } from "@/auth";
 import { listAllReviews } from "@/server/services/reviewService";
 import { AdminNav } from "@/components/admin/admin-nav";
+import { ReviewActions } from "@/components/admin/review-actions";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { StarRating } from "@/components/ui/star-rating";
 import { DataTable, type DataTableColumn } from "@/components/ui/data-table";
 
@@ -38,11 +37,7 @@ export default async function AdminReviewsPage() {
       header: "Actions",
       headerClassName: "text-right whitespace-nowrap",
       className: "text-right whitespace-nowrap align-top",
-      cell: (r) => (
-        <Button variant="outline" size="sm" render={<Link href={`/admin/reviews/${r.id}`} />}>
-          Edit
-        </Button>
-      ),
+      cell: (r) => <ReviewActions id={r.id} />,
     },
   ];
 
