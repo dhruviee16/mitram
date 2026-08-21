@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 import { prisma } from "@/server/db";
 import type { VendorVerificationStatus, TripStatus, UserRole } from "@/generated/prisma/client";
 
@@ -29,7 +30,9 @@ export function listTripsForApproval() {
 }
 
 export async function setTripStatus(tripId: string, status: TripStatus) {
-  return prisma.trip.update({ where: { id: tripId }, data: { status } });
+  const trip = await prisma.trip.update({ where: { id: tripId }, data: { status } });
+  revalidateTag("trips", { expire: 0 });
+  return trip;
 }
 
 export function listAllBookings() {

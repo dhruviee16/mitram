@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import { revalidateTag, unstable_cache } from "next/cache";
 import { prisma } from "@/server/db";
 
 function slugify(name: string) {
@@ -9,41 +10,53 @@ function slugify(name: string) {
     .replace(/(^-|-$)/g, "")}-${nanoid(6)}`;
 }
 
-export function createDestination(name: string) {
-  return prisma.destination.create({
+export async function createDestination(name: string) {
+  const destination = await prisma.destination.create({
     data: { name, slug: slugify(name) },
   });
+  revalidateTag("destinations", { expire: 0 });
+  return destination;
 }
 
-export function listDestinations() {
-  return prisma.destination.findMany({
-    include: { _count: { select: { trips: { where: { status: "approved" } } } } },
-    orderBy: { name: "asc" },
-  });
-}
+export const listDestinations = unstable_cache(
+  () =>
+    prisma.destination.findMany({
+      include: { _count: { select: { trips: { where: { status: "approved" } } } } },
+      orderBy: { name: "asc" },
+    }),
+  ["destinations-list"],
+  { tags: ["destinations"], revalidate: 300 },
+);
 
 // Vendors can add a destination with just a name; until an admin fills in the
 // photo it stays invisible to travelers rather than showing a broken-looking
 // green placeholder card on public pages.
-export function listPublishedDestinations(limit?: number) {
-  return prisma.destination.findMany({
-    where: { heroImage: { not: null } },
-    orderBy: { name: "asc" },
-    ...(limit ? { take: limit } : {}),
-  });
-}
+export const listPublishedDestinations = unstable_cache(
+  (limit?: number) =>
+    prisma.destination.findMany({
+      where: { heroImage: { not: null } },
+      orderBy: { name: "asc" },
+      ...(limit ? { take: limit } : {}),
+    }),
+  ["destinations-published"],
+  { tags: ["destinations"], revalidate: 300 },
+);
 
-export function getDestinationBySlug(slug: string) {
-  return prisma.destination.findUnique({ where: { slug } });
-}
+export const getDestinationBySlug = unstable_cache(
+  (slug: string) => prisma.destination.findUnique({ where: { slug } }),
+  ["destination-by-slug"],
+  { tags: ["destinations"], revalidate: 300 },
+);
 
 export function getDestinationById(id: string) {
   return prisma.destination.findUnique({ where: { id } });
 }
 
-export function updateDestination(
+export async function updateDestination(
   id: string,
   data: { name?: string; state?: string | null; bestTime?: string | null; description?: string | null; heroImage?: string | null },
 ) {
-  return prisma.destination.update({ where: { id }, data });
+  const destination = await prisma.destination.update({ where: { id }, data });
+  revalidateTag("destinations", { expire: 0 });
+  return destination;
 }

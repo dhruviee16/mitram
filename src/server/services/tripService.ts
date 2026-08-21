@@ -1,26 +1,33 @@
+import { unstable_cache } from "next/cache";
 import { Prisma, type WalkingIntensity } from "@/generated/prisma/client";
 import { prisma } from "@/server/db";
 
-export function listTrips() {
-  return prisma.trip.findMany({
-    where: { status: "approved" },
-    include: { category: true, destination: true, vendor: { include: { vendorProfile: true } } },
-    orderBy: { title: "asc" },
-  });
-}
+export const listTrips = unstable_cache(
+  () =>
+    prisma.trip.findMany({
+      where: { status: "approved" },
+      include: { category: true, destination: true, vendor: { include: { vendorProfile: true } } },
+      orderBy: { title: "asc" },
+    }),
+  ["trips-list"],
+  { tags: ["trips"], revalidate: 300 },
+);
 
-export function getTripBySlug(slug: string) {
-  return prisma.trip.findUnique({
-    where: { slug },
-    include: {
-      days: { orderBy: { dayNumber: "asc" } },
-      dates: { orderBy: { departureDate: "asc" } },
-      category: true,
-      destination: true,
-      vendor: { include: { vendorProfile: true } },
-    },
-  });
-}
+export const getTripBySlug = unstable_cache(
+  (slug: string) =>
+    prisma.trip.findUnique({
+      where: { slug },
+      include: {
+        days: { orderBy: { dayNumber: "asc" } },
+        dates: { orderBy: { departureDate: "asc" } },
+        category: true,
+        destination: true,
+        vendor: { include: { vendorProfile: true } },
+      },
+    }),
+  ["trip-by-slug"],
+  { tags: ["trips"], revalidate: 300 },
+);
 
 export function getTripForBooking(slug: string) {
   return prisma.trip.findUnique({
@@ -133,10 +140,13 @@ export async function searchTrips(params: TripSearchParams) {
   return trips;
 }
 
-export function getRelatedTrips(tripId: string, categoryId: string) {
-  return prisma.trip.findMany({
-    where: { status: "approved", categoryId, id: { not: tripId } },
-    include: { category: true, destination: true, vendor: { include: { vendorProfile: true } } },
-    take: 4,
-  });
-}
+export const getRelatedTrips = unstable_cache(
+  (tripId: string, categoryId: string) =>
+    prisma.trip.findMany({
+      where: { status: "approved", categoryId, id: { not: tripId } },
+      include: { category: true, destination: true, vendor: { include: { vendorProfile: true } } },
+      take: 4,
+    }),
+  ["related-trips"],
+  { tags: ["trips"], revalidate: 300 },
+);
