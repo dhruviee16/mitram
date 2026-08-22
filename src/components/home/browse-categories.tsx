@@ -59,7 +59,7 @@ export function BrowseCategories({ categories }: { categories: Category[] }) {
             return (
               <Link
                 key={slug}
-                href={`/trips?category=${slug}`}
+                href={slug === "state-focused" ? "/destinations" : `/trips?category=${slug}`}
                 className="group relative block aspect-3/2 overflow-hidden rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 {image ? (

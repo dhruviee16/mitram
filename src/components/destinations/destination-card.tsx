@@ -33,41 +33,56 @@ export function DestinationCard({
         className,
       )}
     >
-      <motion.div
-        className="absolute inset-0"
-        initial="idle"
-        whileHover="active"
-        variants={{ idle: { scale: 1 }, active: { scale: 1.06 } }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-      >
-        <Image
-          src={destination.heroImage!}
-          alt=""
-          fill
-          sizes="(min-width: 768px) 25vw, 50vw"
-          className="object-cover"
-        />
-      </motion.div>
-      <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent to-45%" />
+      {destination.heroImage ? (
+        <>
+          <motion.div
+            className="absolute inset-0"
+            initial="idle"
+            whileHover="active"
+            variants={{ idle: { scale: 1 }, active: { scale: 1.06 } }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+          >
+            <Image
+              src={destination.heroImage}
+              alt=""
+              fill
+              sizes="(min-width: 768px) 25vw, 50vw"
+              className="object-cover"
+            />
+          </motion.div>
+          <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent to-45%" />
 
-      <div className="absolute inset-x-0 bottom-0 border-t border-white/10 bg-black/45 p-3.5 backdrop-blur-md">
-        {showState && (
-          <p className="text-[10px] font-bold tracking-wide text-white/70 uppercase">
-            {destination.state}
+          <div className="absolute inset-x-0 bottom-0 border-t border-white/10 bg-black/45 p-3.5 backdrop-blur-md">
+            {showState && (
+              <p className="text-[10px] font-bold tracking-wide text-white/70 uppercase">
+                {destination.state}
+              </p>
+            )}
+            <p
+              className={cn(
+                "mt-0.5 font-heading font-bold text-white",
+                large ? "text-lg" : "text-[15px]",
+              )}
+            >
+              {destination.name}
+            </p>
+            {destination.description && (
+              <p className="mt-1 line-clamp-2 text-xs text-white/80">{destination.description}</p>
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center bg-linear-to-br from-primary to-foreground p-3.5">
+          <p
+            className={cn(
+              "font-heading font-bold text-center text-white",
+              large ? "text-lg" : "text-[15px]",
+            )}
+          >
+            {destination.name}
           </p>
-        )}
-        <p
-          className={cn(
-            "mt-0.5 font-heading font-bold text-white",
-            large ? "text-lg" : "text-[15px]",
-          )}
-        >
-          {destination.name}
-        </p>
-        {destination.description && (
-          <p className="mt-1 line-clamp-2 text-xs text-white/80">{destination.description}</p>
-        )}
-      </div>
+        </div>
+      )}
     </Link>
   );
 }

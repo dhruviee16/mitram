@@ -28,13 +28,9 @@ export const listDestinations = unstable_cache(
   { tags: ["destinations"], revalidate: 300 },
 );
 
-// Vendors can add a destination with just a name; until an admin fills in the
-// photo it stays invisible to travelers rather than showing a broken-looking
-// green placeholder card on public pages.
 export const listPublishedDestinations = unstable_cache(
   (limit?: number) =>
     prisma.destination.findMany({
-      where: { heroImage: { not: null } },
       orderBy: { name: "asc" },
       ...(limit ? { take: limit } : {}),
     }),

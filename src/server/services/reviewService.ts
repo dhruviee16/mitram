@@ -1,3 +1,4 @@
+import { revalidateTag, unstable_cache } from "next/cache";
 import { prisma } from "@/server/db";
 import type { ReviewValues } from "@/lib/validations/review";
 
@@ -15,7 +16,7 @@ export async function createReview(userId: string, input: ReviewValues) {
     throw new Error("You've already reviewed this trip.");
   }
 
-  return prisma.review.create({
+  const review = await prisma.review.create({
     data: {
       bookingId: input.bookingId,
       tripId: booking.tripId,
@@ -24,24 +25,33 @@ export async function createReview(userId: string, input: ReviewValues) {
       comment: input.comment || null,
     },
   });
+  revalidateTag("reviews", { expire: 0 });
+  return review;
 }
 
-export function listReviewsForTrip(tripId: string) {
-  return prisma.review.findMany({
-    where: { tripId, status: "published" },
-    include: { user: true },
-    orderBy: { createdAt: "desc" },
-  });
-}
+export const listReviewsForTrip = unstable_cache(
+  (tripId: string) =>
+    prisma.review.findMany({
+      where: { tripId, status: "published" },
+      include: { user: true },
+      orderBy: { createdAt: "desc" },
+    }),
+  ["reviews-for-trip"],
+  { tags: ["reviews"], revalidate: 300 },
+);
 
-export async function getTripRatingSummary(tripId: string) {
-  const result = await prisma.review.aggregate({
-    where: { tripId, status: "published" },
-    _avg: { rating: true },
-    _count: true,
-  });
-  return { average: result._avg.rating ?? 0, count: result._count };
-}
+export const getTripRatingSummary = unstable_cache(
+  async (tripId: string) => {
+    const result = await prisma.review.aggregate({
+      where: { tripId, status: "published" },
+      _avg: { rating: true },
+      _count: true,
+    });
+    return { average: result._avg.rating ?? 0, count: result._count };
+  },
+  ["trip-rating-summary"],
+  { tags: ["reviews"], revalidate: 300 },
+);
 
 export function getReviewForBooking(bookingId: string) {
   return prisma.review.findUnique({ where: { bookingId } });
@@ -58,13 +68,16 @@ export function getReviewById(id: string) {
   return prisma.review.findUnique({ where: { id }, include: { trip: true } });
 }
 
-export function updateReview(
+export async function updateReview(
   id: string,
   data: { rating: number; comment: string | null; images: string[] },
 ) {
-  return prisma.review.update({ where: { id }, data });
+  const review = await prisma.review.update({ where: { id }, data });
+  revalidateTag("reviews", { expire: 0 });
+  return review;
 }
 
-export function deleteReview(id: string) {
-  return prisma.review.delete({ where: { id } });
+export async function deleteReview(id: string) {
+  await prisma.review.delete({ where: { id } });
+  revalidateTag("reviews", { expire: 0 });
 }
